@@ -4,40 +4,42 @@ using UnityEngine;
 
 public class BrokenObject : MonoBehaviour
 {
-    [SerializeField] float _duration = 999;
+    [SerializeField] int _duration = 999;
+    GameObject _effectHit;
+    GameObject _effectExplosion;
+    GameObject _effectFrame;
 
-    float _time = 0;
-    float _effTime = 0;
-
-    bool _broken = false;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        _effectHit = Resources.Load("Prefabs/ParticleEffects/Hit") as GameObject;
+        _effectExplosion = Resources.Load("Prefabs/ParticleEffects/Explosion") as GameObject;
+        _effectFrame = Resources.Load("Prefabs/ParticleEffects/Frame") as GameObject;
     }
 
     // Update is called once per frame
     void Update()
     {
-        _time += Time.deltaTime;
-        _effTime += Time.deltaTime;
-        if (!_broken)
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("BulletObj"))
         {
-            if (_time >= _duration && _duration != 999)
+            GameObject go = Instantiate(_effectHit, other.transform.position, Quaternion.identity);
+            Destroy(go, 2.0f);
+            Destroy(other.gameObject);
+            if (_duration != 999)
             {
-                GameObject boomEffect = Resources.Load("Prefabs/ParticleEffects/Explosion") as GameObject;
-                GameObject go = Instantiate(boomEffect, transform);
-                Destroy(go, 2.0f);
-                _broken = true;
-            }
-            else
-            {
-                if (_effTime >= 0.5f)
+                _duration--;
+                if (_duration <= 0)
                 {
-                    _effTime = 0;
-                    GameObject spakeEffect = Resources.Load("Prefabs/ParticleEffects/Spake") as GameObject;
-                    GameObject go = Instantiate(spakeEffect, transform);
-                    Destroy(go, 1.0f);
+                    go = Instantiate(_effectExplosion, transform.position, Quaternion.identity);
+                    Destroy(go, 2.0f);
+                    go = Instantiate(_effectFrame, transform.position, _effectFrame.transform.rotation);
+                    go.transform.localScale = Vector3.one * 3;
+                    Destroy(go, 5.0f);
+                    Destroy(gameObject);
                 }
             }
         }

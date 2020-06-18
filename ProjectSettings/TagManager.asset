@@ -6,6 +6,7 @@ TagManager:
   tags:
   - LauncherStick
   - MoveStick
+  - BulletObj
   layers:
   - Default
   - TransparentFX
