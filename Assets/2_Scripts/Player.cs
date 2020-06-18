@@ -1,24 +1,41 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 
 public class Player : UnitBase
 {
-    Animator _animator;
+    [SerializeField] Transform _posFire;
+
+    Animator _ctrlAni;
     CharacterController _controller;
     GameObject _modelObj;
-    [SerializeField] float _runSpeed = 5;
-    [SerializeField] float _walkSpeed = 1.0f;
-    [SerializeField] float _sideSpeed = 0.2f;
+    GameObject _prefabBullet;
 
-    void Start()
+    // UI Reference
+    StickObject _stickLauncher;
+
+    float _runSpeed = 5;
+    float _walkSpeed = 1.0f;
+    float _sideSpeed = 0.5f;
+    bool _isAttack = false;
+
+    void Awake()
     {
-        _animator = GetComponent<Animator>();
+        _ctrlAni = GetComponent<Animator>();
         _controller = GetComponent<CharacterController>();
         _modelObj = transform.GetChild(0).gameObject;
-        _animator.SetBool("IsBattle", true);
+        _prefabBullet = Resources.Load("Prefabs/Objects/BulletObject") as GameObject;
+
+        _ctrlAni.SetBool("IsBattle", true);
     }
 
+    private void Start()
+    {
+        GameObject go = GameObject.FindGameObjectWithTag("LauncherStick");
+        _stickLauncher = go.GetComponent<StickObject>();
+        _stickLauncher.SetOwnerPlayer(this);
+    }
 
     void Update()
     {
@@ -29,16 +46,20 @@ public class Player : UnitBase
         Vector3 mv = new Vector3(mx, 0, -mz);
         mv = (mv.magnitude > 1) ? mv.normalized : mv;
 
-        if (mv.magnitude == 0)
-            _animator.SetInteger("AniType", (int)eAniType.IDLE);
-        else if (mv.magnitude > 0)
+        if (_stickLauncher._isAimMotion)
         {
-            _animator.SetInteger("AniType", (int)eAniType.RUN);
-            _modelObj.transform.rotation = Quaternion.LookRotation(mv);
+            speed = ChangeAnimationToDirection(mv);
         }
-
-        // 방향을 받아서 방향에 따른 애니메이션 변화
-        //float speed = ChangeAnimationToDirection(mv);
+        else
+        {
+            if (mv.magnitude == 0)
+                _ctrlAni.SetInteger("AniType", (int)eAniType.IDLE);
+            else if (mv.magnitude > 0)
+            {
+                _ctrlAni.SetInteger("AniType", (int)eAniType.RUN);
+                _modelObj.transform.rotation = Quaternion.LookRotation(mv);
+            }
+        }
 
         _controller.Move(mv * speed * Time.deltaTime);
     }
@@ -46,22 +67,29 @@ public class Player : UnitBase
     float ChangeAnimationToDirection(Vector3 dir)
     {
         float speed = _walkSpeed;
-        eAniType aniType = eAniType.IDLE;
         if (dir == Vector3.zero)
-            aniType = eAniType.IDLE;
+        {
+            if (_ctrlAni.GetInteger("AniType") != (int)eAniType.ATTACK)
+            {
+                _ctrlAni.SetInteger("AniType", (int)eAniType.ATTACK);
+                _ctrlAni.SetBool("StartAttack", true);
+            }
+            _modelObj.transform.rotation = Quaternion.LookRotation(_stickLauncher._direction);
+        }
         else
         {
+            InitializeDirection();
             if (dir.z == 0)
             {
                 if (dir.x > 0)
                 {
                     speed = _sideSpeed;
-                    aniType = eAniType.WALK_LEFT;
+                    _ctrlAni.SetInteger("AniType", (int)eAniType.WALK_LEFT);
                 }
                 else if (dir.x < 0)
                 {
                     speed = _sideSpeed;
-                    aniType = eAniType.WALK_RIGHT;
+                    _ctrlAni.SetInteger("AniType", (int)eAniType.WALK_RIGHT);
                 }
             }
             else if (dir.z > 0)
@@ -75,11 +103,11 @@ public class Player : UnitBase
                 {
                     speed -= _sideSpeed;
                 }
-                aniType = eAniType.RUN;
+                _ctrlAni.SetInteger("AniType", (int)eAniType.RUN);
             }
             else
             {
-                aniType = eAniType.WALK_BACK;
+                _ctrlAni.SetInteger("AniType", (int)eAniType.WALK_BACK);
                 if (dir.x > 0)
                 {
                     speed -= _sideSpeed;
@@ -90,7 +118,18 @@ public class Player : UnitBase
                 }
             }
         }
-        _animator.SetInteger("AniType", (int)aniType);
         return speed;
+    }
+
+    public void InitializeDirection()
+    {
+        _modelObj.transform.rotation = Quaternion.identity;
+    }
+
+    public void Fire()
+    {
+        Instantiate(_prefabBullet, _posFire.position, _posFire.rotation);
+
+        _ctrlAni.SetBool("StartAttack", false);
     }
 }
