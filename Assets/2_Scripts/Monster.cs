@@ -19,8 +19,11 @@ public class Monster : UnitBase
     {
         Random  = 0,
         Loop,
-        PingPong
+        PingPong,
+        Max
     }
+
+    [SerializeField] eTypeRoam _roamingType = eTypeRoam.Random;
 
     eAniType _nowAction;
     Animation _ctrlAni;
@@ -32,6 +35,9 @@ public class Monster : UnitBase
     [SerializeField] float _walkSpeed = 0.7f;
     int _nowIndex = 0;
 
+    int _moveCount = 0;
+    bool _isPingPong = true;
+
     private void Awake()
     {
         _ctrlAni = GetComponent<Animation>();
@@ -41,12 +47,7 @@ public class Monster : UnitBase
     void Start()
     {
         _ctrlAni.Play(_aniList[eAniKeyType.IDLE]);
-
-        // 임시
-        Transform tf = GameObject.Find("rootRoam").transform;
-        SetRoamPositions(tf);
         SettingGoalPosition(GetNextPosition());
-        // === === === 
     }
 
     // Update is called once per frame
@@ -84,7 +85,41 @@ public class Monster : UnitBase
 
     Vector3 GetNextPosition()
     {
-        _nowIndex = Random.Range(0, _roamPointList.Count);
+        if (_roamingType == eTypeRoam.Random)
+        {
+            _nowIndex = Random.Range(0, _roamPointList.Count);
+        }
+
+        else if(_roamingType == eTypeRoam.Loop)
+        {
+            _nowIndex++;
+            if (_nowIndex == _roamPointList.Count)
+                _nowIndex = 0;
+        }
+        else if(_roamingType == eTypeRoam.PingPong)
+        {
+            if (_isPingPong)
+            {
+                _nowIndex++;
+                if (_nowIndex >= _roamPointList.Count-1)
+                    _isPingPong = false;
+                    
+            }
+            else
+            {
+                _nowIndex--;
+                if(_nowIndex <= 0)
+                    _isPingPong = true;
+            }
+        }
+
+        _moveCount++;
+        if(_moveCount == _roamPointList.Count * 2)
+        {
+            _moveCount = 0;
+            _roamingType = (eTypeRoam)Random.Range(0, (int)eTypeRoam.Max);
+        }
+
         return _roamPointList[_nowIndex];
     }
 

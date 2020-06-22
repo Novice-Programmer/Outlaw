@@ -67,6 +67,7 @@
     <Compile Include="Assets\2_Scripts\Bullet.cs" />
     <Compile Include="Assets\2_Scripts\Monster.cs" />
     <Compile Include="Assets\2_Scripts\Player.cs" />
+    <Compile Include="Assets\2_Scripts\SpawnControl.cs" />
     <Compile Include="Assets\2_Scripts\StickObject.cs" />
     <Compile Include="Assets\2_Scripts\Test\TestManager.cs" />
     <Compile Include="Assets\2_Scripts\UnitBase.cs" />
