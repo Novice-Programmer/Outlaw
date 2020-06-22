@@ -39,6 +39,9 @@ public class Player : UnitBase
 
     void Update()
     {
+        if (_isDead)
+            return;
+
         float speed = _runSpeed;
         float mz = Input.GetAxis("Horizontal");
         float mx = Input.GetAxis("Vertical");

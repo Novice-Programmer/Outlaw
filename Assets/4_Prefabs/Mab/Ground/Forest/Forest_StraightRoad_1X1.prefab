@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2157178253647264394}
   - component: {fileID: 2132551592199068784}
   - component: {fileID: 2140320796502195084}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: mod_ground_forrest_road_straight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2157406217196705526}
   - component: {fileID: 1993492892497804219}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Forest_StraightRoad_1X1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

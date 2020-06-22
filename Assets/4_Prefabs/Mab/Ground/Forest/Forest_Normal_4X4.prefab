@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6007717087936858541}
   - component: {fileID: 4144934733635509323}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Forest_Normal_4X4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58,6 +58,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 263a62c6ec1f6e54fb6f42566656a9ac, type: 3}
       propertyPath: m_Name
       value: mod_ground_forrest (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 263a62c6ec1f6e54fb6f42566656a9ac, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 263a62c6ec1f6e54fb6f42566656a9ac, type: 3}
       propertyPath: m_LocalPosition.x
@@ -126,6 +130,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: mod_ground_forrest (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 263a62c6ec1f6e54fb6f42566656a9ac, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 263a62c6ec1f6e54fb6f42566656a9ac, type: 3}
       propertyPath: m_LocalPosition.x
       value: 25
@@ -193,6 +201,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: mod_ground_forrest (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 263a62c6ec1f6e54fb6f42566656a9ac, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 263a62c6ec1f6e54fb6f42566656a9ac, type: 3}
       propertyPath: m_LocalPosition.x
       value: -25
@@ -259,6 +271,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 263a62c6ec1f6e54fb6f42566656a9ac, type: 3}
       propertyPath: m_Name
       value: mod_ground_forrest
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 263a62c6ec1f6e54fb6f42566656a9ac, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 263a62c6ec1f6e54fb6f42566656a9ac, type: 3}
       propertyPath: m_LocalPosition.x

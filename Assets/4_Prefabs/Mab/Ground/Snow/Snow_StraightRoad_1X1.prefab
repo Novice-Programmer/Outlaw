@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8924139026431808502}
   - component: {fileID: 461377769260270398}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Snow_StraightRoad_1X1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 8918954399685972422}
   - component: {fileID: 8916207956409558158}
   - component: {fileID: 8906611415803727600}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: mod_ground_snow_road_straight
   m_TagString: Untagged
   m_Icon: {fileID: 0}

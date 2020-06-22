@@ -7,6 +7,8 @@ TagManager:
   - LauncherStick
   - MoveStick
   - BulletObj
+  - FxTemporaire
+  - Monster
   layers:
   - Default
   - TransparentFX
@@ -16,7 +18,7 @@ TagManager:
   - UI
   - 
   - 
-  - StickController
+  - FIELD
   - 
   - 
   - 

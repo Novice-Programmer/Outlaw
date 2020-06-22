@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1936005856228561202}
   - component: {fileID: 169438287172401587}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Desert_Normal_4X4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58,6 +58,10 @@ PrefabInstance:
     - target: {fileID: 100002, guid: cb0c8f5207fb13c4a947bb8bd3ec6530, type: 3}
       propertyPath: m_Name
       value: mod_ground_desert (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: cb0c8f5207fb13c4a947bb8bd3ec6530, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: cb0c8f5207fb13c4a947bb8bd3ec6530, type: 3}
       propertyPath: m_LocalPosition.x
@@ -126,6 +130,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: mod_ground_desert
       objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: cb0c8f5207fb13c4a947bb8bd3ec6530, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: cb0c8f5207fb13c4a947bb8bd3ec6530, type: 3}
       propertyPath: m_LocalPosition.x
       value: 25
@@ -193,6 +201,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: mod_ground_desert (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: cb0c8f5207fb13c4a947bb8bd3ec6530, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: cb0c8f5207fb13c4a947bb8bd3ec6530, type: 3}
       propertyPath: m_LocalPosition.x
       value: 25
@@ -259,6 +271,10 @@ PrefabInstance:
     - target: {fileID: 100002, guid: cb0c8f5207fb13c4a947bb8bd3ec6530, type: 3}
       propertyPath: m_Name
       value: mod_ground_desert (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: cb0c8f5207fb13c4a947bb8bd3ec6530, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: cb0c8f5207fb13c4a947bb8bd3ec6530, type: 3}
       propertyPath: m_LocalPosition.x

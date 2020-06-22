@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8048840075896787115}
   - component: {fileID: 8055443771526586085}
   - component: {fileID: 8065681354803409261}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: mod_ground_volcano_road_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8048993674649462449}
   - component: {fileID: 1953862859838088269}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Volcano_EndRoad_1X1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

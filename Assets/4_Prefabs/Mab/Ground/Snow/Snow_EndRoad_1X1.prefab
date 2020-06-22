@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6673090482495049073}
   - component: {fileID: 6670104525510653840}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Snow_EndRoad_1X1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 6672881906909416437}
   - component: {fileID: 6693329857890227387}
   - component: {fileID: 6683897393182272621}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: mod_ground_snow_road_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}

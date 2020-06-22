@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8531878771265337443}
   - component: {fileID: 3988022871676517944}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Desert_Normal_1X1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 8531878771274937332}
   - component: {fileID: 8531878771278328788}
   - component: {fileID: 8531878771277230356}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: mod_ground_desert
   m_TagString: Untagged
   m_Icon: {fileID: 0}

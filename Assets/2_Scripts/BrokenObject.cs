@@ -39,6 +39,8 @@ public class BrokenObject : MonoBehaviour
         if (other.CompareTag("BulletObj"))
         {
             GameObject go = Instantiate(_effectHit, other.transform.position, Quaternion.identity);
+            Vector3 scale = go.transform.localScale;
+            go.transform.localScale = scale * _effSize;
             Destroy(go, 2.0f);
             Destroy(other.gameObject);
             if (_duration != 999)

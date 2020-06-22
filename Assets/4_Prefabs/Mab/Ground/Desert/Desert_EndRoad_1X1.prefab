@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7284932168196902382}
   - component: {fileID: 2487034868886094313}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Desert_EndRoad_1X1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 7280023195143723880}
   - component: {fileID: 7305437365101475884}
   - component: {fileID: 7297444828776762204}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: mod_ground_desert_road_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}

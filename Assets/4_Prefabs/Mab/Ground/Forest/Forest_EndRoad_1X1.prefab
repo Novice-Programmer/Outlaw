@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4281902050479669680}
   - component: {fileID: 4259181787209828802}
   - component: {fileID: 4265280984152934078}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: mod_ground_forrest_road_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4281805331415254848}
   - component: {fileID: 3584568663137673391}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Forest_EndRoad_1X1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
