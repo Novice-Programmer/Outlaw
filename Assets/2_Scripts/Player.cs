@@ -5,7 +5,7 @@ using UnityEngine.SocialPlatforms;
 
 public class Player : UnitBase
 {
-    [SerializeField] Transform _posFire;
+    [SerializeField] Transform _posFire = null;
 
     Animator _ctrlAni;
     CharacterController _controller;
@@ -18,7 +18,6 @@ public class Player : UnitBase
     float _runSpeed = 5;
     float _walkSpeed = 1.0f;
     float _sideSpeed = 0.5f;
-    bool _isAttack = false;
 
     void Awake()
     {

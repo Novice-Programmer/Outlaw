@@ -13,13 +13,15 @@ public class Animal : MonoBehaviour
     }
 
     [SerializeField] eTypeRoam _roamingType = eTypeRoam.Random;
-    [SerializeField] GameObject _movePoints;
+    [SerializeField] GameObject _movePoints = null;
+    [SerializeField] string _hitEffectName = "Hit";
 
+    GameObject _effhit;
     Transform _rootPoint;
     NavMeshAgent _navAgent;
 
-
     [SerializeField] float _moveSpeed = 0;
+    [SerializeField] int _hp = 10;
     int _nowIndex = -1;
     int _moveCount = 0;
 
@@ -30,6 +32,8 @@ public class Animal : MonoBehaviour
     }
     void Start()
     {
+        string path = "Prefabs/ParticleEffects/" + _hitEffectName;
+        _effhit = Resources.Load(path) as GameObject;
         GameObject go = GameObject.Find("AnimalMovePoint");
         _rootPoint = Instantiate(_movePoints, transform.position, transform.rotation,go.transform).transform;
         for(int i = 0; i < _rootPoint.childCount; i++)
@@ -76,5 +80,19 @@ public class Animal : MonoBehaviour
         }
 
         return _movePoint[_nowIndex];
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("BulletObj"))
+        {
+            _hp--;
+            GameObject go = Instantiate(_effhit, other.transform.position, Quaternion.identity);
+            Destroy(go, 2.0f);
+            if (_hp <= 0)
+            {
+
+            }
+        }
     }
 }

@@ -33,8 +33,8 @@ public class Monster : UnitBase
 
     [Range(0.5f, 3.0f)] [SerializeField] float _minWaitTime = 2.5f;
     [Range(3.0f, 9.9f)] [SerializeField] float _maxWaitTime = 9.9f;
-    [SerializeField] HitZone _hitZone;
-    [SerializeField] SightZone _sightZone;
+    [SerializeField] HitZone _hitZone = null;
+    [SerializeField] SightZone _sightZone = null;
     Player _targetPlayer;
 
     eKindRoam _roamingKind = eKindRoam.Random;
@@ -51,8 +51,10 @@ public class Monster : UnitBase
     [SerializeField] float _walkSpeed = 0.7f;
     [SerializeField] float _sightRange = 10;
     [SerializeField] float _attackRange = 3;
+    [SerializeField] float _followDistance = 20;
     [Range(10.0f, 100.0f)] [SerializeField] float _rateMoveAct = 50.0f; // 비전투 행동중 이동을 선택할 확률
     float _timeWait = 0;
+
     // Monster의 활용 정보
     int _nowIndex = -1;
     int _moveCount = 0;
@@ -60,6 +62,7 @@ public class Monster : UnitBase
     bool _isBack = false;
     bool _isSelectAct = true;  // false일때 선택을 한다. (true면 선택한 상황)
     bool _isRandom = false;
+    Vector3 _posBattleStart;
 
     public float _lengthSight
     {
@@ -110,6 +113,12 @@ public class Monster : UnitBase
             case eAniType.RUN:
                 if (Vector3.Distance(transform.position, _navAgent.destination) < _attackRange)
                     ChangeAction(eAniType.ATTACK);
+                else if (Vector3.Distance(transform.position, _posBattleStart) > _followDistance)
+                {
+                    ChangeAction(eAniType.WALK);
+                    _navAgent.destination = _posBattleStart;
+                    _targetPlayer = null;
+                }
                 else
                     _navAgent.destination = _targetPlayer.transform.position;
                 break;
@@ -152,6 +161,10 @@ public class Monster : UnitBase
 
     public void OnBattle(Player p)
     {
+        if(_targetPlayer == null)
+        {
+            _posBattleStart = transform.position;
+        }
         _targetPlayer = p;
         if(Vector3.Distance(transform.position,_targetPlayer.transform.position) <= _attackRange)
             ChangeAction(eAniType.ATTACK);

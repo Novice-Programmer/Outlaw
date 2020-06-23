@@ -14,12 +14,4 @@ public class Bullet : MonoBehaviour
         _rgbd.AddForce(transform.forward * _force);
         Destroy(gameObject, 3.0f);
     }
-    void Start()
-    {
-    }
-
-    void Update()
-    {
-        
-    }
 }

@@ -551,6 +551,7 @@ MonoBehaviour:
   _walkSpeed: 0.7
   _sightRange: 10
   _attackRange: 3
+  _followDistance: 15
   _rateMoveAct: 65.2
 --- !u!195 &1509545226138548623
 NavMeshAgent:
