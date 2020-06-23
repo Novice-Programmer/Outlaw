@@ -17,26 +17,42 @@ public class Monster : UnitBase
 
     public enum eTypeRoam
     {
-        Random  = 0,
+        Random = 0,
         Loop,
         PingPong,
         Max
     }
 
-    [SerializeField] eTypeRoam _roamingType = eTypeRoam.Random;
+    public enum eKindRoam
+    {
+        Random = 0,
+        Patrol,
+        Border,
+        Max
+    }
 
+    [Range(0.5f, 3.0f)] [SerializeField] float _minWaitTime = 2.5f;
+    [Range(3.0f, 9.9f)] [SerializeField] float _maxWaitTime = 9.9f;
+    [Range(10.0f, 100.0f)] [SerializeField] float _rateMoveAct = 50.0f; // 비전투 행동중 이동을 선택할 확률
+    [SerializeField] float _runSpeed = 4;
+    [SerializeField] float _walkSpeed = 0.7f;
+    [SerializeField] HitZone _hitZone;
+
+    eKindRoam _roamingKind = eKindRoam.Random;
+    eTypeRoam _roamingType = eTypeRoam.Random;
     eAniType _nowAction;
     Animation _ctrlAni;
     NavMeshAgent _navAgent;
     Dictionary<eAniKeyType, string> _aniList = new Dictionary<eAniKeyType, string>();
     List<Vector3> _roamPointList = new List<Vector3>();
 
-    [SerializeField] float _runSpeed = 4;
-    [SerializeField] float _walkSpeed = 0.7f;
-    int _nowIndex = 0;
-
+    int _nowIndex = -1;
     int _moveCount = 0;
-    bool _isPingPong = true;
+    int _randomPos = 0;
+    bool _isBack = false;
+    bool _isSelectAct = true;  // false일때 선택을 한다. (true면 선택한 상황)
+    bool _isRandom = false;
+    float _timeWait = 0;    // 비전투 행동중 대기일때 대기 시간
 
     private void Awake()
     {
@@ -47,7 +63,11 @@ public class Monster : UnitBase
     void Start()
     {
         _ctrlAni.Play(_aniList[eAniKeyType.IDLE]);
+        _hitZone.InitSettings(this);
+        _hitZone.EnableTrigger(false);
         SettingGoalPosition(GetNextPosition());
+        if (_roamingKind == eKindRoam.Random)
+            _randomPos = Random.Range(0, _roamPointList.Count);
     }
 
     // Update is called once per frame
@@ -59,11 +79,24 @@ public class Monster : UnitBase
         if (!_ctrlAni.isPlaying)
             ChangeAction(eAniType.IDLE);
 
-        if (Vector3.Distance(transform.position, _navAgent.destination) < 0.1f)
+        switch (_nowAction)
         {
-            SettingGoalPosition(GetNextPosition());
+            case eAniType.WALK:
+                if (Vector3.Distance(transform.position, _navAgent.destination) < 0.3f)
+                {
+                    _isSelectAct = false;
+                }
+                break;
+            case eAniType.IDLE:
+                _timeWait -= Time.deltaTime;
+                if (_timeWait <= 0)
+                {
+                    _isSelectAct = false;
+                }
+                break;
         }
-                   
+
+        SelectAIProcess();
     }
 
     public void SettingGoalPosition(Vector3 point, bool isRun = false)
@@ -75,50 +108,110 @@ public class Monster : UnitBase
         _navAgent.destination = point;
     }
 
-    public void SetRoamPositions(Transform root)
+    public void SetRoamPositions(Transform root, eTypeRoam type, eKindRoam kind, bool isRandom = false)
     {
-        for(int i = 0; i < root.childCount; i++)
+        for (int i = 0; i < root.childCount; i++)
         {
             _roamPointList.Add(root.GetChild(i).position);
         }
+
+        _roamingType = type;
+        _roamingKind = kind;
+        _isRandom = isRandom;
     }
 
-    Vector3 GetNextPosition()
+    /// <summary>
+    /// 매 프레임 AI가 선택을 할 수 있는지 확인하고, 선택할 수 있다면 행동에 대한
+    /// 선택(대기, 이동)을 하도록 한다.
+    /// </summary>
+    void SelectAIProcess()
     {
-        if (_roamingType == eTypeRoam.Random)
+        if (!_isSelectAct)
         {
-            _nowIndex = Random.Range(0, _roamPointList.Count);
-        }
-
-        else if(_roamingType == eTypeRoam.Loop)
-        {
-            _nowIndex++;
-            if (_nowIndex == _roamPointList.Count)
-                _nowIndex = 0;
-        }
-        else if(_roamingType == eTypeRoam.PingPong)
-        {
-            if (_isPingPong)
+            bool isNext = false;
+            switch (_roamingKind)
             {
-                _nowIndex++;
-                if (_nowIndex >= _roamPointList.Count-1)
-                    _isPingPong = false;
-                    
+                case eKindRoam.Random:
+                    if (_randomPos == _nowIndex)
+                    {
+                        float rate = Random.Range(0.0f, 100.0f);
+                        if (rate <= _rateMoveAct)
+                            isNext = true;
+                        else
+                            isNext = false;
+                    }
+                    break;
+                case eKindRoam.Patrol:
+                    if (_moveCount >= _roamPointList.Count - 1)
+                        isNext = false;
+                    break;
+                case eKindRoam.Border:
+                    if (_moveCount >= _roamPointList.Count * 2 - 1)
+                        isNext = false;
+                    break;
+            }
+            if (isNext)
+            {
+                SettingGoalPosition(GetNextPosition());
             }
             else
             {
-                _nowIndex--;
-                if(_nowIndex <= 0)
-                    _isPingPong = true;
+                _timeWait = Random.Range(_minWaitTime, _maxWaitTime);
+                ChangeAction(eAniType.IDLE);
             }
+
+            _isSelectAct = true;
+
+            if (_moveCount >= _roamPointList.Count)
+            {
+                _moveCount = 0;
+                if (_isRandom)
+                {
+                    _roamingType = (eTypeRoam)Random.Range(0, (int)eTypeRoam.Max);
+                    _roamingKind = (eKindRoam)Random.Range(0, (int)eKindRoam.Max);
+                    if (_roamingKind == eKindRoam.Random)
+                        _randomPos = Random.Range(0, _roamPointList.Count);
+                }
+            }
+        }
+    }
+
+
+    Vector3 GetNextPosition()
+    {
+        switch (_roamingType)
+        {
+            case eTypeRoam.Random:
+                _nowIndex = Random.Range(0, _roamPointList.Count);
+                break;
+            case eTypeRoam.Loop:
+                _nowIndex++;
+                if (_nowIndex >= _roamPointList.Count)
+                    _nowIndex = 0;
+                break;
+            case eTypeRoam.PingPong:
+                if (_isBack)
+                {
+                    _nowIndex--;
+                    if (_nowIndex < 0)
+                    {
+                        _isBack = false;
+                        _nowIndex = 1;
+                    }
+                }
+                else
+                {
+                    _nowIndex++;
+                    if (_nowIndex >= _roamPointList.Count)
+                    {
+                        _nowIndex = -_roamPointList.Count - 2;
+                        _isBack = true;
+                    }
+                }
+                break;
         }
 
         _moveCount++;
-        if(_moveCount == _roamPointList.Count * 2)
-        {
-            _moveCount = 0;
-            _roamingType = (eTypeRoam)Random.Range(0, (int)eTypeRoam.Max);
-        }
 
         return _roamPointList[_nowIndex];
     }

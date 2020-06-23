@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class SpawnControl : MonoBehaviour
 {
+    [SerializeField] bool _isRandom = false;
+    [SerializeField] Monster.eTypeRoam _typeRoam = Monster.eTypeRoam.Random;
+    [SerializeField] Monster.eKindRoam _kindRoam = Monster.eKindRoam.Random;
     [SerializeField] int _maxViewCount = 3;
     [SerializeField] int _maxCreateCount = 10;
     [SerializeField] float _intervalCreateTime = 2;
@@ -26,7 +29,7 @@ public class SpawnControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_maxCreateCount>0)
+        if (_maxCreateCount > 0)
         {
             if (_spawnMonList.Count < _maxViewCount)
             {
@@ -36,7 +39,15 @@ public class SpawnControl : MonoBehaviour
                     _timeCheck = 0;
                     GameObject go = Instantiate(_prefabMon, transform.position, transform.rotation);
                     Monster monster = go.GetComponent<Monster>();
-                    monster.SetRoamPositions(transform.GetChild(0));
+                    if (_isRandom)
+                    {
+                        int type, kind;
+                        type = Random.Range(0, (int)Monster.eTypeRoam.Max);
+                        kind = Random.Range(0, (int)Monster.eKindRoam.Max);
+                        _typeRoam = (Monster.eTypeRoam)type;
+                        _kindRoam = (Monster.eKindRoam)kind;
+                    }
+                    monster.SetRoamPositions(transform.GetChild(0), _typeRoam, _kindRoam);
                     _spawnMonList.Add(go);
                     _maxCreateCount--;
                 }

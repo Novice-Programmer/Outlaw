@@ -138,3 +138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _duration: 999
+  _hitEffectName: Hit
+  _boomEffectName: Explosion
+  _frameEffectName: Frame
+  _effSize: 1
