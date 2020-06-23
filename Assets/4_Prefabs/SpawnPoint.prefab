@@ -74,6 +74,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ee5625aba10f6d46a0bb303e7cf9e17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isRandom: 0
+  _typeRoam: 0
+  _kindRoam: 0
   _maxViewCount: 3
   _maxCreateCount: 10
   _intervalCreateTime: 2

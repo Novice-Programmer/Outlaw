@@ -69,8 +69,10 @@
     <Compile Include="Assets\2_Scripts\HitZone.cs" />
     <Compile Include="Assets\2_Scripts\Monster.cs" />
     <Compile Include="Assets\2_Scripts\Player.cs" />
+    <Compile Include="Assets\2_Scripts\SightZone.cs" />
     <Compile Include="Assets\2_Scripts\SpawnControl.cs" />
     <Compile Include="Assets\2_Scripts\StickObject.cs" />
+    <Compile Include="Assets\2_Scripts\Test\MyGizmo.cs" />
     <Compile Include="Assets\2_Scripts\Test\TestManager.cs" />
     <Compile Include="Assets\2_Scripts\UnitBase.cs" />
     <Compile Include="Assets\9_DownAssets\JMO Assets\Cartoon FX\Demo\Assets\CFX_AutoStopLoopedEffect.cs" />

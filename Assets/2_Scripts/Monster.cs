@@ -33,10 +33,9 @@ public class Monster : UnitBase
 
     [Range(0.5f, 3.0f)] [SerializeField] float _minWaitTime = 2.5f;
     [Range(3.0f, 9.9f)] [SerializeField] float _maxWaitTime = 9.9f;
-    [Range(10.0f, 100.0f)] [SerializeField] float _rateMoveAct = 50.0f; // 비전투 행동중 이동을 선택할 확률
-    [SerializeField] float _runSpeed = 4;
-    [SerializeField] float _walkSpeed = 0.7f;
     [SerializeField] HitZone _hitZone;
+    [SerializeField] SightZone _sightZone;
+    Player _targetPlayer;
 
     eKindRoam _roamingKind = eKindRoam.Random;
     eTypeRoam _roamingType = eTypeRoam.Random;
@@ -46,13 +45,26 @@ public class Monster : UnitBase
     Dictionary<eAniKeyType, string> _aniList = new Dictionary<eAniKeyType, string>();
     List<Vector3> _roamPointList = new List<Vector3>();
 
+
+    // Monster의 기본 정보
+    [SerializeField] float _runSpeed = 4;
+    [SerializeField] float _walkSpeed = 0.7f;
+    [SerializeField] float _sightRange = 10;
+    [SerializeField] float _attackRange = 3;
+    [Range(10.0f, 100.0f)] [SerializeField] float _rateMoveAct = 50.0f; // 비전투 행동중 이동을 선택할 확률
+    float _timeWait = 0;
+    // Monster의 활용 정보
     int _nowIndex = -1;
     int _moveCount = 0;
     int _randomPos = 0;
     bool _isBack = false;
     bool _isSelectAct = true;  // false일때 선택을 한다. (true면 선택한 상황)
     bool _isRandom = false;
-    float _timeWait = 0;    // 비전투 행동중 대기일때 대기 시간
+
+    public float _lengthSight
+    {
+        get { return _sightRange; }
+    }
 
     private void Awake()
     {
@@ -63,11 +75,12 @@ public class Monster : UnitBase
     void Start()
     {
         _ctrlAni.Play(_aniList[eAniKeyType.IDLE]);
+        _sightZone.InitSettings(this);
         _hitZone.InitSettings(this);
         _hitZone.EnableTrigger(false);
-        SettingGoalPosition(GetNextPosition());
         if (_roamingKind == eKindRoam.Random)
             _randomPos = Random.Range(0, _roamPointList.Count);
+        SettingGoalPosition(GetNextPosition());
     }
 
     // Update is called once per frame
@@ -94,6 +107,23 @@ public class Monster : UnitBase
                     _isSelectAct = false;
                 }
                 break;
+            case eAniType.RUN:
+                if (Vector3.Distance(transform.position, _navAgent.destination) < _attackRange)
+                    ChangeAction(eAniType.ATTACK);
+                else
+                    _navAgent.destination = _targetPlayer.transform.position;
+                break;
+            case eAniType.ATTACK:
+                if (Vector3.Distance(transform.position, _targetPlayer.transform.position) > _attackRange)
+                {
+                    ChangeAction(eAniType.RUN);
+                    _navAgent.destination = _targetPlayer.transform.position;
+                }
+                else
+                {
+                    ChangeAction(eAniType.ATTACK);
+                }
+                    break;
         }
 
         SelectAIProcess();
@@ -120,6 +150,19 @@ public class Monster : UnitBase
         _isRandom = isRandom;
     }
 
+    public void OnBattle(Player p)
+    {
+        _targetPlayer = p;
+        if(Vector3.Distance(transform.position,_targetPlayer.transform.position) <= _attackRange)
+            ChangeAction(eAniType.ATTACK);
+        else
+        {
+            ChangeAction(eAniType.RUN);
+            _navAgent.destination = _targetPlayer.transform.position;
+        }
+        
+    }
+
     /// <summary>
     /// 매 프레임 AI가 선택을 할 수 있는지 확인하고, 선택할 수 있다면 행동에 대한
     /// 선택(대기, 이동)을 하도록 한다.
@@ -128,7 +171,7 @@ public class Monster : UnitBase
     {
         if (!_isSelectAct)
         {
-            bool isNext = false;
+            bool isNext = true;
             switch (_roamingKind)
             {
                 case eKindRoam.Random:
