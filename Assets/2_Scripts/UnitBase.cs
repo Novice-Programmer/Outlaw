@@ -14,6 +14,7 @@ public class UnitBase : MonoBehaviour
         ATTACK,
         RELOAD,
         WALK,
+        BACKHOME,
         DEAD
     }
 
@@ -23,6 +24,11 @@ public class UnitBase : MonoBehaviour
     int _att;
     int _def;
     int _curLife;
+
+    protected int _baseAtt
+    {
+        get { return _att; }
+    }
 
     protected bool _isDead
     {
@@ -36,5 +42,21 @@ public class UnitBase : MonoBehaviour
         _life = _curLife = life;
         _att = att;
         _def = def;
+    }
+
+    protected bool HittingMe(int dam)
+    {
+        int finishD = dam - _def;
+        if (finishD < 1) finishD = 1;
+
+
+        _curLife -= finishD;
+        if (_curLife <= 0)
+        {
+            _curLife = 0;
+            return true;
+        }
+
+        return false;
     }
 }

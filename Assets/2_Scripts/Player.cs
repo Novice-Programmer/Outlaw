@@ -15,9 +15,27 @@ public class Player : UnitBase
     // UI Reference
     StickObject _stickLauncher;
 
+    // Player 기본 정보
     float _runSpeed = 5;
     float _walkSpeed = 1.0f;
     float _sideSpeed = 0.5f;
+    int _limitBulletCount = 24;
+
+    // Player 활용 정보
+    float _movSpeed;
+    int _curBulletCount = 0;
+
+    public int _finalDamage
+    {
+        get { return _baseAtt; }
+    }
+
+    public bool _playerDead
+    {
+        get { return _isDead; }
+    }
+
+    eAniType _nowAction;
 
     void Awake()
     {
@@ -27,6 +45,10 @@ public class Player : UnitBase
         _prefabBullet = Resources.Load("Prefabs/Objects/BulletObject") as GameObject;
 
         _ctrlAni.SetBool("IsBattle", true);
+
+        //임시
+        InitalizeData("플레이어", 30, 3, 2);
+        //
     }
 
     private void Start()
@@ -38,10 +60,9 @@ public class Player : UnitBase
 
     void Update()
     {
-        if (_isDead)
+        if (_isDead || _nowAction == eAniType.RELOAD)
             return;
 
-        float speed = _runSpeed;
         float mz = Input.GetAxis("Horizontal");
         float mx = Input.GetAxis("Vertical");
 
@@ -50,30 +71,29 @@ public class Player : UnitBase
 
         if (_stickLauncher._isAimMotion)
         {
-            speed = ChangeAnimationToDirection(mv);
+            ChangeAnimationToDirection(mv);
         }
         else
         {
             if (mv.magnitude == 0)
-                _ctrlAni.SetInteger("AniType", (int)eAniType.IDLE);
+                ChangeAction(eAniType.IDLE);
             else if (mv.magnitude > 0)
             {
-                _ctrlAni.SetInteger("AniType", (int)eAniType.RUN);
+                ChangeAction(eAniType.RUN);
                 _modelObj.transform.rotation = Quaternion.LookRotation(mv);
             }
         }
 
-        _controller.Move(mv * speed * Time.deltaTime);
+        _controller.Move(mv * _movSpeed * Time.deltaTime);
     }
 
-    float ChangeAnimationToDirection(Vector3 dir)
+    void ChangeAnimationToDirection(Vector3 dir)
     {
-        float speed = _walkSpeed;
         if (dir == Vector3.zero)
         {
             if (_ctrlAni.GetInteger("AniType") != (int)eAniType.ATTACK)
             {
-                _ctrlAni.SetInteger("AniType", (int)eAniType.ATTACK);
+                ChangeAction(eAniType.ATTACK);
                 _ctrlAni.SetBool("StartAttack", true);
             }
             _modelObj.transform.rotation = Quaternion.LookRotation(_stickLauncher._direction);
@@ -85,42 +105,61 @@ public class Player : UnitBase
             {
                 if (dir.x > 0)
                 {
-                    speed = _sideSpeed;
-                    _ctrlAni.SetInteger("AniType", (int)eAniType.WALK_LEFT);
+                    ChangeAction(eAniType.WALK_LEFT);
+                    _movSpeed = _sideSpeed;
                 }
                 else if (dir.x < 0)
                 {
-                    speed = _sideSpeed;
-                    _ctrlAni.SetInteger("AniType", (int)eAniType.WALK_RIGHT);
+                    ChangeAction(eAniType.WALK_RIGHT);
+                    _movSpeed = _sideSpeed;
                 }
             }
             else if (dir.z > 0)
             {
-                speed = _runSpeed;
-                if (dir.x > 0)
-                {
-                    speed -= _sideSpeed;
-                }
-                else if (dir.x < 0)
-                {
-                    speed -= _sideSpeed;
-                }
-                _ctrlAni.SetInteger("AniType", (int)eAniType.RUN);
+                ChangeAction(eAniType.RUN);
+                if (dir.x != 0)
+                    _movSpeed -= _sideSpeed;
             }
             else
             {
-                _ctrlAni.SetInteger("AniType", (int)eAniType.WALK_BACK);
-                if (dir.x > 0)
-                {
-                    speed -= _sideSpeed;
-                }
-                else if (dir.x < 0)
-                {
-                    speed -= _sideSpeed;
-                }
+                ChangeAction(eAniType.WALK_BACK);
+                if (dir.x != 0)
+                    _movSpeed -= _sideSpeed;
             }
         }
-        return speed;
+    }
+
+    public void ChangeAction(eAniType type)
+    {
+        switch (type)
+        {
+            case eAniType.IDLE:
+            case eAniType.ATTACK:
+                _ctrlAni.SetInteger("AniType", (int)type);
+                break;
+            case eAniType.RUN:
+                _movSpeed = _runSpeed;
+                _ctrlAni.SetInteger("AniType", (int)type);
+                break;
+            case eAniType.WALK:
+            case eAniType.WALK_LEFT:
+            case eAniType.WALK_RIGHT:
+            case eAniType.WALK_BACK:
+                _movSpeed = _walkSpeed;
+                _ctrlAni.SetInteger("AniType", (int)type);
+                break;
+            case eAniType.RELOAD:
+                _curBulletCount = 0;
+                _ctrlAni.SetTrigger("Reload");
+                break;
+            case eAniType.DEAD:
+                _isDead = true;
+                _ctrlAni.SetTrigger("Dead");
+                _controller.enabled = false;
+                _stickLauncher.enabled = false;
+                break;
+        }
+        _nowAction = type;
     }
 
     public void InitializeDirection()
@@ -130,8 +169,33 @@ public class Player : UnitBase
 
     public void Fire()
     {
-        Instantiate(_prefabBullet, _posFire.position, _posFire.rotation);
+
+        GameObject go = Instantiate(_prefabBullet, _posFire.position, _posFire.rotation);
+        Bullet bullet = go.GetComponent<Bullet>();
+        bullet.InitSetting(this);
+        _curBulletCount++;
 
         _ctrlAni.SetBool("StartAttack", false);
+        if (_curBulletCount >= _limitBulletCount)
+            ChangeAction(eAniType.RELOAD);
+    }
+
+    public void EndReload()
+    {
+    
+        ChangeAction(eAniType.IDLE);
+    }
+
+    public bool OnHitting(int hitDamage)
+    {
+        if (HittingMe(hitDamage))
+        {
+            ChangeAction(eAniType.DEAD);
+        }
+        else
+        {
+
+        }
+        return _isDead;
     }
 }

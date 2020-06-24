@@ -51,7 +51,7 @@ public class BrokenObject : MonoBehaviour
                     go = Instantiate(_effectExplosion, transform.position, Quaternion.identity);
                     go.transform.localScale = scale * _effSize;
                     Destroy(go, 2.0f);
-                    go = Instantiate(_effectFrame, transform.position, _effectFrame.transform.rotation);
+                    go = Instantiate(_effectFrame, transform.position, Quaternion.identity);
                     go.transform.localScale = scale * _effSize;
                     Destroy(go, 5.0f);
                     Destroy(gameObject);

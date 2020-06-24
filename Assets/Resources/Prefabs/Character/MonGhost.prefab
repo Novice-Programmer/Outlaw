@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2887683884228424306}
   m_Layer: 0
   m_Name: HitZone
-  m_TagString: Untagged
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -57,6 +57,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bb9f3842a2dddb4aa3402795a9d5838, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _hitEffName: PowHit
 --- !u!1 &671720982575941542
 GameObject:
   m_ObjectHideFlags: 0
@@ -514,6 +515,7 @@ Animation:
   - {fileID: 9151505997278386845, guid: 51095db131b86ae43b174bd0caa10eea, type: 3}
   - {fileID: 2358267264691754076, guid: 51095db131b86ae43b174bd0caa10eea, type: 3}
   - {fileID: -1328933121197127327, guid: 51095db131b86ae43b174bd0caa10eea, type: 3}
+  - {fileID: -7567048221584320907, guid: 51095db131b86ae43b174bd0caa10eea, type: 3}
   m_WrapMode: 0
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
@@ -553,6 +555,7 @@ MonoBehaviour:
   _attackRange: 3
   _followDistance: 15
   _rateMoveAct: 65.2
+  _hitEffName: MonsterHit
 --- !u!195 &1509545226138548623
 NavMeshAgent:
   m_ObjectHideFlags: 0

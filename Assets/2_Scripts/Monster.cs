@@ -12,7 +12,8 @@ public class Monster : UnitBase
         WALK,
         RUN,
         ATTACK,
-        HIT
+        HIT,
+        DEAD
     }
 
     public enum eTypeRoam
@@ -36,6 +37,7 @@ public class Monster : UnitBase
     [SerializeField] HitZone _hitZone = null;
     [SerializeField] SightZone _sightZone = null;
     Player _targetPlayer;
+    SpawnControl _mySpawnControl;
 
     eKindRoam _roamingKind = eKindRoam.Random;
     eTypeRoam _roamingType = eTypeRoam.Random;
@@ -64,9 +66,24 @@ public class Monster : UnitBase
     bool _isRandom = false;
     Vector3 _posBattleStart;
 
+    [SerializeField] string _hitEffName = "MonsterHit";
+    [SerializeField] string _deadEffName = "MonsterDead";
+    GameObject _hitEffect;
+    GameObject _deadEffect;
+
     public float _lengthSight
     {
         get { return _sightRange; }
+    }
+
+    public int _finalDamage
+    {
+        get { return _baseAtt; }
+    }
+
+    public Player _target
+    {
+        get { return _targetPlayer; }
     }
 
     private void Awake()
@@ -74,6 +91,10 @@ public class Monster : UnitBase
         _ctrlAni = GetComponent<Animation>();
         _navAgent = GetComponent<NavMeshAgent>();
         MyAnimationList();
+
+        //임시
+        InitalizeData("몬스터", 30, 2, 1);
+        //
     }
     void Start()
     {
@@ -84,6 +105,8 @@ public class Monster : UnitBase
         if (_roamingKind == eKindRoam.Random)
             _randomPos = Random.Range(0, _roamPointList.Count);
         SettingGoalPosition(GetNextPosition());
+        _hitEffect = Resources.Load("Prefabs/ParticleEffects/" + _hitEffName) as GameObject;
+        _deadEffect = Resources.Load("Prefabs/ParticleEffects/" + _deadEffName) as GameObject;
     }
 
     // Update is called once per frame
@@ -98,7 +121,7 @@ public class Monster : UnitBase
         switch (_nowAction)
         {
             case eAniType.WALK:
-                if (Vector3.Distance(transform.position, _navAgent.destination) < 0.3f)
+                if (Vector3.Distance(transform.position, _navAgent.destination) < 0.5f)
                 {
                     _isSelectAct = false;
                 }
@@ -111,28 +134,48 @@ public class Monster : UnitBase
                 }
                 break;
             case eAniType.RUN:
-                if (Vector3.Distance(transform.position, _navAgent.destination) < _attackRange)
-                    ChangeAction(eAniType.ATTACK);
-                else if (Vector3.Distance(transform.position, _posBattleStart) > _followDistance)
+                if (Vector3.Distance(transform.position, _posBattleStart) >= _followDistance)
                 {
-                    ChangeAction(eAniType.WALK);
+                    ChangeAction(eAniType.BACKHOME);
                     _navAgent.destination = _posBattleStart;
-                    _targetPlayer = null;
                 }
+
+                else if (Vector3.Distance(transform.position, _navAgent.destination) < _attackRange)
+                    ChangeAction(eAniType.ATTACK);
                 else
                     _navAgent.destination = _targetPlayer.transform.position;
                 break;
             case eAniType.ATTACK:
-                if (Vector3.Distance(transform.position, _targetPlayer.transform.position) > _attackRange)
+                if (_targetPlayer._playerDead)
+                {
+                    Winner();
+                }
+                else if (Vector3.Distance(transform.position, _targetPlayer.transform.position) > _attackRange)
                 {
                     ChangeAction(eAniType.RUN);
                     _navAgent.destination = _targetPlayer.transform.position;
                 }
                 else
                 {
-                    ChangeAction(eAniType.ATTACK);
+                    AnimationState anistate = _ctrlAni[_aniList[eAniKeyType.ATTACK]];
+                    if(anistate.normalizedTime * 100 % 100 > 33)
+                    {
+                        _hitZone.EnableTrigger(true);
+                    }
+                    if(anistate.normalizedTime * 100 % 100 > 60)
+                    {
+                        _hitZone.EnableTrigger(false);
+                    }
                 }
                     break;
+            case eAniType.BACKHOME:
+                if (Vector3.Distance(transform.position, _posBattleStart) < 0.5f)
+                {
+                    transform.position = _posBattleStart;
+                    _isSelectAct = false;
+                    _targetPlayer = null;
+                }
+                break;
         }
 
         SelectAIProcess();
@@ -147,7 +190,7 @@ public class Monster : UnitBase
         _navAgent.destination = point;
     }
 
-    public void SetRoamPositions(Transform root, eTypeRoam type, eKindRoam kind, bool isRandom = false)
+    public void SetRoamPositions(Transform root, eTypeRoam type, eKindRoam kind, SpawnControl parent, bool isRandom = false)
     {
         for (int i = 0; i < root.childCount; i++)
         {
@@ -157,6 +200,7 @@ public class Monster : UnitBase
         _roamingType = type;
         _roamingKind = kind;
         _isRandom = isRandom;
+        _mySpawnControl = parent;
     }
 
     public void OnBattle(Player p)
@@ -166,14 +210,38 @@ public class Monster : UnitBase
             _posBattleStart = transform.position;
         }
         _targetPlayer = p;
-        if(Vector3.Distance(transform.position,_targetPlayer.transform.position) <= _attackRange)
-            ChangeAction(eAniType.ATTACK);
-        else
+        if (!_targetPlayer._playerDead)
         {
-            ChangeAction(eAniType.RUN);
-            _navAgent.destination = _targetPlayer.transform.position;
+            if (Vector3.Distance(transform.position, _targetPlayer.transform.position) <= _attackRange)
+                ChangeAction(eAniType.ATTACK);
+            else
+            {
+                ChangeAction(eAniType.RUN);
+                _navAgent.destination = _targetPlayer.transform.position;
+            }
         }
-        
+    }
+
+    public void Winner()
+    {
+        StartCoroutine(WinnerAction());
+    }
+
+    public void Win()
+    {
+        _mySpawnControl.WinMonster();
+    }
+
+    IEnumerator WinnerAction()
+    {
+        ChangeAction(eAniType.IDLE);
+        yield return new WaitForSeconds(2.0f);
+
+        ChangeAction(eAniType.BACKHOME);
+        _navAgent.destination = _posBattleStart;
+
+        yield return new WaitForSeconds(0.5f);
+        StopAllCoroutines();
     }
 
     /// <summary>
@@ -260,7 +328,7 @@ public class Monster : UnitBase
                     _nowIndex++;
                     if (_nowIndex >= _roamPointList.Count)
                     {
-                        _nowIndex = -_roamPointList.Count - 2;
+                        _nowIndex = _roamPointList.Count - 2;
                         _isBack = true;
                     }
                 }
@@ -268,7 +336,6 @@ public class Monster : UnitBase
         }
 
         _moveCount++;
-
         return _roamPointList[_nowIndex];
     }
 
@@ -304,11 +371,54 @@ public class Monster : UnitBase
                 _navAgent.enabled = false;
                 _ctrlAni.CrossFade(_aniList[eAniKeyType.ATTACK]);
                 break;
+            case eAniType.BACKHOME:
+                _navAgent.enabled = true;
+                _navAgent.speed = _runSpeed * 2;
+                _ctrlAni.CrossFade(_aniList[eAniKeyType.RUN]);
+                break;
             case eAniType.DEAD:
+                _isDead = true;
                 _navAgent.enabled = false;
-                _ctrlAni.CrossFade(_aniList[eAniKeyType.HIT]);
+                _ctrlAni.CrossFade(_aniList[eAniKeyType.DEAD]);
+                Vector3 pos = transform.position;
+                pos.y += 1;
+                GameObject deadEff = Instantiate(_deadEffect, pos, Quaternion.identity);
+                Destroy(deadEff, 2.0f);
+                Destroy(gameObject, 4.0f);
                 break;
         }
         _nowAction = type;
+    }
+
+    public void OnHitting(int hitDamage)
+    {
+        if (HittingMe(hitDamage))
+        {
+            ChangeAction(eAniType.DEAD);
+            GetComponent<BoxCollider>().enabled = false;
+        }
+        else
+        {
+
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("BulletObj"))
+        {
+            Quaternion eular = Quaternion.Euler(other.transform.eulerAngles + new Vector3(0, 180, 0));
+            GameObject hitEff = Instantiate(_hitEffect, other.transform.position, eular);
+            Bullet bull = other.GetComponent<Bullet>();
+            Destroy(other.gameObject);
+            Destroy(hitEff, 1.0f);
+
+            OnHitting(bull._finalDamage);
+            if (_targetPlayer == null)
+            {
+                Player p = (Player)other.GetComponent<Bullet>()._owner;
+                _mySpawnControl.HitMonster(p);
+            }
+        }
     }
 }

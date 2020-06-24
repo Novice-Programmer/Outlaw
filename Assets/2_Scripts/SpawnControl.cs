@@ -14,7 +14,7 @@ public class SpawnControl : MonoBehaviour
     GameObject _prefabMon;
     float _timeCheck = 0;
 
-    List<GameObject> _spawnMonList = new List<GameObject>();
+    List<Monster> _spawnMonList = new List<Monster>();
 
     private void Awake()
     {
@@ -47,8 +47,8 @@ public class SpawnControl : MonoBehaviour
                         _typeRoam = (Monster.eTypeRoam)type;
                         _kindRoam = (Monster.eKindRoam)kind;
                     }
-                    monster.SetRoamPositions(transform.GetChild(0), _typeRoam, _kindRoam);
-                    _spawnMonList.Add(go);
+                    monster.SetRoamPositions(transform.GetChild(0), _typeRoam, _kindRoam, this);
+                    _spawnMonList.Add(monster);
                     _maxCreateCount--;
                 }
             }
@@ -63,6 +63,28 @@ public class SpawnControl : MonoBehaviour
             {
                 _spawnMonList.RemoveAt(i);
                 break;
+            }
+        }
+    }
+
+    public void HitMonster(Player p)
+    {
+        for(int i = 0; i < _spawnMonList.Count; i++)
+        {
+            if (_spawnMonList[i]._target == null)
+            {
+                _spawnMonList[i].OnBattle(p);
+            }
+        }
+    }
+
+    public void WinMonster()
+    {
+        for (int i = 0; i < _spawnMonList.Count; i++)
+        {
+            if (_spawnMonList[i]._target == null)
+            {
+                _spawnMonList[i].Winner();
             }
         }
     }
