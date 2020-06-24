@@ -1,15 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class Animal : MonoBehaviour
 {
-    public enum eTypeRoam
+    enum eTypeRoam
     {
         Random = 0,
         Loop,
         Max
+    }
+
+    enum eAniType
+    {
+        IDLE = 0,
+        RUN,
+        DIE
     }
 
     [SerializeField] eTypeRoam _roamingType = eTypeRoam.Random;
@@ -21,14 +29,22 @@ public class Animal : MonoBehaviour
     NavMeshAgent _navAgent;
 
     [SerializeField] float _moveSpeed = 0;
+    [Range(0.5f, 2.0f)] [SerializeField] float _minRate = 0.5f;
+    [Range(2.0f, 4.0f)] [SerializeField] float _maxRate = 2.0f;
     [SerializeField] int _hp = 10;
+
+    float _rateTime = 0;
     int _nowIndex = -1;
     int _moveCount = 0;
+
+    Animator _ctrlAni;
+    eAniType _nowAniType = eAniType.RUN;
 
     List<Vector3> _movePoint = new List<Vector3>();
     private void Awake()
     {
         _navAgent = GetComponent<NavMeshAgent>();
+        _ctrlAni = GetComponent<Animator>();
     }
     void Start()
     {
@@ -40,6 +56,7 @@ public class Animal : MonoBehaviour
         {
             _movePoint.Add(_rootPoint.GetChild(i).transform.position);
         }
+        ChangeAnimation(eAniType.RUN);
         SettingGoalPosition(GetNextPosition());
         _navAgent.speed = _moveSpeed;
     }
@@ -47,10 +64,22 @@ public class Animal : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Vector3.Distance(transform.position, _navAgent.destination) < 0.3f)
+        switch (_nowAniType)
         {
-            SettingGoalPosition(GetNextPosition());
+            case eAniType.IDLE:
+                _rateTime -= Time.deltaTime;
+                if (_rateTime <= 0)
+                {
+                    ChangeAnimation(eAniType.RUN);
+                }
+
+                break;
+            case eAniType.RUN:
+                if (Vector3.Distance(transform.position, _navAgent.destination) < 0.3f)
+                    SettingGoalPosition(GetNextPosition());
+                break;
         }
+
     }
 
     public void SettingGoalPosition(Vector3 point, bool isRun = false)
@@ -77,21 +106,44 @@ public class Animal : MonoBehaviour
         {
             _moveCount = 0;
             _roamingType = (eTypeRoam)Random.Range(0, (int)eTypeRoam.Max);
+            ChangeAnimation(eAniType.IDLE);
+            _rateTime = Random.Range(_minRate, _maxRate);
         }
 
         return _movePoint[_nowIndex];
+    }
+
+    void ChangeAnimation(eAniType aniType)
+    {
+        switch (aniType)
+        {
+            case eAniType.IDLE:
+                _ctrlAni.SetBool("IsRun", false);
+                break;
+            case eAniType.RUN:
+                _ctrlAni.SetBool("IsRun", true);
+                break;
+            case eAniType.DIE:
+                _ctrlAni.SetTrigger("Die");
+                Destroy(gameObject, 1.0f);
+                break;
+        }
+
+        _nowAniType = aniType;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("BulletObj"))
         {
+            Destroy(other.gameObject);
             _hp--;
             GameObject go = Instantiate(_effhit, other.transform.position, Quaternion.identity);
             Destroy(go, 2.0f);
             if (_hp <= 0)
             {
-
+                ChangeAnimation(eAniType.DIE);
+                GetComponent<BoxCollider>().enabled = false;
             }
         }
     }
