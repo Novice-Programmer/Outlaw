@@ -85,11 +85,9 @@
     <Compile Include="Assets\9_DownAssets\JMO Assets\Cartoon FX\Scripts\CFX_AutoRotate.cs" />
     <Compile Include="Assets\9_DownAssets\JMO Assets\Cartoon FX\Scripts\CFX_LightFlicker.cs" />
     <Compile Include="Assets\9_DownAssets\JMO Assets\Cartoon FX\Scripts\CFX_LightIntensityFade.cs" />
-    <Compile Include="Assets\9_DownAssets\VoxelAnimals\Assets\Scripts\PlayerController.cs" />
     <None Include="Assets\9_DownAssets\JMO Assets\Cartoon FX\Shaders\CFX3 Multiply Color.shader" />
     <None Include="Assets\9_DownAssets\JMO Assets\Cartoon FX Easy Editor\CartoonFX Easy Editor Readme.txt" />
     <None Include="Assets\9_DownAssets\JMO Assets\Cartoon FX\Shaders\CFXM_MobileParticleAdd_Alpha8.shader" />
-    <None Include="Assets\9_DownAssets\VoxelAnimals\Documentation\ReadMe.txt" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Unity/Outlaw/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
