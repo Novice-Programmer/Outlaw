@@ -14,6 +14,8 @@ public class Player : UnitBase
 
     // UI Reference
     StickObject _stickLauncher;
+    StickObject _stickMovement;
+    MiniStatusWindow _miniWnd;
 
     // Player 기본 정보
     float _runSpeed = 5;
@@ -33,6 +35,11 @@ public class Player : UnitBase
     public bool _playerDead
     {
         get { return _isDead; }
+    }
+
+    public int _maxBulletCount
+    {
+        get { return _limitBulletCount; }
     }
 
     eAniType _nowAction;
@@ -55,19 +62,29 @@ public class Player : UnitBase
     {
         GameObject go = GameObject.FindGameObjectWithTag("LauncherStick");
         _stickLauncher = go.GetComponent<StickObject>();
+        go = GameObject.FindGameObjectWithTag("MoveStick");
+        _stickMovement = go.GetComponent<StickObject>();
         _stickLauncher.SetOwnerPlayer(this);
+        _stickMovement.SetOwnerPlayer(this);
+        _miniWnd = GameObject.FindGameObjectWithTag("MiniAvatarWindow").GetComponent<MiniStatusWindow>();
+        _miniWnd.InitializeSetData(_myName, _limitBulletCount);
     }
 
     void Update()
     {
         if (_isDead || _nowAction == eAniType.RELOAD)
             return;
-
-        float mz = Input.GetAxis("Horizontal");
+        Vector3 mv;
+#if UNITY_EDITOR
+        float mz = -Input.GetAxis("Horizontal");
         float mx = Input.GetAxis("Vertical");
-
-        Vector3 mv = new Vector3(mx, 0, -mz);
-        mv = (mv.magnitude > 1) ? mv.normalized : mv;
+        if (mz == 0 && mx == 0)
+            mv = _stickMovement._dirMov;
+        else
+            mv = new Vector3(mx, 0, mz);
+#else
+        mv = _stickMovement._dirMov;
+#endif
 
         if (_stickLauncher._isAimMotion)
         {
@@ -75,6 +92,7 @@ public class Player : UnitBase
         }
         else
         {
+            mv = (mv.magnitude > 1) ? mv.normalized : mv;
             if (mv.magnitude == 0)
                 ChangeAction(eAniType.IDLE);
             else if (mv.magnitude > 0)
@@ -153,13 +171,19 @@ public class Player : UnitBase
                 _ctrlAni.SetTrigger("Reload");
                 break;
             case eAniType.DEAD:
-                _isDead = true;
+                PlayerDead();
                 _ctrlAni.SetTrigger("Dead");
-                _controller.enabled = false;
-                _stickLauncher.enabled = false;
                 break;
         }
         _nowAction = type;
+    }
+
+    void PlayerDead()
+    {
+        _isDead = true;
+        _controller.enabled = false;
+        _stickLauncher.gameObject.SetActive(false);
+        _stickMovement.gameObject.SetActive(false);
     }
 
     public void InitializeDirection()
@@ -169,12 +193,14 @@ public class Player : UnitBase
 
     public void Fire()
     {
-
+        if (_nowAction == eAniType.RELOAD)
+            return;
         GameObject go = Instantiate(_prefabBullet, _posFire.position, _posFire.rotation);
         Bullet bullet = go.GetComponent<Bullet>();
-        bullet.InitSetting(this);
-        _curBulletCount++;
+        bullet.InitData(this);
 
+        _curBulletCount++;
+        _miniWnd.SetBulletRate(_limitBulletCount - _curBulletCount);
         _ctrlAni.SetBool("StartAttack", false);
         if (_curBulletCount >= _limitBulletCount)
             ChangeAction(eAniType.RELOAD);
@@ -182,8 +208,9 @@ public class Player : UnitBase
 
     public void EndReload()
     {
-    
+        _curBulletCount = 0;
         ChangeAction(eAniType.IDLE);
+        _miniWnd.SetBulletRate(_limitBulletCount - _curBulletCount);
     }
 
     public bool OnHitting(int hitDamage)
@@ -196,6 +223,7 @@ public class Player : UnitBase
         {
 
         }
+        _miniWnd.SetHPRate(_hpRate);
         return _isDead;
     }
 }

@@ -11,6 +11,10 @@ public class StickObject : MonoBehaviour, IDragHandler, IPointerDownHandler, IPo
     Image _stick;
     Vector3 _dirInput;
 
+    Color _orizinColor;
+    [SerializeField] Color _downColor = Color.green;
+    [Range(4.0f, 2.0f)] [SerializeField] float _scrollSpeed = 3.0f;
+
     Player _ownerPlayer;
 
     public bool _isAimMotion { get { return _isAim; } }
@@ -23,6 +27,8 @@ public class StickObject : MonoBehaviour, IDragHandler, IPointerDownHandler, IPo
     {
         _bg = GetComponent<Image>();
         _stick = transform.GetChild(0).GetComponent<Image>();
+        _orizinColor = _stick.color;
+
     }
 
     void Update()
@@ -45,15 +51,14 @@ public class StickObject : MonoBehaviour, IDragHandler, IPointerDownHandler, IPo
 
             _dirInput = new Vector3(pos.y, 0, -pos.x);
             Vector3 dir = pos.magnitude > 1.0f ? pos.normalized : pos;
-
-            _stick.rectTransform.anchoredPosition = new Vector3(dir.x * _bg.rectTransform.sizeDelta.x / 3, dir.y * _bg.rectTransform.sizeDelta.y / 3, 0);
+            _stick.rectTransform.anchoredPosition = new Vector3(dir.x * _bg.rectTransform.sizeDelta.x / _scrollSpeed, dir.y * _bg.rectTransform.sizeDelta.y / _scrollSpeed, 0);
         }
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
         _isAim = true;
-        _stick.color = new Color(0.5f, 0, 0, 0.5f);
+        _stick.color = _downColor;
         _ownerPlayer.InitializeDirection();
         OnDrag(eventData);
     }
@@ -61,7 +66,7 @@ public class StickObject : MonoBehaviour, IDragHandler, IPointerDownHandler, IPo
     public void OnPointerUp(PointerEventData eventData)
     {
         _isAim = false;
-        _stick.color = new Color(1.0f, 0, 0, 0.5f);
+        _stick.color = _orizinColor;
         _dirInput = Vector3.zero;
         _stick.rectTransform.anchoredPosition = _dirInput;
     }

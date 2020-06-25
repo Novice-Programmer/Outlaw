@@ -36,6 +36,21 @@ public class UnitBase : MonoBehaviour
         get { return _isDie; }
     }
 
+    protected string _myName
+    {
+        get { return _name; }
+    }
+
+    public float _hpRate
+    {
+        get { return (float)_curLife / _life; }
+    }
+
+    public float _energyRate
+    {
+        get;
+    }
+
     protected void InitalizeData(string name, int life, int att, int def)
     {
         _name = name;

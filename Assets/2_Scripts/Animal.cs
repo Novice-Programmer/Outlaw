@@ -4,20 +4,13 @@ using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Animal : MonoBehaviour
+public class Animal : UnitBase
 {
     enum eTypeRoam
     {
         Random = 0,
         Loop,
         Max
-    }
-
-    enum eAniType
-    {
-        IDLE = 0,
-        RUN,
-        DIE
     }
 
     [SerializeField] eTypeRoam _roamingType = eTypeRoam.Random;
@@ -31,7 +24,9 @@ public class Animal : MonoBehaviour
     [SerializeField] float _moveSpeed = 0;
     [Range(0.5f, 2.0f)] [SerializeField] float _minRate = 0.5f;
     [Range(2.0f, 4.0f)] [SerializeField] float _maxRate = 2.0f;
-    [SerializeField] int _hp = 10;
+    [SerializeField] string _animalName = "Animal";
+    [SerializeField] int _animalHP = 10;
+    [SerializeField] int _animalDef = 0;
 
     float _rateTime = 0;
     int _nowIndex = -1;
@@ -45,6 +40,7 @@ public class Animal : MonoBehaviour
     {
         _navAgent = GetComponent<NavMeshAgent>();
         _ctrlAni = GetComponent<Animator>();
+        InitalizeData(_animalName, _animalHP, 0, _animalDef);
     }
     void Start()
     {
@@ -123,7 +119,7 @@ public class Animal : MonoBehaviour
             case eAniType.RUN:
                 _ctrlAni.SetBool("IsRun", true);
                 break;
-            case eAniType.DIE:
+            case eAniType.DEAD:
                 _ctrlAni.SetTrigger("Die");
                 Destroy(gameObject, 1.0f);
                 break;
@@ -136,13 +132,14 @@ public class Animal : MonoBehaviour
     {
         if (other.CompareTag("BulletObj"))
         {
+            Bullet bull = other.GetComponent<Bullet>();
             Destroy(other.gameObject);
-            _hp--;
-            GameObject go = Instantiate(_effhit, other.transform.position, Quaternion.identity);
+            Quaternion eular = Quaternion.Euler(other.transform.eulerAngles + new Vector3(0, 180, 0));
+            GameObject go = Instantiate(_effhit, other.transform.position, eular);
             Destroy(go, 2.0f);
-            if (_hp <= 0)
+            if (HittingMe(bull._finalDamage))
             {
-                ChangeAnimation(eAniType.DIE);
+                ChangeAnimation(eAniType.DEAD);
                 GetComponent<BoxCollider>().enabled = false;
             }
         }

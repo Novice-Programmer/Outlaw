@@ -33,7 +33,7 @@ public class Bullet : MonoBehaviour
         get { return (UnitBase)_ownerCharacter; }
     }
 
-    public void InitSetting(UnitBase owner,bool isPlayer = true)
+    public void InitData(UnitBase owner,bool isPlayer = true)
     {
         _ownerCharacter = owner;
         _isPlayer = isPlayer;

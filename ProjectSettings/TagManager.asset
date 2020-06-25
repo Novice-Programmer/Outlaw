@@ -9,6 +9,7 @@ TagManager:
   - BulletObj
   - FxTemporaire
   - Monster
+  - MiniAvatarWindow
   layers:
   - Default
   - TransparentFX
@@ -19,7 +20,7 @@ TagManager:
   - 
   - 
   - FIELD
-  - 
+  - AvatarModel
   - 
   - 
   - 

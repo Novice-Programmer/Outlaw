@@ -36,6 +36,7 @@ public class Monster : UnitBase
     [Range(3.0f, 9.9f)] [SerializeField] float _maxWaitTime = 9.9f;
     [SerializeField] HitZone _hitZone = null;
     [SerializeField] SightZone _sightZone = null;
+    [SerializeField] WorldStatusWindow _monsterStatus = null;
     Player _targetPlayer;
     SpawnControl _mySpawnControl;
 
@@ -401,6 +402,7 @@ public class Monster : UnitBase
         {
 
         }
+        _monsterStatus.HPRateUpdate(_hpRate);
     }
 
     private void OnTriggerEnter(Collider other)
