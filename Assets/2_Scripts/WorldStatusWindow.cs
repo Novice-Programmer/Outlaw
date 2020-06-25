@@ -38,6 +38,7 @@ public class WorldStatusWindow : MonoBehaviour
     {
         _sdMonSlider.value = rate;
         _isAttack = true;
+        time = _viewTime;
         _sdMonSlider.gameObject.SetActive(true);
     }
 }
