@@ -10,6 +10,9 @@ TagManager:
   - FxTemporaire
   - Monster
   - MiniAvatarWindow
+  - Marker
+  - MinimapController
+  - BrokenObject
   layers:
   - Default
   - TransparentFX
@@ -21,9 +24,9 @@ TagManager:
   - 
   - FIELD
   - AvatarModel
-  - 
-  - 
-  - 
+  - WALL
+  - BROKENPROB
+  - CHARACTERMAKER
   - 
   - 
   - 

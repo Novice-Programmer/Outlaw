@@ -14,7 +14,7 @@ public class SpawnControl : MonoBehaviour
     GameObject _prefabMon;
     float _timeCheck = 0;
 
-    List<Monster> _spawnMonList = new List<Monster>();
+    List<GameObject> _spawnMonList = new List<GameObject>();
 
     private void Awake()
     {
@@ -29,6 +29,9 @@ public class SpawnControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (IngameManager._instance._gameState != IngameManager.EGameState.Play)
+            return;
+
         if (_maxCreateCount > 0)
         {
             if (_spawnMonList.Count < _maxViewCount)
@@ -48,7 +51,7 @@ public class SpawnControl : MonoBehaviour
                         _kindRoam = (Monster.eKindRoam)kind;
                     }
                     monster.SetRoamPositions(transform.GetChild(0), _typeRoam, _kindRoam, this);
-                    _spawnMonList.Add(monster);
+                    _spawnMonList.Add(go);
                     _maxCreateCount--;
                 }
             }
@@ -67,25 +70,30 @@ public class SpawnControl : MonoBehaviour
         }
     }
 
-    public void HitMonster(Player p)
+    public void AttackAtOnce(Player p)
     {
         for(int i = 0; i < _spawnMonList.Count; i++)
         {
-            if (_spawnMonList[i]._target == null)
-            {
-                _spawnMonList[i].OnBattle(p);
-            }
+            Monster mon = _spawnMonList[i].GetComponent<Monster>(); 
+            mon.OnBattle(p);
         }
     }
 
-    public void WinMonster()
+    public void AllNotificationPlayerDeath()
     {
         for (int i = 0; i < _spawnMonList.Count; i++)
         {
-            if (_spawnMonList[i]._target == null)
-            {
-                _spawnMonList[i].Winner();
-            }
+            Monster mon = _spawnMonList[i].GetComponent<Monster>();
+            mon.Winner();
+        }
+    }
+
+    public void MonsterDie(GameObject go)
+    {
+        _spawnMonList.Remove(go);
+        if (_maxCreateCount == 0 && _spawnMonList.Count == 0)
+        {
+            IngameManager._instance.SpawnPointRemove(this);
         }
     }
 }

@@ -7,11 +7,6 @@ public class CameraController : MonoBehaviour
     [SerializeField] Vector3 _offSet = Vector3.zero;
     [SerializeField] float _followSpeed = 2.5f;
     GameObject _playerObj;
-    void Start()
-    {
-        _playerObj = GameObject.FindGameObjectWithTag("Player");
-    }
-
 
     void Update()
     {
@@ -22,5 +17,10 @@ public class CameraController : MonoBehaviour
             // 즉각반응
             //transform.position = _playerObj.transform.position + _offSet;
         }
+    }
+
+    public void InitPlayer()
+    {
+        _playerObj = GameObject.FindGameObjectWithTag("Player");
     }
 }

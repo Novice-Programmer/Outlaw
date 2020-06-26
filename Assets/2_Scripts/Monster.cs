@@ -36,9 +36,10 @@ public class Monster : UnitBase
     [Range(3.0f, 9.9f)] [SerializeField] float _maxWaitTime = 9.9f;
     [SerializeField] HitZone _hitZone = null;
     [SerializeField] SightZone _sightZone = null;
-    [SerializeField] WorldStatusWindow _monsterStatus = null;
+    [SerializeField] WorldStatusWindow _worldMiniUI = null;
+    [SerializeField] Marker _marker = null;
     Player _targetPlayer;
-    SpawnControl _mySpawnControl;
+    SpawnControl _ownerParent;
 
     eKindRoam _roamingKind = eKindRoam.Random;
     eTypeRoam _roamingType = eTypeRoam.Random;
@@ -56,7 +57,7 @@ public class Monster : UnitBase
     [SerializeField] float _attackRange = 3;
     [SerializeField] float _followDistance = 20;
     [Range(10.0f, 100.0f)] [SerializeField] float _rateMoveAct = 50.0f; // 비전투 행동중 이동을 선택할 확률
-    float _timeWait = 0;
+    float _timeCheck = 0;
 
     // Monster의 활용 정보
     int _nowIndex = -1;
@@ -65,6 +66,7 @@ public class Monster : UnitBase
     bool _isBack = false;
     bool _isSelectAct = true;  // false일때 선택을 한다. (true면 선택한 상황)
     bool _isRandom = false;
+    bool _isInvincibility = false;
     Vector3 _posBattleStart;
 
     [SerializeField] string _hitEffName = "MonsterHit";
@@ -108,6 +110,7 @@ public class Monster : UnitBase
         SettingGoalPosition(GetNextPosition());
         _hitEffect = Resources.Load("Prefabs/ParticleEffects/" + _hitEffName) as GameObject;
         _deadEffect = Resources.Load("Prefabs/ParticleEffects/" + _deadEffName) as GameObject;
+        MinimapController.Instance.AddMarker(_marker);
     }
 
     // Update is called once per frame
@@ -128,8 +131,8 @@ public class Monster : UnitBase
                 }
                 break;
             case eAniType.IDLE:
-                _timeWait -= Time.deltaTime;
-                if (_timeWait <= 0)
+                _timeCheck -= Time.deltaTime;
+                if (_timeCheck <= 0)
                 {
                     _isSelectAct = false;
                 }
@@ -174,7 +177,16 @@ public class Monster : UnitBase
                 {
                     transform.position = _posBattleStart;
                     _isSelectAct = false;
+                    _isInvincibility = false;
                     _targetPlayer = null;
+                }
+                else
+                {
+                    _timeCheck += Time.deltaTime;
+                    if (_timeCheck < 0.5f)
+                    {
+                        LifeSet(1);
+                    }
                 }
                 break;
         }
@@ -191,7 +203,7 @@ public class Monster : UnitBase
         _navAgent.destination = point;
     }
 
-    public void SetRoamPositions(Transform root, eTypeRoam type, eKindRoam kind, SpawnControl parent, bool isRandom = false)
+    public void SetRoamPositions(Transform root, eTypeRoam type, eKindRoam kind, SpawnControl owner, bool isRandom = false)
     {
         for (int i = 0; i < root.childCount; i++)
         {
@@ -201,15 +213,16 @@ public class Monster : UnitBase
         _roamingType = type;
         _roamingKind = kind;
         _isRandom = isRandom;
-        _mySpawnControl = parent;
+        _ownerParent = owner;
     }
 
     public void OnBattle(Player p)
     {
-        if(_targetPlayer == null)
-        {
+        if (_targetPlayer != null)
+            return;
+        else
             _posBattleStart = transform.position;
-        }
+
         _targetPlayer = p;
         if (!_targetPlayer._playerDead)
         {
@@ -225,14 +238,11 @@ public class Monster : UnitBase
 
     public void Winner()
     {
+        if (_targetPlayer == null)
+            return;
         StartCoroutine(WinnerAction());
     }
-
-    public void Win()
-    {
-        _mySpawnControl.WinMonster();
-    }
-
+    
     IEnumerator WinnerAction()
     {
         ChangeAction(eAniType.IDLE);
@@ -281,7 +291,7 @@ public class Monster : UnitBase
             }
             else
             {
-                _timeWait = Random.Range(_minWaitTime, _maxWaitTime);
+                _timeCheck = Random.Range(_minWaitTime, _maxWaitTime);
                 ChangeAction(eAniType.IDLE);
             }
 
@@ -375,6 +385,8 @@ public class Monster : UnitBase
             case eAniType.BACKHOME:
                 _navAgent.enabled = true;
                 _navAgent.speed = _runSpeed * 2;
+                _isInvincibility = true;
+                _timeCheck = 0;
                 _ctrlAni.CrossFade(_aniList[eAniKeyType.RUN]);
                 break;
             case eAniType.DEAD:
@@ -397,12 +409,12 @@ public class Monster : UnitBase
         {
             ChangeAction(eAniType.DEAD);
             GetComponent<BoxCollider>().enabled = false;
+            _ownerParent.MonsterDie(gameObject);
         }
         else
         {
-
         }
-        _monsterStatus.HPRateUpdate(_hpRate);
+        _worldMiniUI.SetHpRate(_hpRate);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -412,15 +424,17 @@ public class Monster : UnitBase
             Quaternion eular = Quaternion.Euler(other.transform.eulerAngles + new Vector3(0, 180, 0));
             GameObject hitEff = Instantiate(_hitEffect, other.transform.position, eular);
             Bullet bull = other.GetComponent<Bullet>();
-            Destroy(other.gameObject);
             Destroy(hitEff, 1.0f);
-
-            OnHitting(bull._finalDamage);
-            if (_targetPlayer == null)
+            Destroy(other.gameObject);
+            if (!_isInvincibility)
+                OnHitting(bull._finalDamage);
+            else
             {
-                Player p = (Player)other.GetComponent<Bullet>()._owner;
-                _mySpawnControl.HitMonster(p);
+
             }
+
+            Player p = (Player)other.GetComponent<Bullet>()._owner;
+            _ownerParent.AttackAtOnce(p);
         }
     }
 }

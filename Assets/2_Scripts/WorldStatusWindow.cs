@@ -5,26 +5,23 @@ using UnityEngine.UI;
 
 public class WorldStatusWindow : MonoBehaviour
 {
-    [SerializeField] Slider _sdMonSlider;
-    [SerializeField] float _viewTime = 3.0f;
-    float time=0;
-    bool _isAttack=false;
+    [SerializeField] Slider _hpBar = null;
+    [SerializeField] float _limitViewTime = 3.0f;
+    float _timeCheck=int.MaxValue;
 
     private void Start()
     {
-        time = _viewTime;
-        _sdMonSlider.gameObject.SetActive(false);
+        _timeCheck = _limitViewTime;
     }
 
-    private void Update()
+    private void LateUpdate()
     {
-        if (_isAttack)
+        if (gameObject.activeSelf)
         {
-            time -= Time.deltaTime;
-            if (time <= 0)
+            _timeCheck += Time.deltaTime;
+            if(_timeCheck >= _limitViewTime)
             {
-                _isAttack = false;
-                _sdMonSlider.gameObject.SetActive(false);
+                gameObject.SetActive(false);
             }
         }
     }
@@ -34,11 +31,10 @@ public class WorldStatusWindow : MonoBehaviour
         transform.LookAt(Camera.main.transform);
     }
 
-    public void HPRateUpdate(float rate)
+    public void SetHpRate(float rate)
     {
-        _sdMonSlider.value = rate;
-        _isAttack = true;
-        time = _viewTime;
-        _sdMonSlider.gameObject.SetActive(true);
+        gameObject.SetActive(true);
+        _hpBar.value = rate;
+        _timeCheck = 0;
     }
 }

@@ -28,12 +28,6 @@ public class StickObject : MonoBehaviour, IDragHandler, IPointerDownHandler, IPo
         _bg = GetComponent<Image>();
         _stick = transform.GetChild(0).GetComponent<Image>();
         _orizinColor = _stick.color;
-
-    }
-
-    void Update()
-    {
-        
     }
 
     public void SetOwnerPlayer(Player p)

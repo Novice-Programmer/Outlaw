@@ -51,6 +51,16 @@ public class UnitBase : MonoBehaviour
         get;
     }
 
+    protected void LifeSet(int life, bool isExcess = false)
+    {
+        _curLife += life;
+
+        if (_curLife >= _life)
+        {
+            _curLife = isExcess ? _curLife : _life;
+        }
+    }
+
     protected void InitalizeData(string name, int life, int att, int def)
     {
         _name = name;

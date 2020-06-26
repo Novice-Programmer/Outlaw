@@ -43,7 +43,7 @@ public class HitZone : MonoBehaviour
             if (_isMonster)
             {
                 if (p.OnHitting(((Monster)_ownerCharacter)._finalDamage))
-                    ((Monster)_ownerCharacter).Win();
+                    IngameManager._instance.ReceivePlayerDie();
             }
             else
             {

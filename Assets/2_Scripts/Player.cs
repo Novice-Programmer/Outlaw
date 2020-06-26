@@ -6,6 +6,7 @@ using UnityEngine.SocialPlatforms;
 public class Player : UnitBase
 {
     [SerializeField] Transform _posFire = null;
+    [SerializeField] Marker _marker = null;
 
     Animator _ctrlAni;
     CharacterController _controller;
@@ -68,11 +69,12 @@ public class Player : UnitBase
         _stickMovement.SetOwnerPlayer(this);
         _miniWnd = GameObject.FindGameObjectWithTag("MiniAvatarWindow").GetComponent<MiniStatusWindow>();
         _miniWnd.InitializeSetData(_myName, _limitBulletCount);
+        MinimapController.Instance.AddMarker(_marker);
     }
 
     void Update()
     {
-        if (_isDead || _nowAction == eAniType.RELOAD)
+        if (_isDead || _nowAction == eAniType.RELOAD || IngameManager._instance._gameState != IngameManager.EGameState.Play)
             return;
         Vector3 mv;
 #if UNITY_EDITOR
