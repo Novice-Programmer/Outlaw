@@ -10,6 +10,8 @@ public class MinimapController : MonoBehaviour
     [SerializeField] Text _txtMapName = null;
     Camera _camera;
     GameObject _playerObj;
+    GameObject _prefabBrokenMarker;
+    GameObject _prefabAnimalMarker;
     List<Marker> _markers = new List<Marker>();
     int _curSize = 1;
     int _minSize = 0;
@@ -35,6 +37,8 @@ public class MinimapController : MonoBehaviour
     }
     void Start()
     {
+        _prefabBrokenMarker = Resources.Load("Prefabs/Objects/BrokenMarker") as GameObject;
+        _prefabAnimalMarker = Resources.Load("Prefabs/Objects/AnimalMarker") as GameObject;
         GetMarker();
     }
 
@@ -110,9 +114,16 @@ public class MinimapController : MonoBehaviour
         GameObject[] brokenObj = GameObject.FindGameObjectsWithTag("BrokenObject");
         for(int i = 0; i < brokenObj.Length; i++)
         {
-            GameObject markerObj = Resources.Load("Prefabs/Objects/BrokenMarker") as GameObject;
-            GameObject addmarker = Instantiate(markerObj, brokenObj[i].transform);
-            Marker marker = addmarker.GetComponent<Marker>();
+            GameObject addMarker = Instantiate(_prefabBrokenMarker, brokenObj[i].transform);
+            Marker marker = addMarker.GetComponent<Marker>();
+            _markers.Add(marker);
+        }
+
+        Animal[] animalObj = GameObject.FindObjectsOfType<Animal>();
+        for(int i = 0; i < animalObj.Length; i++)
+        {
+            GameObject addMarker = Instantiate(_prefabAnimalMarker, animalObj[i].transform);
+            Marker marker = addMarker.GetComponent<Marker>();
             _markers.Add(marker);
         }
     }
