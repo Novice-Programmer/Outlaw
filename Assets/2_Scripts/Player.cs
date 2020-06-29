@@ -74,7 +74,7 @@ public class Player : UnitBase
 
     void Update()
     {
-        if (_isDead || _nowAction == eAniType.RELOAD || IngameManager._instance._gameState != IngameManager.EGameState.Play)
+        if (_isDead || _nowAction == eAniType.RELOAD || IngameManager.Instance._gameState != IngameManager.EGameState.Play)
             return;
         Vector3 mv;
 #if UNITY_EDITOR

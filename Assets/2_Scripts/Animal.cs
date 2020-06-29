@@ -16,6 +16,7 @@ public class Animal : UnitBase
     [SerializeField] eTypeRoam _roamingType = eTypeRoam.Random;
     [SerializeField] GameObject _movePoints = null;
     [SerializeField] string _hitEffectName = "Hit";
+    [SerializeField] WorldStatusWindow _worldMiniUI = null;
 
     GameObject _effhit;
     Transform _rootPoint;
@@ -141,7 +142,9 @@ public class Animal : UnitBase
             {
                 ChangeAnimation(eAniType.DEAD);
                 GetComponent<BoxCollider>().enabled = false;
+                ++IngameManager.Instance._countAnimalKill;
             }
+            _worldMiniUI.SetHpRate(_hpRate);
         }
     }
 }

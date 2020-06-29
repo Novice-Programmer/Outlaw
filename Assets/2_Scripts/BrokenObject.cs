@@ -10,12 +10,20 @@ public class BrokenObject : MonoBehaviour
     [SerializeField] string _hitEffectName = "Hit";
     [SerializeField] string _boomEffectName = "Explosion";
     [SerializeField] string _frameEffectName = "Frame";
-    [SerializeField] int _effSize = 1;
+    [SerializeField] float _effSize = 1;
+    [SerializeField] float _markerSize = 1;
+    [SerializeField] int _brokenScore = 1;
+    
     GameObject _effectHit;
     GameObject _effectExplosion;
     GameObject _effectFrame;
 
     const string effPass = "Prefabs/ParticleEffects/";
+
+    public float _sizeMarker
+    {
+        get { return _markerSize; }
+    }
 
     // Start is called before the first frame update
     void Awake()
@@ -40,7 +48,6 @@ public class BrokenObject : MonoBehaviour
         {
             GameObject go = Instantiate(_effectHit, other.transform.position, Quaternion.identity);
             Vector3 scale = go.transform.localScale;
-            go.transform.localScale = scale * _effSize;
             Destroy(go, 2.0f);
             Destroy(other.gameObject);
             if (_duration != 999)
@@ -48,6 +55,7 @@ public class BrokenObject : MonoBehaviour
                 _duration--;
                 if (_duration <= 0)
                 {
+                    IngameManager.Instance._scoreBroken = _brokenScore;
                     go = Instantiate(_effectExplosion, transform.position, Quaternion.identity);
                     go.transform.localScale = scale * _effSize;
                     Destroy(go, 2.0f);

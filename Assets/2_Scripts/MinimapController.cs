@@ -19,7 +19,20 @@ public class MinimapController : MonoBehaviour
 
     float _markSize
     {
-        get { return (_curSize + 1) / 2.0f; }
+        get
+        {
+            float size = 1.0f;
+            switch (_curSize)
+            {
+                case 0:
+                    size = 1.1f;
+                    break;
+                case 2:
+                    size = 0.8f;
+                    break;
+            }
+            return size; 
+        }
     }
 
     static MinimapController _uniqueInstance;
@@ -49,10 +62,24 @@ public class MinimapController : MonoBehaviour
         {
             Vector3 target = _playerObj.transform.position + _offSet;
             Vector3 movePos = transform.position;
-            if (target.x < 205 && target.x > -105)
+            int addSize = 15 * Mathf.Abs(_maxSize - _curSize);
+            int xMinRange = -90 - addSize;
+            int xMaxRange = 190 + addSize;
+            int zMinRange = -45 - addSize;
+            int zMaxRange = 150 + addSize;
+            if (target.x >= xMinRange && target.x < xMaxRange)
                 movePos.x = target.x;
-            if (target.z > -55.0f && target.z < 165)
+            else if (target.x >= xMaxRange)
+                movePos.x = xMaxRange;
+            else
+                movePos.x = xMinRange;
+            
+            if (target.z >= zMinRange && target.z < zMaxRange)
                 movePos.z = target.z;
+            else if (target.z >= zMaxRange)
+                movePos.z = zMaxRange;
+            else
+                movePos.z = zMinRange;
             transform.position = movePos;
         }
     }
@@ -116,10 +143,11 @@ public class MinimapController : MonoBehaviour
         {
             GameObject addMarker = Instantiate(_prefabBrokenMarker, brokenObj[i].transform);
             Marker marker = addMarker.GetComponent<Marker>();
+            marker._sizeScale = brokenObj[i].GetComponent<BrokenObject>()._sizeMarker;
             _markers.Add(marker);
         }
 
-        Animal[] animalObj = GameObject.FindObjectsOfType<Animal>();
+        Animal[] animalObj = FindObjectsOfType<Animal>();
         for(int i = 0; i < animalObj.Length; i++)
         {
             GameObject addMarker = Instantiate(_prefabAnimalMarker, animalObj[i].transform);

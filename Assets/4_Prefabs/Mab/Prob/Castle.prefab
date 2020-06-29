@@ -129,7 +129,8 @@ MonoBehaviour:
   _hitEffectName: Hit
   _boomEffectName: Explosion
   _frameEffectName: Frame
-  _effSize: 3
+  _effSize: 7
+  _markerSize: 7
 --- !u!65 &5019589961229614593
 BoxCollider:
   m_ObjectHideFlags: 0

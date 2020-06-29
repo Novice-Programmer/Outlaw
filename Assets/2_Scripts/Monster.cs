@@ -409,6 +409,7 @@ public class Monster : UnitBase
         {
             ChangeAction(eAniType.DEAD);
             GetComponent<BoxCollider>().enabled = false;
+            ++IngameManager.Instance._countMonsterKill;
             _ownerParent.MonsterDie(gameObject);
         }
         else

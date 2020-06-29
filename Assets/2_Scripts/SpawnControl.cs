@@ -29,7 +29,7 @@ public class SpawnControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (IngameManager._instance._gameState != IngameManager.EGameState.Play)
+        if (IngameManager.Instance._gameState != IngameManager.EGameState.Play)
             return;
 
         if (_maxCreateCount > 0)
@@ -93,7 +93,7 @@ public class SpawnControl : MonoBehaviour
         _spawnMonList.Remove(go);
         if (_maxCreateCount == 0 && _spawnMonList.Count == 0)
         {
-            IngameManager._instance.SpawnPointRemove(this);
+            IngameManager.Instance.SpawnPointRemove(this);
         }
     }
 }
