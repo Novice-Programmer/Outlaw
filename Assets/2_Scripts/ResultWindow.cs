@@ -9,7 +9,7 @@ public class ResultWindow : MonoBehaviour
     [SerializeField] Text _txtResult = null;
     [SerializeField] Text _txtSec = null;
     [SerializeField] Text _txtMSec = null;
-    [SerializeField] Text _txtKillCount = null;
+    [SerializeField] Text _txtMonsterCount = null;
     [SerializeField] Text _txtAnimalKillCount = null;
     [SerializeField] Text _txtTotalScore = null;
 
@@ -39,7 +39,7 @@ public class ResultWindow : MonoBehaviour
         _txtSec.text = sec.ToString();
         _txtMSec.text += msec.ToString();
 
-        _txtKillCount.text = isWin ? animalKill.ToString() : monsterKill.ToString();
+        _txtMonsterCount.text = monsterKill.ToString();
         _txtAnimalKillCount.text = animalKill.ToString();
         _txtTotalScore.text = totalScore.ToString();
     }

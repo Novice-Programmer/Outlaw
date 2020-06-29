@@ -231,4 +231,9 @@ public class IngameManager : MonoBehaviour
         _isWin = false;
         GameEnd();
     }
+
+    public void MapChange(MapSet mapSet)
+    {
+        _minimapController.InitMapData(mapSet);
+    }
 }

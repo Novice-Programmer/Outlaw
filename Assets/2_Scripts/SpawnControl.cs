@@ -10,15 +10,20 @@ public class SpawnControl : MonoBehaviour
     [SerializeField] int _maxViewCount = 3;
     [SerializeField] int _maxCreateCount = 10;
     [SerializeField] float _intervalCreateTime = 2;
+    [SerializeField] string[] _prefabMonsterNames = new string[]{ "MonGhost", "MonOrc" };
 
-    GameObject _prefabMon;
+    List<GameObject> _prefabMon = new List<GameObject>();
     float _timeCheck = 0;
 
     List<GameObject> _spawnMonList = new List<GameObject>();
 
     private void Awake()
     {
-        _prefabMon = Resources.Load("Prefabs/Character/MonGhost") as GameObject;
+        string path = "Prefabs/Character/";
+        for(int i = 0; i < _prefabMonsterNames.Length; i++)
+        {
+            _prefabMon.Add(Resources.Load(path + _prefabMonsterNames[i]) as GameObject);
+        }
     }
     // Start is called before the first frame update
     void Start()
@@ -40,7 +45,8 @@ public class SpawnControl : MonoBehaviour
                 if (_timeCheck >= _intervalCreateTime)
                 {
                     _timeCheck = 0;
-                    GameObject go = Instantiate(_prefabMon, transform.position, transform.rotation);
+
+                    GameObject go = Instantiate(_prefabMon[Random.Range(0,_prefabMon.Count)], transform.position, transform.rotation);
                     Monster monster = go.GetComponent<Monster>();
                     if (_isRandom)
                     {

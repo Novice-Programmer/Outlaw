@@ -67,8 +67,10 @@
     <Compile Include="Assets\2_Scripts\BrokenObject.cs" />
     <Compile Include="Assets\2_Scripts\Bullet.cs" />
     <Compile Include="Assets\2_Scripts\CameraController.cs" />
+    <Compile Include="Assets\2_Scripts\Environment.cs" />
     <Compile Include="Assets\2_Scripts\HitZone.cs" />
     <Compile Include="Assets\2_Scripts\IngameManager.cs" />
+    <Compile Include="Assets\2_Scripts\MapSet.cs" />
     <Compile Include="Assets\2_Scripts\Marker.cs" />
     <Compile Include="Assets\2_Scripts\MiniStatusWindow.cs" />
     <Compile Include="Assets\2_Scripts\MinimapController.cs" />

@@ -16,6 +16,7 @@ public class MinimapController : MonoBehaviour
     int _curSize = 1;
     int _minSize = 0;
     int _maxSize = 2;
+    MapSet _nowMap;
 
     float _markSize
     {
@@ -131,9 +132,10 @@ public class MinimapController : MonoBehaviour
         _markers.Remove(marker);
     }
 
-    public void InitSetData(string mapName)
+    public void InitMapData(MapSet nowMap)
     {
-        _txtMapName.text = mapName;
+        _nowMap = nowMap;
+        _txtMapName.text = _nowMap._nameMap;
     }
 
     public void InitMarker()

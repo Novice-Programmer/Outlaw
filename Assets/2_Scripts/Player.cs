@@ -26,6 +26,8 @@ public class Player : UnitBase
 
     // Player 활용 정보
     float _movSpeed;
+    float _nowSpeed = 1.0f;
+    float _speedPower = 1.0f;
     int _curBulletCount = 0;
 
     public int _finalDamage
@@ -74,7 +76,13 @@ public class Player : UnitBase
 
     void Update()
     {
-        if (_isDead || _nowAction == eAniType.RELOAD || IngameManager.Instance._gameState != IngameManager.EGameState.Play)
+        if(IngameManager.Instance._gameState != IngameManager.EGameState.Play)
+        {
+            ChangeAction(eAniType.IDLE);
+            return;
+        }
+
+        if (_isDead || _nowAction == eAniType.RELOAD)
             return;
         Vector3 mv;
 #if UNITY_EDITOR
@@ -104,7 +112,7 @@ public class Player : UnitBase
             }
         }
 
-        _controller.Move(mv * _movSpeed * Time.deltaTime);
+        _controller.Move(mv * _movSpeed * _nowSpeed * Time.deltaTime);
     }
 
     void ChangeAnimationToDirection(Vector3 dir)
@@ -227,5 +235,12 @@ public class Player : UnitBase
         }
         _miniWnd.SetHPRate(_hpRate);
         return _isDead;
+    }
+
+    public void SpeedCheck(float speed = 1.0f)
+    {
+        if (speed == 1.0f)
+            _nowSpeed = _speedPower;
+        _nowSpeed = speed;
     }
 }

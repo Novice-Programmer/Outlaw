@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField] float _force = 800.0f;
+    [SerializeField] float _force = 1100.0f;
     int _bulletDamage = 3;
     bool _isPlayer = true;
     UnitBase _ownerCharacter;
@@ -43,6 +43,6 @@ public class Bullet : MonoBehaviour
     {
         _rgbd = GetComponent<Rigidbody>();
         _rgbd.AddForce(transform.forward * _force);
-        Destroy(gameObject, 3.0f);
+        Destroy(gameObject, 1.5f);
     }
 }

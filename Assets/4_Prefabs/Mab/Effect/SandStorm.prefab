@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 5909287575314667341}
   - component: {fileID: 5909287575334064653}
   - component: {fileID: 5909287575334103981}
+  - component: {fileID: 1713890688638059240}
+  - component: {fileID: 5896164630076473805}
   m_Layer: 0
   m_Name: SandStorm
   m_TagString: Untagged
@@ -4592,3 +4594,33 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!65 &1713890688638059240
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5909287575314828141}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 2, z: 2}
+  m_Center: {x: 0, y: 0, z: 1}
+--- !u!114 &5896164630076473805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5909287575314828141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db99c07ea8564c043b4f243ded3e33a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isSlow: 1
+  _slowPower: 0.7
+  _isDamage: 1
+  _damagePower: 1
+  _damageTime: 1
