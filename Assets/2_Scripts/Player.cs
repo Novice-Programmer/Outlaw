@@ -35,11 +35,6 @@ public class Player : UnitBase
         get { return _baseAtt; }
     }
 
-    public bool _playerDead
-    {
-        get { return _isDead; }
-    }
-
     public int _maxBulletCount
     {
         get { return _limitBulletCount; }
@@ -63,20 +58,15 @@ public class Player : UnitBase
 
     private void Start()
     {
-        GameObject go = GameObject.FindGameObjectWithTag("LauncherStick");
-        _stickLauncher = go.GetComponent<StickObject>();
-        go = GameObject.FindGameObjectWithTag("MoveStick");
-        _stickMovement = go.GetComponent<StickObject>();
-        _stickLauncher.SetOwnerPlayer(this);
-        _stickMovement.SetOwnerPlayer(this);
-        _miniWnd = GameObject.FindGameObjectWithTag("MiniAvatarWindow").GetComponent<MiniStatusWindow>();
+        GameObject go = GameObject.FindGameObjectWithTag("MiniAvatarWindow");
+        _miniWnd = go.GetComponent<MiniStatusWindow>();
         _miniWnd.InitializeSetData(_myName, _limitBulletCount);
         MinimapController.Instance.AddMarker(_marker);
     }
 
     void Update()
     {
-        if(IngameManager.Instance._gameState != IngameManager.EGameState.Play)
+        if(IngameManager.Instance._nowGameState != IngameManager.EGameState.Play)
         {
             ChangeAction(eAniType.IDLE);
             return;
@@ -223,7 +213,7 @@ public class Player : UnitBase
         _miniWnd.SetBulletRate(_limitBulletCount - _curBulletCount);
     }
 
-    public bool OnHitting(int hitDamage)
+    public override bool OnHitting(int hitDamage)
     {
         if (HittingMe(hitDamage))
         {
@@ -242,5 +232,15 @@ public class Player : UnitBase
         if (speed == 1.0f)
             _nowSpeed = _speedPower;
         _nowSpeed = speed;
+    }
+
+    public void SettingSticks()
+    {
+        GameObject go = GameObject.FindGameObjectWithTag("LauncherStick");
+        _stickLauncher = go.GetComponent<StickObject>();
+        go = GameObject.FindGameObjectWithTag("MoveStick");
+        _stickMovement = go.GetComponent<StickObject>();
+        _stickLauncher.SetOwnerPlayer(this);
+        _stickMovement.SetOwnerPlayer(this);
     }
 }

@@ -7,12 +7,15 @@ TagManager:
   - LauncherStick
   - MoveStick
   - BulletObj
-  - FxTemporaire
   - Monster
   - MiniAvatarWindow
   - Marker
   - MinimapController
   - BrokenObject
+  - MessageBox
+  - StickControllerWindow
+  - MinimapWindow
+  - Animal
   layers:
   - Default
   - TransparentFX

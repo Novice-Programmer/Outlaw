@@ -17,9 +17,14 @@ public class SpawnControl : MonoBehaviour
 
     List<GameObject> _spawnMonList = new List<GameObject>();
 
+    public bool _checkRemainingCount
+    {
+        get { return _maxCreateCount == 0 && _spawnMonList.Count == 0; }
+    }
+
     private void Awake()
     {
-        string path = "Prefabs/Character/";
+        string path = "Prefabs/Characters/";
         for(int i = 0; i < _prefabMonsterNames.Length; i++)
         {
             _prefabMon.Add(Resources.Load(path + _prefabMonsterNames[i]) as GameObject);
@@ -34,7 +39,7 @@ public class SpawnControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (IngameManager.Instance._gameState != IngameManager.EGameState.Play)
+        if (IngameManager.Instance._nowGameState != IngameManager.EGameState.Play)
             return;
 
         if (_maxCreateCount > 0)
@@ -94,12 +99,12 @@ public class SpawnControl : MonoBehaviour
         }
     }
 
-    public void MonsterDie(GameObject go)
+    public void MonsterDestroy()
     {
-        _spawnMonList.Remove(go);
-        if (_maxCreateCount == 0 && _spawnMonList.Count == 0)
+        while (_spawnMonList.Count != 0)
         {
-            IngameManager.Instance.SpawnPointRemove(this);
+            Destroy(_spawnMonList[0].gameObject);
+            _spawnMonList.RemoveAt(0);
         }
     }
 }

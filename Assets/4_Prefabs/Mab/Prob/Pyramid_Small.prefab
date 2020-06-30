@@ -46,12 +46,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ed0fd7963c57694eaab11daa80b1486, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _duration: 30
+  _duration: 15
   _hitEffectName: Hit
   _boomEffectName: Explosion
   _frameEffectName: Frame
   _effSize: 5
   _markerSize: 5
+  _brokenScore: 10
 --- !u!65 &5483806670823525501
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitBase : MonoBehaviour
+public abstract class UnitBase : MonoBehaviour
 {
     public enum eAniType
     {
@@ -30,7 +30,7 @@ public class UnitBase : MonoBehaviour
         get { return _att; }
     }
 
-    protected bool _isDead
+    public bool _isDead
     {
         set { _isDie = value; }
         get { return _isDie; }
@@ -74,7 +74,6 @@ public class UnitBase : MonoBehaviour
         int finishD = dam - _def;
         if (finishD < 1) finishD = 1;
 
-
         _curLife -= finishD;
         if (_curLife <= 0)
         {
@@ -84,4 +83,6 @@ public class UnitBase : MonoBehaviour
 
         return false;
     }
+
+    public abstract bool OnHitting(int hitDamage);
 }

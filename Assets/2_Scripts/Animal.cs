@@ -138,13 +138,19 @@ public class Animal : UnitBase
             Quaternion eular = Quaternion.Euler(other.transform.eulerAngles + new Vector3(0, 180, 0));
             GameObject go = Instantiate(_effhit, other.transform.position, eular);
             Destroy(go, 2.0f);
-            if (HittingMe(bull._finalDamage))
-            {
-                ChangeAnimation(eAniType.DEAD);
-                GetComponent<BoxCollider>().enabled = false;
-                ++IngameManager.Instance._countAnimalKill;
-            }
-            _worldMiniUI.SetHpRate(_hpRate);
+            OnHitting(bull._finalDamage);
         }
+    }
+
+    public override bool OnHitting(int hitDamage)
+    {
+        if (HittingMe(hitDamage))
+        {
+            ChangeAnimation(eAniType.DEAD);
+            GetComponent<BoxCollider>().enabled = false;
+            ++IngameManager.Instance._countAnimalKill;
+        }
+        _worldMiniUI.SetHpRate(_hpRate);
+        return _isDead;
     }
 }

@@ -150,7 +150,7 @@ public class Monster : UnitBase
                     _navAgent.destination = _targetPlayer.transform.position;
                 break;
             case eAniType.ATTACK:
-                if (_targetPlayer._playerDead)
+                if (_targetPlayer._isDead)
                 {
                     Winner();
                 }
@@ -224,7 +224,7 @@ public class Monster : UnitBase
             _posBattleStart = transform.position;
 
         _targetPlayer = p;
-        if (!_targetPlayer._playerDead)
+        if (!_targetPlayer._isDead)
         {
             if (Vector3.Distance(transform.position, _targetPlayer.transform.position) <= _attackRange)
                 ChangeAction(eAniType.ATTACK);
@@ -403,19 +403,19 @@ public class Monster : UnitBase
         _nowAction = type;
     }
 
-    public void OnHitting(int hitDamage)
+    public override bool OnHitting(int hitDamage)
     {
         if (HittingMe(hitDamage))
         {
             ChangeAction(eAniType.DEAD);
             GetComponent<BoxCollider>().enabled = false;
             ++IngameManager.Instance._countMonsterKill;
-            _ownerParent.MonsterDie(gameObject);
         }
         else
         {
         }
         _worldMiniUI.SetHpRate(_hpRate);
+        return _isDead;
     }
 
     private void OnTriggerEnter(Collider other)

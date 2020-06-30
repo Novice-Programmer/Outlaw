@@ -131,6 +131,7 @@ MonoBehaviour:
   _frameEffectName: Frame
   _effSize: 3
   _markerSize: 3
+  _brokenScore: 3
 --- !u!65 &5394070690964552344
 BoxCollider:
   m_ObjectHideFlags: 0

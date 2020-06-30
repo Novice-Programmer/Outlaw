@@ -48,4 +48,9 @@ public class ResultWindow : MonoBehaviour
     {
         SceneManager.LoadScene("IngameScene");
     }
+
+    public void ClickNextButton()
+    {
+        SceneControlManager.Instance.StartSceneIngame(SceneControlManager.Instance._stageNow);
+    }
 }

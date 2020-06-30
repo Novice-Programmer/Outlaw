@@ -19,8 +19,8 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    public void InitPlayer()
+    public void SetPlayer(GameObject p)
     {
-        _playerObj = GameObject.FindGameObjectWithTag("Player");
+        _playerObj = p;
     }
 }

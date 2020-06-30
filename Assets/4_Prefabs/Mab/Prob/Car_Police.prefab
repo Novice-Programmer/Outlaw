@@ -65,7 +65,7 @@ MonoBehaviour:
   _frameEffectName: Frame
   _effSize: 2
   _markerSize: 2
-  _brokenScore: 1
+  _brokenScore: 2
 --- !u!208 &3342987643881714117
 NavMeshObstacle:
   m_ObjectHideFlags: 0

@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 7820762482507841856}
   - component: {fileID: 6510255702368354292}
   m_Layer: 0
-  m_Name: House
+  m_Name: JapaneseHouse
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -125,12 +125,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ed0fd7963c57694eaab11daa80b1486, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _duration: 130
+  _duration: 80
   _hitEffectName: Hit
   _boomEffectName: Explosion
   _frameEffectName: Frame
   _effSize: 5
   _markerSize: 5
+  _brokenScore: 30
 --- !u!65 &7820762482507841856
 BoxCollider:
   m_ObjectHideFlags: 0

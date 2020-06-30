@@ -63,18 +63,34 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\10_DownAssets\JMO Assets\Cartoon FX\Demo\Assets\CFX_AutoStopLoopedEffect.cs" />
+    <Compile Include="Assets\10_DownAssets\JMO Assets\Cartoon FX\Demo\Assets\CFX_Demo_New.cs" />
+    <Compile Include="Assets\10_DownAssets\JMO Assets\Cartoon FX\Demo\Assets\CFX_Demo_RandomDir.cs" />
+    <Compile Include="Assets\10_DownAssets\JMO Assets\Cartoon FX\Demo\Assets\CFX_Demo_RandomDirectionTranslate.cs" />
+    <Compile Include="Assets\10_DownAssets\JMO Assets\Cartoon FX\Demo\Assets\CFX_Demo_RotateCamera.cs" />
+    <Compile Include="Assets\10_DownAssets\JMO Assets\Cartoon FX\Demo\Assets\CFX_Demo_Translate.cs" />
+    <Compile Include="Assets\10_DownAssets\JMO Assets\Cartoon FX\Scripts\CFX_AutoDestructShuriken.cs" />
+    <Compile Include="Assets\10_DownAssets\JMO Assets\Cartoon FX\Scripts\CFX_AutoRotate.cs" />
+    <Compile Include="Assets\10_DownAssets\JMO Assets\Cartoon FX\Scripts\CFX_LightFlicker.cs" />
+    <Compile Include="Assets\10_DownAssets\JMO Assets\Cartoon FX\Scripts\CFX_LightIntensityFade.cs" />
     <Compile Include="Assets\2_Scripts\Animal.cs" />
     <Compile Include="Assets\2_Scripts\BrokenObject.cs" />
     <Compile Include="Assets\2_Scripts\Bullet.cs" />
     <Compile Include="Assets\2_Scripts\CameraController.cs" />
+    <Compile Include="Assets\2_Scripts\DamageField.cs" />
     <Compile Include="Assets\2_Scripts\Environment.cs" />
     <Compile Include="Assets\2_Scripts\HitZone.cs" />
-    <Compile Include="Assets\2_Scripts\IngameManager.cs" />
+    <Compile Include="Assets\2_Scripts\Loading.cs" />
+    <Compile Include="Assets\2_Scripts\LoadingMonster.cs" />
+    <Compile Include="Assets\2_Scripts\Manager\IngameManager.cs" />
+    <Compile Include="Assets\2_Scripts\Manager\SceneControlManager.cs" />
     <Compile Include="Assets\2_Scripts\MapSet.cs" />
     <Compile Include="Assets\2_Scripts\Marker.cs" />
+    <Compile Include="Assets\2_Scripts\MessageBox.cs" />
     <Compile Include="Assets\2_Scripts\MiniStatusWindow.cs" />
     <Compile Include="Assets\2_Scripts\MinimapController.cs" />
     <Compile Include="Assets\2_Scripts\Monster.cs" />
+    <Compile Include="Assets\2_Scripts\MovePoint.cs" />
     <Compile Include="Assets\2_Scripts\Player.cs" />
     <Compile Include="Assets\2_Scripts\ResultWindow.cs" />
     <Compile Include="Assets\2_Scripts\ScoreWindow.cs" />
@@ -86,20 +102,10 @@
     <Compile Include="Assets\2_Scripts\TimeWindow.cs" />
     <Compile Include="Assets\2_Scripts\UnitBase.cs" />
     <Compile Include="Assets\2_Scripts\WorldStatusWindow.cs" />
-    <Compile Include="Assets\9_DownAssets\JMO Assets\Cartoon FX\Demo\Assets\CFX_AutoStopLoopedEffect.cs" />
-    <Compile Include="Assets\9_DownAssets\JMO Assets\Cartoon FX\Demo\Assets\CFX_Demo_New.cs" />
-    <Compile Include="Assets\9_DownAssets\JMO Assets\Cartoon FX\Demo\Assets\CFX_Demo_RandomDir.cs" />
-    <Compile Include="Assets\9_DownAssets\JMO Assets\Cartoon FX\Demo\Assets\CFX_Demo_RandomDirectionTranslate.cs" />
-    <Compile Include="Assets\9_DownAssets\JMO Assets\Cartoon FX\Demo\Assets\CFX_Demo_RotateCamera.cs" />
-    <Compile Include="Assets\9_DownAssets\JMO Assets\Cartoon FX\Demo\Assets\CFX_Demo_Translate.cs" />
-    <Compile Include="Assets\9_DownAssets\JMO Assets\Cartoon FX\Scripts\CFX_AutoDestructShuriken.cs" />
-    <Compile Include="Assets\9_DownAssets\JMO Assets\Cartoon FX\Scripts\CFX_AutoRotate.cs" />
-    <Compile Include="Assets\9_DownAssets\JMO Assets\Cartoon FX\Scripts\CFX_LightFlicker.cs" />
-    <Compile Include="Assets\9_DownAssets\JMO Assets\Cartoon FX\Scripts\CFX_LightIntensityFade.cs" />
-    <None Include="Assets\9_DownAssets\JMO Assets\Cartoon FX\Shaders\CFX3 Multiply Color.shader" />
-    <None Include="Assets\9_DownAssets\Sentinel FPS GUI\Fonts\Font Links.txt" />
-    <None Include="Assets\9_DownAssets\JMO Assets\Cartoon FX Easy Editor\CartoonFX Easy Editor Readme.txt" />
-    <None Include="Assets\9_DownAssets\JMO Assets\Cartoon FX\Shaders\CFXM_MobileParticleAdd_Alpha8.shader" />
+    <None Include="Assets\10_DownAssets\JMO Assets\Cartoon FX\Shaders\CFX3 Multiply Color.shader" />
+    <None Include="Assets\10_DownAssets\Sentinel FPS GUI\Fonts\Font Links.txt" />
+    <None Include="Assets\10_DownAssets\JMO Assets\Cartoon FX Easy Editor\CartoonFX Easy Editor Readme.txt" />
+    <None Include="Assets\10_DownAssets\JMO Assets\Cartoon FX\Shaders\CFXM_MobileParticleAdd_Alpha8.shader" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Unity/Outlaw/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

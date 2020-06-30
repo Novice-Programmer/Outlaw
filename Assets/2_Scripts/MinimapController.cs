@@ -48,11 +48,11 @@ public class MinimapController : MonoBehaviour
     {
         _uniqueInstance = this;
         _camera = GetComponent<Camera>();
+        _prefabBrokenMarker = Resources.Load("Prefabs/Objects/BrokenMarker") as GameObject;
+        _prefabAnimalMarker = Resources.Load("Prefabs/Objects/AnimalMarker") as GameObject;
     }
     void Start()
     {
-        _prefabBrokenMarker = Resources.Load("Prefabs/Objects/BrokenMarker") as GameObject;
-        _prefabAnimalMarker = Resources.Load("Prefabs/Objects/AnimalMarker") as GameObject;
         GetMarker();
     }
 

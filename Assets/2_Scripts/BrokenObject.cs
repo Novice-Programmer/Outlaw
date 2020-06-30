@@ -12,7 +12,8 @@ public class BrokenObject : MonoBehaviour
     [SerializeField] string _frameEffectName = "Frame";
     [SerializeField] float _effSize = 1;
     [SerializeField] float _markerSize = 1;
-    [SerializeField] int _brokenScore = 1;
+
+    int _brokenScore = 0;
     
     GameObject _effectHit;
     GameObject _effectExplosion;
@@ -35,6 +36,8 @@ public class BrokenObject : MonoBehaviour
         _effectHit = Resources.Load(hitPass) as GameObject;
         _effectExplosion = Resources.Load(boomPass) as GameObject;
         _effectFrame = Resources.Load(framePass) as GameObject;
+
+        _brokenScore = _duration / 2;
     }
 
     // Update is called once per frame
@@ -47,7 +50,6 @@ public class BrokenObject : MonoBehaviour
         if (other.CompareTag("BulletObj"))
         {
             GameObject go = Instantiate(_effectHit, other.transform.position, Quaternion.identity);
-            Vector3 scale = go.transform.localScale;
             Destroy(go, 2.0f);
             Destroy(other.gameObject);
             if (_duration != 999)
@@ -57,9 +59,11 @@ public class BrokenObject : MonoBehaviour
                 {
                     IngameManager.Instance._scoreBroken = _brokenScore;
                     go = Instantiate(_effectExplosion, transform.position, Quaternion.identity);
+                    Vector3 scale = go.transform.localScale;
                     go.transform.localScale = scale * _effSize;
                     Destroy(go, 2.0f);
                     go = Instantiate(_effectFrame, transform.position, Quaternion.identity);
+                    scale = go.transform.localScale;
                     go.transform.localScale = scale * _effSize;
                     Destroy(go, 5.0f);
                     Destroy(gameObject);

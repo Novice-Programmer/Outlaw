@@ -49,5 +49,6 @@ public class Environment : MonoBehaviour
             _time = 0;
             player = null;
         }
+
     }
 }
