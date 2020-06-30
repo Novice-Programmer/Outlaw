@@ -159,7 +159,7 @@ public class IngameManager : MonoBehaviour
     public void GameReady()
     {
         _currentGameState = EGameState.Ready;
-        _msgBox.OpenMessageBox("준비~!!", true);
+        _msgBox.OpenMessageBox("포탈로 이동중", true);
         ListUpSpawnControl();
         _playerSpawnPos = GameObject.Find("GameStartPos").transform;
         int removeCount = _spawnPointList.Count - _maxSpawnPoint;
@@ -176,7 +176,7 @@ public class IngameManager : MonoBehaviour
     public void SpawnPlayer()
     {
         _currentGameState = EGameState.SpawnPlayer;
-        _msgBox.OpenMessageBox("플레이어 등장~!!", true);
+        _msgBox.OpenMessageBox("행성에 도착", true);
         _miniStatusWindow.SetActive(true);
         GameObject go = Instantiate(_prefabPlayer, _playerSpawnPos.position, _playerSpawnPos.rotation);
         _player = go.GetComponent<Player>();
@@ -188,7 +188,7 @@ public class IngameManager : MonoBehaviour
     {
         _currentGameState = EGameState.Start;
 
-        _msgBox.OpenMessageBox("플레이 시작!!!", true);
+        _msgBox.OpenMessageBox("미션 시작", true);
     }
 
     public void GamePlay()
@@ -208,7 +208,7 @@ public class IngameManager : MonoBehaviour
         _timeCheck = 0;
         _isWin = isWin;
         if (isWin)
-            _msgBox.OpenMessageBox("목표 달성~!!", true);
+            _msgBox.OpenMessageBox("미션 클리어", true);
         else
             _msgBox.OpenMessageBox("플레이어 사망", true);
     }

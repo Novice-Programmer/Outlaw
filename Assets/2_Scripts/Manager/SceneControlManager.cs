@@ -58,16 +58,10 @@ public class SceneControlManager : MonoBehaviour
         _uniqueInstance = this;
         DontDestroyOnLoad(this);
     }
-    // Start is called before the first frame update
+
     void Start()
     {
         StartSceneIngame();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void StartSceneLobby()
@@ -102,6 +96,7 @@ public class SceneControlManager : MonoBehaviour
             wnd.SettingLoadRate(aOper.progress);
             yield return null;
         }
+        wnd.SettingLoadRate(1);
 
         aScene = SceneManager.GetSceneByName(sceneName);
         _currentStateLoad = eLoaddingState.LoadSceneEnd;
@@ -120,7 +115,8 @@ public class SceneControlManager : MonoBehaviour
             aScene = SceneManager.GetSceneByName(stageName + stageNum.ToString());
             _currentStateLoad = eLoaddingState.LoadStageEnd;
         }
-        yield return new WaitForSeconds(2.0f);
+        wnd.SettingLoadRate(1);
+        yield return new WaitForSeconds(5.0f);
         Destroy(wnd.gameObject);
 
         SceneManager.SetActiveScene(aScene);
