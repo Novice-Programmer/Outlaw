@@ -44,7 +44,6 @@ public class StageWindow : BaseWindow
 
     public override void SelectAllCheck(int no)
     {
-        Debug.Log(no);
         _selectNum = no;
         for (int i = 0; i < _stageSlotList.Count; i++)
         {
