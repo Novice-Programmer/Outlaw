@@ -31,11 +31,13 @@ public class IngameManager : MonoBehaviour
     GameObject _stickWindow;
     GameObject _miniStatusWindow;
     GameObject _minimapWindow;
+    GameObject _timeWidnow;
     MessageBox _msgBox;
 
     MinimapController _minimapController;
     TimeWindow _timeWnd;
     ScoreWindow _scoreWnd;
+    GoalWindow _goalWnd;
 
     Player _player;
     EGameState _currentGameState = EGameState.None;
@@ -187,7 +189,7 @@ public class IngameManager : MonoBehaviour
     public void GameStart()
     {
         _currentGameState = EGameState.Start;
-
+        _timeWidnow.SetActive(true);
         _msgBox.OpenMessageBox("미션 시작", true);
     }
 
@@ -239,12 +241,14 @@ public class IngameManager : MonoBehaviour
 
     void GameSetting()
     {
-        GameObject go = GameObject.Find("Time");
-        _timeWnd = go.GetComponent<TimeWindow>();
-        go = GameObject.Find("Score");
+        _timeWidnow = GameObject.FindGameObjectWithTag("TimeWindow");
+        _timeWnd = _timeWidnow.GetComponent<TimeWindow>();
+        GameObject go = GameObject.Find("Score");
         _scoreWnd = go.GetComponent<ScoreWindow>();
         go = GameObject.FindGameObjectWithTag("MessageBox");
         _msgBox = go.GetComponent<MessageBox>();
+        go = GameObject.FindGameObjectWithTag("GoalWindow");
+        _goalWnd = go.GetComponent<GoalWindow>();
         go = GameObject.FindGameObjectWithTag("MinimapController");
         _minimapController = go.GetComponent<MinimapController>();
         _stickWindow = GameObject.FindGameObjectWithTag("StickControllerWindow");
@@ -254,6 +258,7 @@ public class IngameManager : MonoBehaviour
         _stickWindow.SetActive(false);
         _miniStatusWindow.SetActive(false);
         _minimapWindow.SetActive(false);
+        _timeWidnow.SetActive(false);
 
         GameObject[] animalObjects = GameObject.FindGameObjectsWithTag("Animal");
         for (int i = 0; i < animalObjects.Length; i++)
@@ -288,9 +293,11 @@ public class IngameManager : MonoBehaviour
                 addScore = 5;
                 break;
             case EActionScore.AnimalKill:
+                _goalWnd.GoalUpdate("동물을 죽이지 마시오.", true);
                 addScore = -7;
                 break;
             case EActionScore.BrokenObject:
+                _goalWnd.GoalUpdate();
                 break;
         }
         _scoreWnd.ScoreUpdate(_totalScore, addScore);

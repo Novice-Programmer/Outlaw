@@ -63,9 +63,8 @@ MonoBehaviour:
   _hitEffectName: Hit
   _boomEffectName: Explosion
   _frameEffectName: Frame
-  _effSize: 2
+  _effSize: 3
   _markerSize: 2
-  _brokenScore: 2
 --- !u!208 &7250554264440382826
 NavMeshObstacle:
   m_ObjectHideFlags: 0

@@ -61,12 +61,14 @@ public class SceneControlManager : MonoBehaviour
 
     void Start()
     {
-        StartSceneIngame();
+        StartSceneLobby();
     }
 
     public void StartSceneLobby()
     {
-
+        _oldSceneType = _nowSceneType;
+        _nowSceneType = eSceneType.LOBBY;
+        StartCoroutine(LoaddingScene("LobbyScene"));
     }
 
     public void StartSceneIngame(int stageNum = 1)
@@ -78,7 +80,7 @@ public class SceneControlManager : MonoBehaviour
         StartCoroutine(LoaddingScene("IngameScene", stageNum));
     }
 
-    IEnumerator LoaddingScene(string sceneName,int stageNum)
+    IEnumerator LoaddingScene(string sceneName,int stageNum = 1)
     {
         // 씬을 로드한다.
         // IngameScene일 경우 스테이지를 로드한다. 그리고 SetActiveScene을 StageScene으로 한다.
@@ -116,7 +118,7 @@ public class SceneControlManager : MonoBehaviour
             _currentStateLoad = eLoaddingState.LoadStageEnd;
         }
         wnd.SettingLoadRate(1);
-        yield return new WaitForSeconds(5.0f);
+        yield return new WaitForSeconds(2.0f);
         Destroy(wnd.gameObject);
 
         SceneManager.SetActiveScene(aScene);

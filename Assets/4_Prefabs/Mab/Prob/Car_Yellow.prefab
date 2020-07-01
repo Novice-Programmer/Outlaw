@@ -79,9 +79,8 @@ MonoBehaviour:
   _hitEffectName: Hit
   _boomEffectName: Explosion
   _frameEffectName: Frame
-  _effSize: 2
+  _effSize: 3
   _markerSize: 2
-  _brokenScore: 2
 --- !u!1 &4993095180763835899
 GameObject:
   m_ObjectHideFlags: 0
