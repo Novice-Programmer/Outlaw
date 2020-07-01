@@ -10,7 +10,7 @@ public class SlotUI : MonoBehaviour
     [SerializeField] Image _imgCover = null;
 
     BaseWindow _ownerWnd;
-    int _no;
+    int _no = 0;
 
     public int _myNumber
     {

@@ -22,10 +22,6 @@ public class StageWindow : BaseWindow
         _canvas.worldCamera = Camera.main;
     }
     // Start is called before the first frame update
-    void Start()
-    {
-        OpenWindow();
-    }
 
     // Update is called once per frame
     void Update()
@@ -48,6 +44,7 @@ public class StageWindow : BaseWindow
 
     public override void SelectAllCheck(int no)
     {
+        Debug.Log(no);
         _selectNum = no;
         for (int i = 0; i < _stageSlotList.Count; i++)
         {
@@ -59,6 +56,7 @@ public class StageWindow : BaseWindow
 
     void ListUpSlot()
     {
+        _stageSlotList.Clear();
         for(int i = 0; i < _frameRoot.childCount; i++)
         {
             SlotUI su = _frameRoot.GetChild(i).GetComponent<SlotUI>();
