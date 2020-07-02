@@ -5,11 +5,18 @@ using UnityEngine;
 
 public class TestManager : MonoBehaviour
 {
-    Monster _testMon;
+    [SerializeField] Vector3 _offSet = Vector3.zero;
+    [SerializeField] Vector3 _otherViewRotate = Vector3.zero;
+    [SerializeField] Vector3 _firstViewOffSet = Vector3.zero;
+    [SerializeField] Vector3 _firstViewRotate = Vector3.zero;
+    [SerializeField] float _followSpeed = 2.5f;
+    GameObject _playerObj;
     // Start is called before the first frame update
     void Start()
     {
-        _testMon = GameObject.FindGameObjectWithTag("Monster").GetComponent<Monster>();
+        // 임시
+        _playerObj = GameObject.FindGameObjectWithTag("Player");
+        //
     }
 
     // Update is called once per frame
@@ -22,8 +29,19 @@ public class TestManager : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, lMask))
             {
-                _testMon.SettingGoalPosition(hit.point);
             }
         }
+        if (_playerObj != null)
+        {
+            Vector3 target = _playerObj.transform.position + _offSet;
+            transform.position = Vector3.Lerp(transform.position, target, Time.deltaTime * _followSpeed);
+            // 즉각반응
+            //transform.position = _playerObj.transform.position + _offSet;
+        }
+    }
+
+    public void SetPlayer(GameObject p)
+    {
+        _playerObj = p;
     }
 }

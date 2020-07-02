@@ -37,6 +37,7 @@ public class LobbyManager : MonoBehaviour
     {
         _leftDoor.GetComponent<Door>().OpenDoor();
         _rightDoor.GetComponent<Door>().OpenDoor();
+        SoundManager.Instance.PlayerBGMSound(SoundManager.ETypeBGMSound.Lobby);
     }
 
     // Update is called once per frame

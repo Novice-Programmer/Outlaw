@@ -23,6 +23,7 @@ public class IngameManager : MonoBehaviour
     }
 
     [SerializeField] GameObject _prefabResultWindow = null;
+    [SerializeField] bool _isFirstView = false;
 
     List<SpawnControl> _spawnPointList = new List<SpawnControl>();
     List<Animal> _animals = new List<Animal>();
@@ -89,6 +90,11 @@ public class IngameManager : MonoBehaviour
         get { return _totalScore; }
     }
 
+    public bool _firstView
+    {
+        get { return _isFirstView; }
+    }
+
     static IngameManager _uniqueInstance;
 
     public static IngameManager Instance
@@ -101,6 +107,11 @@ public class IngameManager : MonoBehaviour
         _uniqueInstance = this;
         _prefabPlayer = Resources.Load("Prefabs/Characters/PlayerObject") as GameObject;
     }
+
+    private void Start()
+    {
+    }
+
     void Update()
     {
         switch (_currentGameState)

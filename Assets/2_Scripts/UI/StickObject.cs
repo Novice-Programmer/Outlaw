@@ -23,6 +23,24 @@ public class StickObject : MonoBehaviour, IDragHandler, IPointerDownHandler, IPo
 
     public Vector3 _dirMov { get { return _dirInput.magnitude > 1.0f ? _dirInput.normalized : _dirInput; } }
 
+    public Vector3 _dirMoveFirst 
+    {
+        get 
+        {
+            return new Vector3(_dirInput.z, -_dirInput.x, 0);
+            //Vector3 mov = new Vector3(_dirInput.y, _dirInput.x, 0);
+            //return (mov.magnitude > 1.0f) ? mov.normalized : mov;
+        }
+    }
+
+    public Vector3 _directionFirst
+    {
+        get
+        {
+            return new Vector3(0, -_direction.z, 0);
+        }
+    }
+
     void Start()
     {
         _bg = GetComponent<Image>();

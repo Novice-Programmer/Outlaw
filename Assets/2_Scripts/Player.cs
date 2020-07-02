@@ -6,6 +6,7 @@ using UnityEngine.SocialPlatforms;
 public class Player : UnitBase
 {
     [SerializeField] Transform _posFire = null;
+    [SerializeField] Transform _posLook = null;
     [SerializeField] Marker _marker = null;
 
     Animator _ctrlAni;
@@ -38,6 +39,11 @@ public class Player : UnitBase
     public int _maxBulletCount
     {
         get { return _limitBulletCount; }
+    }
+
+    public Transform _tfLookPos
+    {
+        get { return _posLook; }
     }
 
     eAniType _nowAction;
@@ -75,34 +81,113 @@ public class Player : UnitBase
         if (_isDead || _nowAction == eAniType.RELOAD)
             return;
         Vector3 mv;
+        if (IngameManager.Instance._firstView)
+        {
+            float mx, mz;
 #if UNITY_EDITOR
-        float mz = -Input.GetAxis("Horizontal");
-        float mx = Input.GetAxis("Vertical");
-        if (mz == 0 && mx == 0)
-            mv = _stickMovement._dirMov;
+            mx = Input.GetAxis("Horizontal");
+            mz = Input.GetAxis("Vertical");
+            if (mx == 0 && mz == 0)
+            {
+                mx = -_stickMovement._dirMoveFirst.x;
+                mz = -_stickMovement._dirMoveFirst.y;
+                mv = transform.forward * mz;
+            }
+            else
+                mv = transform.forward * mz;
+#else
+                mx = -_stickMovement._dirMoveFirst.x;
+                mz = -_stickMovement._dirMoveFirst.y;
+                mv = transform.forward * mz;
+#endif
+            if (_stickLauncher._isAimMotion)
+            {
+                Vector3 md = new Vector3(mx, 0, mz);
+                md = (md.magnitude > 1) ? md.normalized : md;
+                ChangeAnimationToDirectionFirstView(md);
+
+                md = transform.TransformDirection(md);
+                _controller.Move(md * _movSpeed * Time.deltaTime);
+            }
+            else
+            {
+                if (mz > 0)
+                    ChangeAction(eAniType.RUN);
+                else if (mz < 0)
+                    ChangeAction(eAniType.WALK_BACK);
+                else
+                {
+                    if (mx != 0)
+                        ChangeAction(eAniType.WALK_BACK);
+                    else
+                        ChangeAction(eAniType.IDLE);
+                }
+
+                transform.Rotate(Vector3.up * mx * Time.deltaTime * 100);
+                _controller.Move(mv * _movSpeed * _nowSpeed * Time.deltaTime);
+            }
+        }
         else
-            mv = new Vector3(mx, 0, mz);
+        {
+#if UNITY_EDITOR
+            float mz = -Input.GetAxis("Horizontal");
+            float mx = Input.GetAxis("Vertical");
+            if (mz == 0 && mx == 0)
+                mv = _stickMovement._dirMov;
+            else
+                mv = new Vector3(mx, 0, mz);
 #else
         mv = _stickMovement._dirMov;
 #endif
 
-        if (_stickLauncher._isAimMotion)
+
+            if (_stickLauncher._isAimMotion)
+            {
+                ChangeAnimationToDirection(mv);
+            }
+            else
+            {
+                mv = (mv.magnitude > 1) ? mv.normalized : mv;
+                if (mv.magnitude == 0)
+                    ChangeAction(eAniType.IDLE);
+                else if (mv.magnitude > 0)
+                {
+                    ChangeAction(eAniType.RUN);
+                    _modelObj.transform.rotation = Quaternion.LookRotation(mv);
+                }
+            }
+            _controller.Move(mv * _movSpeed * _nowSpeed * Time.deltaTime);
+        }
+    }
+
+    void ChangeAnimationToDirectionFirstView(Vector3 dir)
+    {
+        if (dir.magnitude == 0)
         {
-            ChangeAnimationToDirection(mv);
+            if (_nowAction != eAniType.ATTACK)
+            {
+                ChangeAction(eAniType.ATTACK);
+                _ctrlAni.SetBool("StartAttack", true);
+            }
+            if (_stickLauncher._directionFirst.y >= 0.4f || _stickLauncher._directionFirst.y <= -0.4f)
+                transform.Rotate(_stickLauncher._directionFirst * Time.deltaTime * 30);
         }
         else
         {
-            mv = (mv.magnitude > 1) ? mv.normalized : mv;
-            if (mv.magnitude == 0)
-                ChangeAction(eAniType.IDLE);
-            else if (mv.magnitude > 0)
+            if (dir.z == 0)
             {
-                ChangeAction(eAniType.RUN);
-                _modelObj.transform.rotation = Quaternion.LookRotation(mv);
+                if (dir.x > 0)
+                    ChangeAction(eAniType.WALK_LEFT);
+                else if (dir.x < 0)
+                    ChangeAction(eAniType.WALK_RIGHT);
             }
-        }
+            else if (dir.z > 0)
 
-        _controller.Move(mv * _movSpeed * _nowSpeed * Time.deltaTime);
+                ChangeAction(eAniType.RUN);
+
+            else
+                ChangeAction(eAniType.WALK_BACK);
+        }
     }
 
     void ChangeAnimationToDirection(Vector3 dir)
@@ -114,7 +199,10 @@ public class Player : UnitBase
                 ChangeAction(eAniType.ATTACK);
                 _ctrlAni.SetBool("StartAttack", true);
             }
-            _modelObj.transform.rotation = Quaternion.LookRotation(_stickLauncher._direction);
+            if (IngameManager.Instance._firstView)
+                transform.rotation = Quaternion.LookRotation(_stickLauncher._directionFirst);
+            else
+                _modelObj.transform.rotation = Quaternion.LookRotation(_stickLauncher._direction);
         }
         else
         {
@@ -188,7 +276,8 @@ public class Player : UnitBase
 
     public void InitializeDirection()
     {
-        _modelObj.transform.rotation = Quaternion.identity;
+        if (!IngameManager.Instance._firstView)
+            _modelObj.transform.rotation = Quaternion.identity;
     }
 
     public void Fire()

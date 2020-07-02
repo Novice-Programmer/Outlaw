@@ -68,10 +68,10 @@ public class SceneControlManager : MonoBehaviour
     {
         _oldSceneType = _nowSceneType;
         _nowSceneType = eSceneType.LOBBY;
-        StartCoroutine(LoaddingScene("LobbyScene"));
+        StartCoroutine(LoaddingScene("LobbyScene", 0));
     }
 
-    public void StartSceneIngame(int stageNum = 1)
+    public void StartSceneIngame(int stageNum)
     {
         _oldSceneType = _nowSceneType;
         _nowSceneType = eSceneType.INGAME;

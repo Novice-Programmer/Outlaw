@@ -1338,6 +1338,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _prefabResultWindow: {fileID: 498086062269332180, guid: cc07dfb5904bc084095bea285c0f5035,
     type: 3}
+  _isFirstView: 0
   _maxSpawnPoint: 3
 --- !u!4 &517188549
 Transform:
@@ -2702,7 +2703,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 100
+  far clip plane: 1000
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -2748,7 +2749,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _offSet: {x: -10, y: 15, z: 10}
-  _followSpeed: 2.5
+  _firstViewOffSet: {x: 0, y: 3, z: 2}
+  _followSpeed: 10
+  _rotSpeed: 5
 --- !u!1 &1022720205
 GameObject:
   m_ObjectHideFlags: 0
