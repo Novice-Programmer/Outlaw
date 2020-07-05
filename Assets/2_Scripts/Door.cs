@@ -7,7 +7,7 @@ public class Door : MonoBehaviour
     [SerializeField] Transform _openPos = null;
     [SerializeField] float _openSpeed = 1.5f;
 
-    Vector3 _doorPos = Vector3.zero;
+    Vector3 _doorPos;
 
     bool _isOpenDoor = false;
 
@@ -22,20 +22,15 @@ public class Door : MonoBehaviour
         if (_isOpenDoor)
         {
             transform.position = Vector3.MoveTowards(transform.position, _openPos.position, Time.deltaTime * _openSpeed);
-            if (Vector3.Distance(transform.position, _openPos.position) < 0.05f)
-            {
-                _isOpenDoor = false;
-            }
+        }
+        else
+        {
+            transform.position = Vector3.MoveTowards(transform.position, _doorPos, Time.deltaTime * _openSpeed);
         }
     }
 
-    public void OpenDoor()
+    public void DoorChange()
     {
-        _isOpenDoor = true;
-    }
-
-    public void CloseDoor()
-    {
-
+        _isOpenDoor = !_isOpenDoor;
     }
 }

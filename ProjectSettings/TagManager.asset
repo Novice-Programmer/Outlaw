@@ -19,6 +19,7 @@ TagManager:
   - FxTemporaire
   - TimeWindow
   - GoalWindow
+  - ActionButton
   layers:
   - Default
   - TransparentFX

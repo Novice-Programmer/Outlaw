@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SelectObject : MonoBehaviour
+public class SelectObject : LobbyObject
 {
     enum ESelectType
     {
@@ -13,9 +13,6 @@ public class SelectObject : MonoBehaviour
     [SerializeField] LobbyManager.ETypeWindow _windowType = LobbyManager.ETypeWindow.StageWnd;
     [SerializeField] Material[] _mats = null;
     MeshRenderer _modelRenderer;
-
-    bool _isIn = false;
-    
 
     private void Start()
     {
@@ -28,27 +25,40 @@ public class SelectObject : MonoBehaviour
         
     }
 
-    private void OnMouseDown()
+    private void OnTriggerEnter(Collider other)
     {
-        _modelRenderer.material = _mats[(int)ESelectType.Select];
-    }
-
-    private void OnMouseUp()
-    {
-        if (_isIn)
+        if (other.CompareTag("Player"))
         {
-            LobbyManager.Instance.OpenWindow(_windowType);
+            _modelRenderer.material = _mats[(int)ESelectType.Select];
+            LobbyPlayer lp = other.GetComponent<LobbyPlayer>();
+            switch (_windowType)
+            {
+                case LobbyManager.ETypeWindow.StageWnd:
+                    lp.SelectChange("행성 이동",this);
+                    break;
+                case LobbyManager.ETypeWindow.CharacterInfoWnd:
+                    lp.SelectChange("상태 확인",this);
+                    break;
+                case LobbyManager.ETypeWindow.StoreWnd:
+                    lp.SelectChange("업그레이드",this);
+                    break;
+            }
         }
-        _modelRenderer.material = _mats[(int)ESelectType.Normal];
     }
 
-    private void OnMouseEnter()
+    private void OnTriggerExit(Collider other)
     {
-        _isIn = true;
+        if (other.CompareTag("Player"))
+        {
+            _modelRenderer.material = _mats[(int)ESelectType.Normal];
+            LobbyPlayer lp = other.GetComponent<LobbyPlayer>();
+            lp.SelectChange();
+            LobbyManager.Instance.CloseWindow(_windowType);
+        }
     }
 
-    private void OnMouseExit()
+    public override void Select()
     {
-        _isIn = false;
+        LobbyManager.Instance.OpenWindow(_windowType);
     }
 }

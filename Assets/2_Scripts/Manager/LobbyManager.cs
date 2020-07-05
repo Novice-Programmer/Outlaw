@@ -7,15 +7,15 @@ public class LobbyManager : MonoBehaviour
     public enum ETypeWindow
     {
         StageWnd = 0,
-        CharacterInfoWnd
+        CharacterInfoWnd,
+        StoreWnd
     }
 
     GameObject _prefabStageWindow;
+    GameObject _prefabAvatarWindow;
 
     StageWindow _wndStage;
-
-    GameObject _leftDoor;
-    GameObject _rightDoor;
+    AvatarWindow _wndAvatar;
 
     static LobbyManager _uniqueInstance;
 
@@ -27,17 +27,19 @@ public class LobbyManager : MonoBehaviour
     private void Awake()
     {
         _uniqueInstance = this;
-        _leftDoor = GameObject.Find("LeftDoor");
-        _rightDoor = GameObject.Find("RightDoor");
         _prefabStageWindow = Resources.Load("Prefabs/UI/StageWindow") as GameObject;
+        _prefabAvatarWindow = Resources.Load("Prefabs/UI/AvatarWindow") as GameObject;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        _leftDoor.GetComponent<Door>().OpenDoor();
-        _rightDoor.GetComponent<Door>().OpenDoor();
-        SoundManager.Instance.PlayerBGMSound(SoundManager.ETypeBGMSound.Lobby);
+#if UNITY_EDITOR
+        if (SoundManager.Instance != null)
+            SoundManager.Instance.PlayerBGMSound(SoundManager.ETypeBGMSound.Lobby);
+#else
+       SoundManager.Instance.PlayerBGMSound(SoundManager.ETypeBGMSound.Lobby); 
+#endif
     }
 
     // Update is called once per frame
@@ -66,6 +68,36 @@ public class LobbyManager : MonoBehaviour
                 }
                 break;
             case ETypeWindow.CharacterInfoWnd:
+                if (_wndAvatar == null)
+                {
+                    go = Instantiate(_prefabAvatarWindow);
+                    _wndAvatar = go.GetComponent<AvatarWindow>();
+                    _wndAvatar.OpenWindow();
+                }
+                else
+                {
+                    if (_wndAvatar.gameObject.activeSelf)
+                        _wndAvatar.CloseWnd();
+                    else
+                        _wndAvatar.OpenWindow();
+                }
+                break;
+        }
+    }
+
+    public void CloseWindow(ETypeWindow type)
+    {
+        switch (type)
+        {
+            case ETypeWindow.StageWnd:
+                if (_wndStage != null)
+                    _wndStage.CloseWnd();
+                break;
+            case ETypeWindow.CharacterInfoWnd:
+                if (_wndAvatar != null)
+                    _wndAvatar.CloseWnd();
+                break;
+            case ETypeWindow.StoreWnd:
                 break;
         }
     }
