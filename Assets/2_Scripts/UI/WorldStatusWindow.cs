@@ -3,38 +3,41 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WorldStatusWindow : MonoBehaviour
+namespace Outlaw
 {
-    [SerializeField] Slider _hpBar = null;
-    [SerializeField] float _limitViewTime = 3.0f;
-    float _timeCheck=int.MaxValue;
-
-    private void Start()
+    public class WorldStatusWindow : MonoBehaviour
     {
-        _timeCheck = _limitViewTime;
-    }
+        [SerializeField] Slider _hpBar = null;
+        [SerializeField] float _limitViewTime = 3.0f;
+        float _timeCheck = int.MaxValue;
 
-    private void LateUpdate()
-    {
-        if (gameObject.activeSelf)
+        private void Start()
         {
-            _timeCheck += Time.deltaTime;
-            if(_timeCheck >= _limitViewTime)
+            _timeCheck = _limitViewTime;
+        }
+
+        private void LateUpdate()
+        {
+            if (gameObject.activeSelf)
             {
-                gameObject.SetActive(false);
+                _timeCheck += Time.deltaTime;
+                if (_timeCheck >= _limitViewTime)
+                {
+                    gameObject.SetActive(false);
+                }
             }
         }
-    }
 
-    private void FixedUpdate()
-    {
-        transform.LookAt(Camera.main.transform);
-    }
+        private void FixedUpdate()
+        {
+            transform.LookAt(Camera.main.transform);
+        }
 
-    public void SetHpRate(float rate)
-    {
-        gameObject.SetActive(true);
-        _hpBar.value = rate;
-        _timeCheck = 0;
+        public void SetHpRate(float rate)
+        {
+            gameObject.SetActive(true);
+            _hpBar.value = rate;
+            _timeCheck = 0;
+        }
     }
 }

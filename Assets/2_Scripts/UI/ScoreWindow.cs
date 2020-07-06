@@ -3,48 +3,51 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ScoreWindow : MonoBehaviour
+namespace Outlaw
 {
-    [SerializeField] Text _scoreText = null;
-    [SerializeField] Text _addScoreText = null;
-    CanvasGroup _scoregroup = null;
-    float _hideSpeed = 2.5f;
-
-    private void Awake()
+    public class ScoreWindow : MonoBehaviour
     {
-        _scoregroup = GetComponent<CanvasGroup>();
-    }
+        [SerializeField] Text _scoreText = null;
+        [SerializeField] Text _addScoreText = null;
+        CanvasGroup _scoregroup = null;
+        float _hideSpeed = 2.5f;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        _scoregroup.alpha = 0.0f;
-    }
-
-    private void Update()
-    {
-        if(_scoregroup.alpha > 0.0f)
+        private void Awake()
         {
-            _scoregroup.alpha -= Time.deltaTime / _hideSpeed;
+            _scoregroup = GetComponent<CanvasGroup>();
         }
-    }
 
-    public void ScoreUpdate(int score,int addScore)
-    {
-        _scoreText.text = score.ToString();
-        string addScoreString = "";
-        if (addScore >= 0)
+        // Start is called before the first frame update
+        void Start()
         {
-            _addScoreText.color = Color.yellow;
-            addScoreString += "+";
+            _scoregroup.alpha = 0.0f;
         }
-        else
+
+        private void Update()
         {
-            _addScoreText.color = Color.red;
+            if (_scoregroup.alpha > 0.0f)
+            {
+                _scoregroup.alpha -= Time.deltaTime / _hideSpeed;
+            }
         }
-        addScoreString += addScore;
-        _addScoreText.text = addScoreString;
-        _scoregroup.alpha = 1.0f;
-        IngameManager.Instance._scoreTotal += addScore;
+
+        public void ScoreUpdate(int score, int addScore)
+        {
+            _scoreText.text = score.ToString();
+            string addScoreString = "";
+            if (addScore >= 0)
+            {
+                _addScoreText.color = Color.yellow;
+                addScoreString += "+";
+            }
+            else
+            {
+                _addScoreText.color = Color.red;
+            }
+            addScoreString += addScore;
+            _addScoreText.text = addScoreString;
+            _scoregroup.alpha = 1.0f;
+            IngameManager.Instance._scoreTotal += addScore;
+        }
     }
 }

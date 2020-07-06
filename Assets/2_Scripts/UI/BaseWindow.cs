@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BaseWindow : MonoBehaviour
+namespace Outlaw
 {
-    public abstract void SelectAllCheck(int no);
+    public abstract class BaseWindow : MonoBehaviour
+    {
+        public abstract void SelectAllCheck(int no);
+    }
 }

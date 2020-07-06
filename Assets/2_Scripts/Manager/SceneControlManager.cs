@@ -3,125 +3,111 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneControlManager : MonoBehaviour
+namespace Outlaw
 {
-    public enum eSceneType
+    public class SceneControlManager : MonoBehaviour
     {
-        START = 0,
-        LOBBY,
-        INGAME
-    }
+        [SerializeField] GameObject _prefabLoading = null;
 
-    public enum eLoaddingState
-    {
-        None = 0,
-        LoadSceneStart,
-        LoaddingScene,
-        LoadSceneEnd,
-        UnloadStageStart,
-        UnloaddingStage,
-        UnloadStageEnd,
-        LoadStageStart,
-        LoaddingStage,
-        LoadStageEnd,
-        LoadEnd
-    }
+        ESceneType _nowSceneType;
+        ESceneType _oldSceneType;
 
-    [SerializeField] GameObject _prefabLoading = null;
+        ELoaddingState _currentStateLoad;
 
-    eSceneType _nowSceneType;
-    eSceneType _oldSceneType;
-
-    eLoaddingState _currentStateLoad;
-
-    public eLoaddingState _nowLoaddingState
-    {
-        get { return _currentStateLoad; }
-    }
-
-    int _nowStageNumber, _oldStageNumber;
-
-    static SceneControlManager _uniqueInstance;
-
-    public static SceneControlManager Instance
-    {
-        get { return _uniqueInstance; }
-    }
-
-    public int _stageNow
-    {
-        get { return _nowStageNumber; }
-    }
-
-    private void Awake()
-    {
-        _uniqueInstance = this;
-        DontDestroyOnLoad(this);
-    }
-
-    void Start()
-    {
-        StartSceneLobby();
-    }
-
-    public void StartSceneLobby()
-    {
-        _oldSceneType = _nowSceneType;
-        _nowSceneType = eSceneType.LOBBY;
-        StartCoroutine(LoaddingScene("LobbyScene", 0));
-    }
-
-    public void StartSceneIngame(int stageNum)
-    {
-        _oldSceneType = _nowSceneType;
-        _nowSceneType = eSceneType.INGAME;
-        _oldStageNumber = _nowStageNumber;
-        _nowStageNumber = stageNum;
-        StartCoroutine(LoaddingScene("IngameScene", stageNum));
-    }
-
-    IEnumerator LoaddingScene(string sceneName,int stageNum = 1)
-    {
-        // 씬을 로드한다.
-        // IngameScene일 경우 스테이지를 로드한다. 그리고 SetActiveScene을 StageScene으로 한다.
-
-        Loading wnd = Instantiate(_prefabLoading,transform).GetComponent<Loading>();
-
-        AsyncOperation aOper;
-        Scene aScene;
-
-        _currentStateLoad = eLoaddingState.LoadSceneStart;
-        aOper = SceneManager.LoadSceneAsync(sceneName);
-        while (!aOper.isDone)
+        public ELoaddingState _nowLoaddingState
         {
-            _currentStateLoad = eLoaddingState.LoaddingScene;
-            wnd.SettingLoadRate(aOper.progress);
-            yield return null;
+            get { return _currentStateLoad; }
         }
-        wnd.SettingLoadRate(1);
 
-        aScene = SceneManager.GetSceneByName(sceneName);
-        _currentStateLoad = eLoaddingState.LoadSceneEnd;
+        int _nowStageNumber, _oldStageNumber;
 
-        if(_nowSceneType == eSceneType.INGAME)
+        static SceneControlManager _uniqueInstance;
+
+        public static SceneControlManager Instance
         {
-            string stageName = "Stage";
-            _currentStateLoad = eLoaddingState.LoadSceneStart;
-            aOper = SceneManager.LoadSceneAsync(stageName + stageNum.ToString(), LoadSceneMode.Additive);
+            get { return _uniqueInstance; }
+        }
+
+        public int _stageNow
+        {
+            get { return _nowStageNumber; }
+        }
+
+        private void Awake()
+        {
+            _uniqueInstance = this;
+            DontDestroyOnLoad(this);
+        }
+
+        void Start()
+        {
+            StartSceneLobby();
+        }
+
+        public void StartSceneLobby()
+        {
+            _oldSceneType = _nowSceneType;
+            _nowSceneType = ESceneType.LOBBY;
+            StartCoroutine(LoaddingScene("LobbyScene", 0));
+        }
+
+        public void StartSceneIngame(int stageNum)
+        {
+            _oldSceneType = _nowSceneType;
+            _nowSceneType = ESceneType.INGAME;
+            _oldStageNumber = _nowStageNumber;
+            _nowStageNumber = stageNum;
+            StartCoroutine(LoaddingScene("IngameScene", stageNum));
+        }
+
+        IEnumerator LoaddingScene(string sceneName, int stageNum = 1)
+        {
+            // 씬을 로드한다.
+            // IngameScene일 경우 스테이지를 로드한다. 그리고 SetActiveScene을 StageScene으로 한다.
+
+            Loading wnd = Instantiate(_prefabLoading, transform).GetComponent<Loading>();
+
+            if (stageNum == 0)
+                wnd.OpenLoaddingWnd(ELoadType.Lobby);
+            else
+                wnd.OpenLoaddingWnd(ELoadType.Planet);
+
+            AsyncOperation aOper;
+            Scene aScene;
+
+            _currentStateLoad = ELoaddingState.LoadSceneStart;
+            aOper = SceneManager.LoadSceneAsync(sceneName);
             while (!aOper.isDone)
             {
-                _currentStateLoad = eLoaddingState.LoaddingStage;
+                _currentStateLoad = ELoaddingState.LoaddingScene;
                 wnd.SettingLoadRate(aOper.progress);
                 yield return null;
             }
-            aScene = SceneManager.GetSceneByName(stageName + stageNum.ToString());
-            _currentStateLoad = eLoaddingState.LoadStageEnd;
-        }
-        wnd.SettingLoadRate(1);
-        yield return new WaitForSeconds(2.0f);
-        Destroy(wnd.gameObject);
+            wnd.SettingLoadRate(1);
 
-        SceneManager.SetActiveScene(aScene);
-        _currentStateLoad = eLoaddingState.LoadEnd;
+            aScene = SceneManager.GetSceneByName(sceneName);
+            _currentStateLoad = ELoaddingState.LoadSceneEnd;
+
+            if (_nowSceneType == ESceneType.INGAME)
+            {
+                string stageName = "Stage";
+                _currentStateLoad = ELoaddingState.LoadSceneStart;
+                aOper = SceneManager.LoadSceneAsync(stageName + stageNum.ToString(), LoadSceneMode.Additive);
+                while (!aOper.isDone)
+                {
+                    _currentStateLoad = ELoaddingState.LoaddingStage;
+                    wnd.SettingLoadRate(aOper.progress);
+                    yield return null;
+                }
+                aScene = SceneManager.GetSceneByName(stageName + stageNum.ToString());
+                _currentStateLoad = ELoaddingState.LoadStageEnd;
+            }
+            wnd.SettingLoadRate(1);
+            yield return new WaitForSeconds(2.0f);
+            Destroy(wnd.gameObject);
+
+            SceneManager.SetActiveScene(aScene);
+            _currentStateLoad = ELoaddingState.LoadEnd;
+        }
     }
 }

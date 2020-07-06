@@ -74,12 +74,16 @@
     <Compile Include="Assets\10_DownAssets\JMO Assets\Cartoon FX\Scripts\CFX_LightFlicker.cs" />
     <Compile Include="Assets\10_DownAssets\JMO Assets\Cartoon FX\Scripts\CFX_LightIntensityFade.cs" />
     <Compile Include="Assets\2_Scripts\Animal.cs" />
-    <Compile Include="Assets\2_Scripts\AvatarInfo.cs" />
     <Compile Include="Assets\2_Scripts\BrokenObject.cs" />
     <Compile Include="Assets\2_Scripts\Bullet.cs" />
     <Compile Include="Assets\2_Scripts\CameraController.cs" />
     <Compile Include="Assets\2_Scripts\DamageField.cs" />
+    <Compile Include="Assets\2_Scripts\DataTable\AvatarInfo.cs" />
+    <Compile Include="Assets\2_Scripts\DataTable\MonsterInfo.cs" />
+    <Compile Include="Assets\2_Scripts\DataTable\StageInfo.cs" />
+    <Compile Include="Assets\2_Scripts\DataTable\UserInfo.cs" />
     <Compile Include="Assets\2_Scripts\Door.cs" />
+    <Compile Include="Assets\2_Scripts\EnumClass.cs" />
     <Compile Include="Assets\2_Scripts\Environment.cs" />
     <Compile Include="Assets\2_Scripts\HitZone.cs" />
     <Compile Include="Assets\2_Scripts\Loading.cs" />
@@ -88,10 +92,12 @@
     <Compile Include="Assets\2_Scripts\LobbyObject.cs" />
     <Compile Include="Assets\2_Scripts\LobbyPlayer.cs" />
     <Compile Include="Assets\2_Scripts\LobbyStick.cs" />
+    <Compile Include="Assets\2_Scripts\Manager\DataManager.cs" />
     <Compile Include="Assets\2_Scripts\Manager\IngameManager.cs" />
     <Compile Include="Assets\2_Scripts\Manager\LobbyManager.cs" />
     <Compile Include="Assets\2_Scripts\Manager\SceneControlManager.cs" />
     <Compile Include="Assets\2_Scripts\Manager\SoundManager.cs" />
+    <Compile Include="Assets\2_Scripts\Manager\StageManager.cs" />
     <Compile Include="Assets\2_Scripts\MapSet.cs" />
     <Compile Include="Assets\2_Scripts\Marker.cs" />
     <Compile Include="Assets\2_Scripts\MessageBox.cs" />
@@ -99,6 +105,7 @@
     <Compile Include="Assets\2_Scripts\Monster.cs" />
     <Compile Include="Assets\2_Scripts\MovePoint.cs" />
     <Compile Include="Assets\2_Scripts\Player.cs" />
+    <Compile Include="Assets\2_Scripts\RotateObject.cs" />
     <Compile Include="Assets\2_Scripts\SightZone.cs" />
     <Compile Include="Assets\2_Scripts\SpawnControl.cs" />
     <Compile Include="Assets\2_Scripts\Test\MyGizmo.cs" />
@@ -117,7 +124,6 @@
     <Compile Include="Assets\2_Scripts\UI\TimeWindow.cs" />
     <Compile Include="Assets\2_Scripts\UI\WorldStatusWindow.cs" />
     <Compile Include="Assets\2_Scripts\UnitBase.cs" />
-    <Compile Include="Assets\2_Scripts\UserInfo.cs" />
     <None Include="Assets\10_DownAssets\JMO Assets\Cartoon FX\Shaders\CFX3 Multiply Color.shader" />
     <None Include="Assets\10_DownAssets\Sentinel FPS GUI\Fonts\Font Links.txt" />
     <None Include="Assets\10_DownAssets\JMO Assets\Cartoon FX Easy Editor\CartoonFX Easy Editor Readme.txt" />

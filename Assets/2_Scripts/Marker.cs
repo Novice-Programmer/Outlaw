@@ -2,33 +2,36 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Marker : MonoBehaviour
+namespace Outlaw
 {
-    Vector3 _scale;
-    float _scaleSize = 1;
-
-    public float _sizeScale
+    public class Marker : MonoBehaviour
     {
-        set { _scaleSize = value; }
-    }
+        Vector3 _scale;
+        float _scaleSize = 1;
 
-    private void Awake()
-    {
-        _scale = transform.localScale;
-    }
+        public float _sizeScale
+        {
+            set { _scaleSize = value; }
+        }
 
-    private void Start()
-    {
-        transform.localScale = _scale * _scaleSize;
-    }
+        private void Awake()
+        {
+            _scale = transform.localScale;
+        }
 
-    public void ScaleSetting(float size)
-    {
-        transform.localScale = _scale * _scaleSize * size;
-    }
+        private void Start()
+        {
+            transform.localScale = _scale * _scaleSize;
+        }
 
-    public void OnDestroy()
-    {
-        MinimapController.Instance.RemoveMarker(this);
+        public void ScaleSetting(float size)
+        {
+            transform.localScale = _scale * _scaleSize * size;
+        }
+
+        public void OnDestroy()
+        {
+            MinimapController.Instance.RemoveMarker(this);
+        }
     }
 }

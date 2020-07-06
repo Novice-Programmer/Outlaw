@@ -2,79 +2,82 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StageWindow : BaseWindow
+namespace Outlaw
 {
-    // 임시
-    [SerializeField] Sprite _stageImg = null; 
-    //
-
-    [SerializeField] Transform _frameRoot = null;
-
-    Canvas _canvas;
-
-    int _pageNum;
-    int _selectNum = 1;
-
-    List<SlotUI> _stageSlotList = new List<SlotUI>();
-    private void Awake()
+    public class StageWindow : BaseWindow
     {
-        _canvas = GetComponent<Canvas>();
-        _canvas.worldCamera = Camera.main;
-    }
-    // Start is called before the first frame update
+        // 임시
+        [SerializeField] Sprite _stageImg = null;
+        //
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+        [SerializeField] Transform _frameRoot = null;
 
-    public void OpenWindow()
-    {
-        gameObject.SetActive(true);
-        ListUpSlot();
+        Canvas _canvas;
 
-        bool first = false;
+        int _pageNum;
+        int _selectNum = 1;
 
-        for (int i = 0; i < _stageSlotList.Count; i++)
+        List<SlotUI> _stageSlotList = new List<SlotUI>();
+        private void Awake()
         {
-            _stageSlotList[i].InitIcon(_stageImg, this, i + 1, first);
+            _canvas = GetComponent<Canvas>();
+            _canvas.worldCamera = Camera.main;
         }
-    }
+        // Start is called before the first frame update
 
-    public override void SelectAllCheck(int no)
-    {
-        _selectNum = no;
-        for (int i = 0; i < _stageSlotList.Count; i++)
+        // Update is called once per frame
+        void Update()
         {
-            if (i + 1 == no)
-                continue;
-            _stageSlotList[i].DisableSelect();
-        }
-    }
 
-    void ListUpSlot()
-    {
-        _stageSlotList.Clear();
-        for(int i = 0; i < _frameRoot.childCount; i++)
+        }
+
+        public void OpenWindow()
         {
-            SlotUI su = _frameRoot.GetChild(i).GetComponent<SlotUI>();
-            _stageSlotList.Add(su);
+            gameObject.SetActive(true);
+            ListUpSlot();
+
+            bool first = false;
+
+            for (int i = 0; i < _stageSlotList.Count; i++)
+            {
+                _stageSlotList[i].InitIcon(_stageImg, this, i + 1, first);
+            }
         }
-    }
 
-    public void CloseWnd()
-    {
-        gameObject.SetActive(false);
-    }
+        public override void SelectAllCheck(int no)
+        {
+            _selectNum = no;
+            for (int i = 0; i < _stageSlotList.Count; i++)
+            {
+                if (i + 1 == no)
+                    continue;
+                _stageSlotList[i].DisableSelect();
+            }
+        }
 
-    public void ClickStartBtn()
-    {
-        SceneControlManager.Instance.StartSceneIngame(_selectNum);
-    }
+        void ListUpSlot()
+        {
+            _stageSlotList.Clear();
+            for (int i = 0; i < _frameRoot.childCount; i++)
+            {
+                SlotUI su = _frameRoot.GetChild(i).GetComponent<SlotUI>();
+                _stageSlotList.Add(su);
+            }
+        }
 
-    public void ClickCloseBtn()
-    {
-        Destroy(gameObject);
+        public void CloseWnd()
+        {
+            gameObject.SetActive(false);
+        }
+
+        public void ClickStartBtn()
+        {
+            SceneControlManager.Instance.StartSceneIngame(_selectNum);
+        }
+
+        public void ClickCloseBtn()
+        {
+            Destroy(gameObject);
+        }
     }
 }

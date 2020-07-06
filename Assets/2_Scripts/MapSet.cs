@@ -2,26 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapSet : MonoBehaviour
+namespace Outlaw
 {
-    [SerializeField] string _mapName = "Desert";
-    [SerializeField] string _mapExplan = "사막";
-
-    public string _nameMap
+    public class MapSet : MonoBehaviour
     {
-        get { return _mapName; }
-    }
+        [SerializeField] string _mapName = "Desert";
+        [SerializeField] string _mapExplan = "사막";
 
-    public string _explanMap
-    {
-        get { return _mapExplan; }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
+        public string _nameMap
         {
-            IngameManager.Instance.MapChange(this);
+            get { return _mapName; }
+        }
+
+        public string _explanMap
+        {
+            get { return _mapExplan; }
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Player"))
+            {
+                IngameManager.Instance.MapChange(this);
+            }
         }
     }
 }

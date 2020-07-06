@@ -2,58 +2,61 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LobbyDoor : LobbyObject
+namespace Outlaw
 {
-    [SerializeField] bool _isAnimDoor = false;
-
-    Animator _doorCtrl;
-
-    Door[] _doors = null;
-
-    bool _isOpened = false;
-
-    private void Awake()
+    public class LobbyDoor : LobbyObject
     {
-        if (!_isAnimDoor)
-            _doors = transform.GetComponentsInChildren<Door>();
-        else
-            _doorCtrl = GetComponent<Animator>();
-    }
+        [SerializeField] bool _isAnimDoor = false;
 
-    public override void Select()
-    {
-        _isOpened = !_isOpened;
-        if (!_isAnimDoor)
+        Animator _doorCtrl;
+
+        Door[] _doors = null;
+
+        bool _isOpened = false;
+
+        private void Awake()
         {
-            for (int i = 0; i < _doors.Length; i++)
+            if (!_isAnimDoor)
+                _doors = transform.GetComponentsInChildren<Door>();
+            else
+                _doorCtrl = GetComponent<Animator>();
+        }
+
+        public override void Select()
+        {
+            _isOpened = !_isOpened;
+            if (!_isAnimDoor)
             {
-                _doors[i].DoorChange();
+                for (int i = 0; i < _doors.Length; i++)
+                {
+                    _doors[i].DoorChange();
+                }
+            }
+            else
+            {
+                _doorCtrl.SetBool("IsOpen", _isOpened);
             }
         }
-        else
-        {
-            _doorCtrl.SetBool("IsOpen", _isOpened);
-        }
-    }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
+        private void OnTriggerEnter(Collider other)
         {
-            LobbyPlayer lp = other.GetComponent<LobbyPlayer>();
-            if (_isOpened)
-                lp.SelectChange("문 닫기", this);
-            else
-                lp.SelectChange("문 열기", this);
+            if (other.CompareTag("Player"))
+            {
+                LobbyPlayer lp = other.GetComponent<LobbyPlayer>();
+                if (_isOpened)
+                    lp.SelectChange("문 닫기", this);
+                else
+                    lp.SelectChange("문 열기", this);
+            }
         }
-    }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
+        private void OnTriggerExit(Collider other)
         {
-            LobbyPlayer lp = other.GetComponent<LobbyPlayer>();
-            lp.SelectChange();
+            if (other.CompareTag("Player"))
+            {
+                LobbyPlayer lp = other.GetComponent<LobbyPlayer>();
+                lp.SelectChange();
+            }
         }
     }
 }

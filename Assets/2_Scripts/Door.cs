@@ -2,35 +2,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Door : MonoBehaviour
+namespace Outlaw
 {
-    [SerializeField] Transform _openPos = null;
-    [SerializeField] float _openSpeed = 1.5f;
-
-    Vector3 _doorPos;
-
-    bool _isOpenDoor = false;
-
-    private void Awake()
+    public class Door : MonoBehaviour
     {
-        _doorPos = transform.position;
-    }
+        [SerializeField] Transform _openPos = null;
+        [SerializeField] float _openSpeed = 1.5f;
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (_isOpenDoor)
+        Vector3 _doorPos;
+
+        bool _isOpenDoor = false;
+
+        private void Awake()
         {
-            transform.position = Vector3.MoveTowards(transform.position, _openPos.position, Time.deltaTime * _openSpeed);
+            _doorPos = transform.position;
         }
-        else
-        {
-            transform.position = Vector3.MoveTowards(transform.position, _doorPos, Time.deltaTime * _openSpeed);
-        }
-    }
 
-    public void DoorChange()
-    {
-        _isOpenDoor = !_isOpenDoor;
+        // Update is called once per frame
+        void Update()
+        {
+            if (_isOpenDoor)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, _openPos.position, Time.deltaTime * _openSpeed);
+            }
+            else
+            {
+                transform.position = Vector3.MoveTowards(transform.position, _doorPos, Time.deltaTime * _openSpeed);
+            }
+        }
+
+        public void DoorChange()
+        {
+            _isOpenDoor = !_isOpenDoor;
+        }
     }
 }

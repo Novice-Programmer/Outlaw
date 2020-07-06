@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MessageBox : MonoBehaviour
+namespace Outlaw
 {
-    [SerializeField] Text _txtMessage = null;
-
-    public void OpenMessageBox(string msg = "", bool isOpen = false)
+    public class MessageBox : MonoBehaviour
     {
-        gameObject.SetActive(isOpen);
-        _txtMessage.text = msg;
+        [SerializeField] Text _txtMessage = null;
+
+        public void OpenMessageBox(string msg = "", bool isOpen = false)
+        {
+            gameObject.SetActive(isOpen);
+            _txtMessage.text = msg;
+        }
     }
 }

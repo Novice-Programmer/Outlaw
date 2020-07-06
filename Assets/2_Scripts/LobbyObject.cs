@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class LobbyObject : MonoBehaviour
+namespace Outlaw
 {
-    public abstract void Select();
+    public abstract class LobbyObject : MonoBehaviour
+    {
+        public abstract void Select();
+    }
 }

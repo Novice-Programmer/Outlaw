@@ -3,17 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TimeWindow : MonoBehaviour
+namespace Outlaw
 {
-    [SerializeField] Text _secText = null;
-    [SerializeField] Text _msecText = null;
-
-    public void TimeUpdate(float time)
+    public class TimeWindow : MonoBehaviour
     {
-        int sec = (int)time;
-        int msec = (int)((time - sec) * 100);
-        _msecText.text = msec < 10 ? "0" : string.Empty;
-        _secText.text = sec.ToString();
-        _msecText.text += msec.ToString();
+        [SerializeField] Text _secText = null;
+        [SerializeField] Text _msecText = null;
+
+        public void TimeUpdate(float time)
+        {
+            int sec = (int)time;
+            int msec = (int)((time - sec) * 100);
+            _msecText.text = msec < 10 ? "0" : string.Empty;
+            _secText.text = sec.ToString();
+            _msecText.text += msec.ToString();
+        }
     }
 }

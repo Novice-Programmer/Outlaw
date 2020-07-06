@@ -2,33 +2,36 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DamageField : MonoBehaviour
+namespace Outlaw
 {
-    [SerializeField] bool _targetAll = false;
-    [Range(1, 10)] [SerializeField] int _damagePower = 3;
-
-    BoxCollider _range;
-
-    private void Awake()
+    public class DamageField : MonoBehaviour
     {
-        _range = GetComponent<BoxCollider>();
-    }
+        [SerializeField] bool _targetAll = false;
+        [Range(1, 10)] [SerializeField] int _damagePower = 3;
 
-    private void OnTriggerEnter(Collider other)
-    {
-        UnitBase unit = null;
-        if (other.CompareTag("Player"))
+        BoxCollider _range;
+
+        private void Awake()
         {
-            unit = other.GetComponent<Player>();
-        }
-        else if (other.CompareTag("Monster") && _targetAll)
-        {
-            unit = other.GetComponent<Monster>();
+            _range = GetComponent<BoxCollider>();
         }
 
-        if (unit != null)
+        private void OnTriggerEnter(Collider other)
         {
-            unit.OnHitting(_damagePower);
+            UnitBase unit = null;
+            if (other.CompareTag("Player"))
+            {
+                unit = other.GetComponent<Player>();
+            }
+            else if (other.CompareTag("Monster") && _targetAll)
+            {
+                unit = other.GetComponent<Monster>();
+            }
+
+            if (unit != null)
+            {
+                unit.OnHitting(_damagePower);
+            }
         }
     }
 }

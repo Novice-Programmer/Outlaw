@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovePoint : MonoBehaviour
+namespace Outlaw
 {
+    public class MovePoint : MonoBehaviour
+    {
+    }
 }

@@ -2,42 +2,45 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RotateObject : MonoBehaviour
+namespace Outlaw
 {
-    [SerializeField] float _rotateSpeed = 130.0f;
-    Quaternion _rotateBack = Quaternion.Euler(Vector3.zero);
-    Quaternion _rotateFront = Quaternion.Euler(0, 180, 0);
-    Quaternion _rotateStart;
-    bool _isBack = false;
-
-    private void Awake()
+    public class RotateObject : MonoBehaviour
     {
-        _rotateStart = transform.rotation;
-    }
+        [SerializeField] float _rotateSpeed = 130.0f;
+        Quaternion _rotateBack = Quaternion.Euler(Vector3.zero);
+        Quaternion _rotateFront = Quaternion.Euler(0, 180, 0);
+        Quaternion _rotateStart;
+        bool _isBack = false;
 
-    void Update()
-    {
-        if (!_isBack)
+        private void Awake()
         {
-            if (transform.rotation.eulerAngles.y > 0.0f)
+            _rotateStart = transform.rotation;
+        }
+
+        void Update()
+        {
+            if (!_isBack)
             {
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, _rotateBack, Time.deltaTime * _rotateSpeed);
+                if (transform.rotation.eulerAngles.y > 0.0f)
+                {
+                    transform.rotation = Quaternion.RotateTowards(transform.rotation, _rotateBack, Time.deltaTime * _rotateSpeed);
+                }
+                else
+                {
+                    _isBack = true;
+                }
             }
             else
             {
-                _isBack = true;
-            }
-        }
-        else
-        {
-            if(transform.rotation.eulerAngles.y > -180.0f)
-            {
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, _rotateFront, Time.deltaTime * _rotateSpeed);
-            }
-            if(transform.rotation.eulerAngles.y == 180)
-            {
-                _isBack = false;
-                transform.rotation = _rotateStart;
+                if (transform.rotation.eulerAngles.y > -180.0f)
+                {
+                    transform.rotation = Quaternion.RotateTowards(transform.rotation, _rotateFront, Time.deltaTime * _rotateSpeed);
+                }
+                if (transform.rotation.eulerAngles.y == 180)
+                {
+                    _isBack = false;
+                    transform.rotation = _rotateStart;
+                }
             }
         }
     }

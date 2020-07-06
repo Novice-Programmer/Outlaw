@@ -2,23 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SightZone : MonoBehaviour
+namespace Outlaw
 {
-    Monster _owner;
-
-    public void InitSettings(Monster owner)
+    public class SightZone : MonoBehaviour
     {
-        _owner = owner;
-        SphereCollider sc = GetComponent<SphereCollider>();
-        sc.radius = _owner._lengthSight;
-    }
+        Monster _owner;
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        { // 플레이어가 시야 범위에 들어왔는가
-            Player p = other.GetComponent<Player>();
-            _owner.OnBattle(p);
+        public void InitSettings(Monster owner)
+        {
+            _owner = owner;
+            SphereCollider sc = GetComponent<SphereCollider>();
+            sc.radius = _owner._lengthSight;
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Player"))
+            { // 플레이어가 시야 범위에 들어왔는가
+                Player p = other.GetComponent<Player>();
+                _owner.OnBattle(p);
+            }
         }
     }
 }

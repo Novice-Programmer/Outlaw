@@ -3,30 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ShowTextUI : MonoBehaviour
+namespace Outlaw
 {
-    [SerializeField] Text _goods = null;
-    // Start is called before the first frame update
-    void Start()
+    public class ShowTextUI : MonoBehaviour
     {
-        SetGoodsValue(12345678);
-    }
+        [SerializeField] Text _goods = null;
+        // Start is called before the first frame update
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void SetGoodsValue(double val)
-    {
-        if (val >= 10000)
+        public void SetGoodsValue(double val)
         {
-            _goods.text = string.Format("{0:#,###}", (long)(val / 10000)) + "만";
-        }
-        else
-        {
-            _goods.text = string.Format("{0:#,###.##}", val);
+            if (val >= 10000)
+            {
+                _goods.text = string.Format("{0:#,###}", (long)(val / 10000)) + "만";
+            }
+            else
+            {
+                _goods.text = string.Format("{0:#,###.##}", val);
+            }
         }
     }
 }
