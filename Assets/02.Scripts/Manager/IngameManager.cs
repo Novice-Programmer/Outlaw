@@ -6,8 +6,6 @@ namespace Outlaw
 {
     public class IngameManager : MonoBehaviour
     {
-        List<SpawnControl> _spawnPointList = new List<SpawnControl>();
-        List<Animal> _animals = new List<Animal>();
         Transform _playerSpawnPos;
         GameObject _prefabPlayer;
         GameObject _prefabResultWindow = null;
@@ -23,13 +21,13 @@ namespace Outlaw
         GoalWindow _goalWnd;
 
         Player _player;
+
         EGameState _currentGameState = EGameState.None;
 
         public EGameState _nowGameState => _currentGameState;
 
         float _timeCheck = 0;
         float _gameTime = 0;
-        int _maxSpawnPoint = 3;
         int _monsterkillCount = 0;
         int _brokenScore = 0;
         int _animalKillCount = 0;
@@ -84,7 +82,6 @@ namespace Outlaw
             _uniqueInstance = this;
             _prefabPlayer = Resources.Load("Prefabs/Characters/PlayerObject") as GameObject;
             _prefabResultWindow = Resources.Load("Prefabs/UI/ResultWindow") as GameObject;
-            _maxSpawnPoint = DataManager.Instance._userData._nowStage._monsterSpawnPoint;
         }
 
         private void Start()
@@ -129,7 +126,7 @@ namespace Outlaw
                 case EGameState.Play:
                     _timeCheck += Time.deltaTime;
                     _timeWnd.TimeUpdate(_timeCheck);
-                    if (CheckClearConditions())
+                    if (StageManager.Instance._clearCheck)
                     {
                         GameEnd(true);
                     }
@@ -152,15 +149,7 @@ namespace Outlaw
         {
             _currentGameState = EGameState.Ready;
             _msgBox.OpenMessageBox("포탈로 이동중", true);
-            ListUpSpawnControl();
             _playerSpawnPos = GameObject.Find("GameStartPos").transform;
-            int removeCount = _spawnPointList.Count - _maxSpawnPoint;
-            for (int i = 0; i < removeCount; i++)
-            {
-                int rid = Random.Range(0, _spawnPointList.Count);
-                Destroy(_spawnPointList[rid].gameObject);
-                _spawnPointList.RemoveAt(rid);
-            }
 
             _minimapController.InitMarker();
         }
@@ -212,21 +201,7 @@ namespace Outlaw
             GameObject go = Instantiate(_prefabResultWindow);
             ResultWindow wnd = go.GetComponent<ResultWindow>();
             wnd.OpenWindow(_isWin, _gameTime, _monsterkillCount, _animalKillCount, TotalScore());
-            // 모든 몬스터, 동물 삭제
-            for (int i = 0; i < _spawnPointList.Count; i++)
-            {
-                _spawnPointList[i].MonsterDestroy();
-            }
 
-        }
-        void ListUpSpawnControl()
-        {
-            SpawnControl[] scArray = FindObjectsOfType<SpawnControl>();
-
-            for (int i = 0; i < scArray.Length; i++)
-            {
-                _spawnPointList.Add(scArray[i]);
-            }
         }
 
         void GameSetting()
@@ -250,29 +225,7 @@ namespace Outlaw
             _minimapWindow.SetActive(false);
             _timeWidnow.SetActive(false);
 
-            GameObject[] animalObjects = GameObject.FindGameObjectsWithTag("Animal");
-            for (int i = 0; i < animalObjects.Length; i++)
-            {
-                Animal animal = animalObjects[i].GetComponent<Animal>();
-                _animals.Add(animal);
-            }
-
             GameReady();
-        }
-
-        bool CheckClearConditions()
-        {
-            int cnt = 0;
-            foreach (SpawnControl item in _spawnPointList)
-            {
-                if (item._checkRemainingCount)
-                    cnt++;
-            }
-
-            if (cnt >= _maxSpawnPoint)
-                return true;
-            else
-                return false;
         }
 
         void ScoreCal(EActionScore action, int addScore = 0)
@@ -300,25 +253,6 @@ namespace Outlaw
             totalScore += _countAnimalKill * -7;
             totalScore += _brokenScore;
             return totalScore;
-        }
-
-        void AnimalDestroy()
-        {
-            for (int i = 0; i < _animals.Count; i++)
-            {
-                if (_animals[i] != null)
-                {
-                    Destroy(_animals[i]);
-                }
-            }
-        }
-
-        public void ReceivePlayerDie()
-        {
-            for (int i = 0; i < _spawnPointList.Count; i++)
-            {
-                _spawnPointList[i].AllNotificationPlayerDeath();
-            }
         }
 
         public void MapChange(MapSet mapSet)

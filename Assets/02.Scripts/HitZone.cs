@@ -45,7 +45,7 @@ namespace Outlaw
                 if (_isMonster)
                 {
                     if (p.OnHitting(((Monster)_ownerCharacter)._finalDamage))
-                        IngameManager.Instance.ReceivePlayerDie();
+                        StageManager.Instance.ReceivePlayerDie();
                 }
                 else
                 {

@@ -105,10 +105,9 @@ namespace Outlaw
 
         public void MonsterDestroy()
         {
-            while (_spawnMonList.Count != 0)
+            for(int i = 0; i < _spawnMonList.Count; i++)
             {
-                Destroy(_spawnMonList[0].gameObject);
-                _spawnMonList.RemoveAt(0);
+                Destroy(_spawnMonList[i].gameObject);
             }
         }
     }

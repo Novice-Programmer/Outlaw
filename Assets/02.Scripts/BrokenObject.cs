@@ -16,6 +16,7 @@ namespace Outlaw
         [SerializeField] float _markerSize = 1;
 
         int _brokenScore = 0;
+        bool _isGoal = false;
 
         GameObject _effectHit;
         GameObject _effectExplosion;
@@ -26,6 +27,11 @@ namespace Outlaw
         public float _sizeMarker
         {
             get { return _markerSize; }
+        }
+
+        public int _durability
+        {
+            get { return _duration; }
         }
 
         // Start is called before the first frame update
@@ -42,9 +48,9 @@ namespace Outlaw
             _brokenScore = _duration / 2;
         }
 
-        // Update is called once per frame
-        void Update()
+        public void InitGoal()
         {
+            _isGoal = true;
         }
 
         private void OnTriggerEnter(Collider other)
@@ -68,6 +74,8 @@ namespace Outlaw
                         scale = go.transform.localScale;
                         go.transform.localScale = scale * _effSize;
                         Destroy(go, 5.0f);
+                        if (_isGoal)
+                            IngameManager.Instance.GameEnd(true);
                         Destroy(gameObject);
                     }
                 }
