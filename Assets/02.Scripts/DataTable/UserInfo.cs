@@ -11,9 +11,9 @@ namespace Outlaw
         public int _ownGold;
         public int _ownDiamond;
         public int _bestStageClear;
-        public int _nowStage;
+        public StageInfo _nowStage;
 
-        public UserInfo(AvatarInfo playerAvatar, string name,int ownGold, int ownDiamond, int bestStageClear, int nowStage)
+        public UserInfo(AvatarInfo playerAvatar, string name,int ownGold, int ownDiamond, int bestStageClear, StageInfo nowStage)
         {
             _playerAvatar = playerAvatar;
             _name = name;

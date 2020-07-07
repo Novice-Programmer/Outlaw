@@ -6,13 +6,11 @@ namespace Outlaw
 {
     public class IngameManager : MonoBehaviour
     {
-        [SerializeField] GameObject _prefabResultWindow = null;
-        [SerializeField] bool _isFirstView = false;
-
         List<SpawnControl> _spawnPointList = new List<SpawnControl>();
         List<Animal> _animals = new List<Animal>();
         Transform _playerSpawnPos;
         GameObject _prefabPlayer;
+        GameObject _prefabResultWindow = null;
         GameObject _stickWindow;
         GameObject _miniStatusWindow;
         GameObject _minimapWindow;
@@ -31,7 +29,7 @@ namespace Outlaw
 
         float _timeCheck = 0;
         float _gameTime = 0;
-        [SerializeField] int _maxSpawnPoint = 3;
+        int _maxSpawnPoint = 3;
         int _monsterkillCount = 0;
         int _brokenScore = 0;
         int _animalKillCount = 0;
@@ -74,11 +72,6 @@ namespace Outlaw
             get { return _totalScore; }
         }
 
-        public bool _firstView
-        {
-            get { return _isFirstView; }
-        }
-
         static IngameManager _uniqueInstance;
 
         public static IngameManager Instance
@@ -90,6 +83,8 @@ namespace Outlaw
         {
             _uniqueInstance = this;
             _prefabPlayer = Resources.Load("Prefabs/Characters/PlayerObject") as GameObject;
+            _prefabResultWindow = Resources.Load("Prefabs/UI/ResultWindow") as GameObject;
+            _maxSpawnPoint = DataManager.Instance._userData._nowStage._monsterSpawnPoint;
         }
 
         private void Start()
@@ -101,7 +96,7 @@ namespace Outlaw
             switch (_currentGameState)
             {
                 case EGameState.None:
-                    if (SceneControlManager.Instance._nowLoaddingState == ELoaddingState.LoadEnd)
+                    if (SceneControlManager.Instance._nowLoaddingState == ELoaddingState.None)
                     {
                         _currentGameState = EGameState.Ready;
                         GameSetting();
@@ -329,6 +324,11 @@ namespace Outlaw
         public void MapChange(MapSet mapSet)
         {
             _minimapController.InitMapData(mapSet);
+        }
+
+        public void ViewChange()
+        {
+            _player.transform.GetChild(0).localRotation = Quaternion.identity;
         }
     }
 }

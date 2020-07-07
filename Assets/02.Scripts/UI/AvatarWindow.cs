@@ -17,8 +17,6 @@ namespace Outlaw
         [SerializeField] Image _imgValueDefense = null;
         [SerializeField] GameObject _groupAmmuFirst = null;
         [SerializeField] GameObject _groupAmmuSecond = null;
-        [SerializeField] GameObject _dummyFirst = null;
-        [SerializeField] GameObject _dummySecond = null;
         [SerializeField] GameObject _prefabAmmu = null;
 
         AvatarInfo _avatarInfo;
@@ -27,7 +25,6 @@ namespace Outlaw
         {
             _avatarInfo = DataManager.Instance._userData._playerAvatar;
             ValueSetting();
-            gameObject.SetActive(true);
         }
 
         void ValueSetting()
@@ -41,20 +38,6 @@ namespace Outlaw
             _imgValueAttack.fillAmount = _avatarInfo._att / AvatarInfo.MAX_ATT;
             _imgValueDefense.fillAmount = _avatarInfo._def / AvatarInfo.MAX_DEF;
             int divideBullet = _avatarInfo._maxBullet / 2;
-            if (_groupAmmuFirst.transform.childCount > 0)
-            {
-                GameObject groupFirst = Instantiate(_dummyFirst, _groupAmmuFirst.transform.parent);
-                Destroy(_groupAmmuFirst);
-                _groupAmmuFirst = groupFirst;
-            }
-
-            if (_groupAmmuSecond.transform.childCount > 0)
-            {
-                GameObject groupSecond = Instantiate(_dummySecond, _groupAmmuSecond.transform.parent);
-                Destroy(_groupAmmuSecond);
-                _groupAmmuSecond = groupSecond;
-            }
-
             for (int i = 0; i < divideBullet; i++)
             {
                 Instantiate(_prefabAmmu, _groupAmmuFirst.transform);
@@ -67,7 +50,7 @@ namespace Outlaw
 
         public void CloseWnd()
         {
-            gameObject.SetActive(false);
+            Destroy(gameObject);
         }
     }
 }

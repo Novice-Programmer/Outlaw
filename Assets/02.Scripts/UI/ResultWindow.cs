@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 namespace Outlaw
 {
@@ -14,6 +13,7 @@ namespace Outlaw
         [SerializeField] Text _txtMonsterCount = null;
         [SerializeField] Text _txtAnimalKillCount = null;
         [SerializeField] Text _txtTotalScore = null;
+        [SerializeField] GameObject _objNextStage = null;
 
         bool _isOpen = false;
         float _time = 0;
@@ -44,16 +44,23 @@ namespace Outlaw
             _txtMonsterCount.text = monsterKill.ToString();
             _txtAnimalKillCount.text = animalKill.ToString();
             _txtTotalScore.text = totalScore.ToString();
+            if (DataManager.Instance.StageCheck())
+                _objNextStage.gameObject.SetActive(false);
         }
 
         public void ClickRestartButton()
         {
-            SceneManager.LoadScene("IngameScene");
+            SceneControlManager.Instance.StartSceneIngame(DataManager.Instance._userData._nowStage._no);
+        }
+
+        public void ClickHomeButton()
+        {
+            SceneControlManager.Instance.StartSceneLobby();
         }
 
         public void ClickNextButton()
         {
-            SceneControlManager.Instance.StartSceneIngame(SceneControlManager.Instance._stageNow);
+            SceneControlManager.Instance.StartSceneIngame(DataManager.Instance._userData._nowStage._no + 1);
         }
     }
 }

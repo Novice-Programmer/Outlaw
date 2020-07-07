@@ -11,13 +11,20 @@ namespace Outlaw
         [SerializeField] float _followSpeed = 10.0f;
         [SerializeField] float _rotSpeed = 5;
         GameObject _playerObj;
+
+        Quaternion _thirdViewRotation;
         Player _cPlayer;
 
         Vector3 _goalPosition;
 
+        private void Awake()
+        {
+            _thirdViewRotation = transform.rotation;
+        }
+
         void Update()
         {
-            if (IngameManager.Instance._firstView)
+            if (ViewPoint.Instance._viewPoint == EViewPoint.FirstPerson)
             {
                 float currentYAngle = Mathf.LerpAngle(transform.eulerAngles.y, _playerObj.transform.eulerAngles.y, _rotSpeed * Time.deltaTime);
                 Quaternion rot = Quaternion.Euler(0, currentYAngle, 0);
@@ -41,6 +48,11 @@ namespace Outlaw
         {
             _playerObj = p;
             _cPlayer = p.GetComponent<Player>();
+        }
+
+        public void ThirdViewChange()
+        {
+            transform.rotation = _thirdViewRotation;
         }
     }
 }

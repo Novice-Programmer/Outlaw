@@ -59,9 +59,9 @@ namespace Outlaw
 
             _ctrlAni.SetBool("IsBattle", true);
 
-            //임시
-            InitalizeData("플레이어", 30, 3, 2);
-            //
+            UserInfo playerInfo = DataManager.Instance._userData;
+
+            InitalizeData(playerInfo._name, playerInfo._playerAvatar._hp, playerInfo._playerAvatar._att, playerInfo._playerAvatar._def);
         }
 
         private void Start()
@@ -83,7 +83,7 @@ namespace Outlaw
             if (_isDead || _nowAction == EAniType.RELOAD)
                 return;
             Vector3 mv;
-            if (IngameManager.Instance._firstView)
+            if (ViewPoint.Instance._viewPoint== EViewPoint.FirstPerson)
             {
                 float mx, mz;
 #if UNITY_EDITOR
@@ -201,7 +201,7 @@ namespace Outlaw
                     ChangeAction(EAniType.ATTACK);
                     _ctrlAni.SetBool("StartAttack", true);
                 }
-                if (IngameManager.Instance._firstView)
+                if (ViewPoint.Instance._viewPoint == EViewPoint.FirstPerson)
                     transform.rotation = Quaternion.LookRotation(_stickLauncher._directionFirst);
                 else
                     _modelObj.transform.rotation = Quaternion.LookRotation(_stickLauncher._direction);
@@ -278,7 +278,7 @@ namespace Outlaw
 
         public void InitializeDirection()
         {
-            if (!IngameManager.Instance._firstView)
+            if (ViewPoint.Instance._viewPoint == EViewPoint.ThirdPerson)
                 _modelObj.transform.rotation = Quaternion.identity;
         }
 

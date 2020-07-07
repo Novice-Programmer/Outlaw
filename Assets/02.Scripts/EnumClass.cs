@@ -6,7 +6,8 @@ namespace Outlaw
 {
     public enum ETypePlanet
     {
-        스탄피드 = 0,
+        None = 0,
+        스탄피드,
         템플크론,
         마그네온
     }
@@ -66,7 +67,7 @@ namespace Outlaw
         BrokenObject
     }
 
-    enum EAniKeyType
+    public enum EAniKeyType
     {
         IDLE = 0,
         WALK,
@@ -129,6 +130,25 @@ namespace Outlaw
         Frame,
         MonsterDead,
         PlayerDead
+    }
+
+    public enum ETypeWindow
+    {
+        StageWnd = 0,
+        CharacterInfoWnd,
+        EnhanceWnd
+    }
+
+    public enum ESelectType
+    {
+        Normal = 0,
+        Select,
+    }
+
+    public enum EViewPoint
+    {
+        ThirdPerson = 0,
+        FirstPerson
     }
     public class EnumClass
     {

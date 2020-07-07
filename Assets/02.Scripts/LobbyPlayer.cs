@@ -14,12 +14,15 @@ namespace Outlaw
         Button _actionBtn;
         Text _actionTxt;
         LobbyStick _stickMovement;
-
         LobbyObject _selectObject;
-
         public Transform _lookTr
         {
             get { return _lookObj.transform; }
+        }
+
+        public bool _isSelect
+        {
+            get { return _selectObject != null; }
         }
 
         private void Awake()
@@ -41,7 +44,7 @@ namespace Outlaw
 
         void Update()
         {
-            if (SceneControlManager.Instance._nowLoaddingState == ELoaddingState.LoadEnd)
+            if (SceneControlManager.Instance._nowLoaddingState == ELoaddingState.None)
             {
                 float mx = -_stickMovement._dirMove.x;
                 float mz = -_stickMovement._dirMove.y;
@@ -80,18 +83,10 @@ namespace Outlaw
                 _playerAnim.SetBool("IsWalk", false);
         }
 
-        public void SelectChange(string actionMsg = "Action", LobbyObject lbObj = null)
+        public void SelectChange(string actionMsg = "", LobbyObject lbObj = null)
         {
-            if (lbObj != null)
-            {
-                _selectObject = lbObj;
-                _actionBtn.interactable = true;
-            }
-            else
-            {
-                _selectObject = null;
-                _actionBtn.interactable = false;
-            }
+            _selectObject = lbObj;
+            _actionBtn.interactable = lbObj != null;
             _actionTxt.text = actionMsg;
         }
 

@@ -6,13 +6,6 @@ namespace Outlaw
 {
     public class LobbyManager : MonoBehaviour
     {
-        public enum ETypeWindow
-        {
-            StageWnd = 0,
-            CharacterInfoWnd,
-            StoreWnd
-        }
-
         GameObject _prefabStageWindow;
         GameObject _prefabAvatarWindow;
         GameObject _startEffect;
@@ -43,9 +36,8 @@ namespace Outlaw
         // Start is called before the first frame update
         void Start()
         {
-#if UNITY_EDITOR
-            if (SoundManager.Instance != null)
-                SoundManager.Instance.PlayerBGMSound(ETypeBGMSound.Lobby);
+
+            SoundManager.Instance.PlayerBGMSound(ETypeBGMSound.Lobby);
             GameObject go = GameObject.Find("GoldWnd");
             _goldText = go.GetComponent<ShowTextUI>();
             go = GameObject.Find("DiamondWnd");
@@ -55,9 +47,7 @@ namespace Outlaw
             _diamondText.SetGoodsValue(_userData._ownDiamond);
             _startEffect = GameObject.Find("PlayerStartEffect");
             _startEffect.SetActive(false);
-#else
-       SoundManager.Instance.PlayerBGMSound(SoundManager.ETypeBGMSound.Lobby); 
-#endif
+
         }
 
         // Update is called once per frame
@@ -65,7 +55,7 @@ namespace Outlaw
         {
             if (!_firstCheck) 
             {
-                if (SceneControlManager.Instance._nowLoaddingState == ELoaddingState.LoadEnd)
+                if (SceneControlManager.Instance._nowLoaddingState == ELoaddingState.None)
                 {
                     _firstCheck = true;
                     _startEffect.SetActive(true);
@@ -73,40 +63,21 @@ namespace Outlaw
             }
         }
 
-        public void OpenWindow(ETypeWindow type)
+        public void OpenWindow(ETypeWindow type,ETypePlanet planet = ETypePlanet.스탄피드)
         {
             GameObject go;
             switch (type)
             {
                 case ETypeWindow.StageWnd:
-                    if (_wndStage == null)
-                    {
                         go = Instantiate(_prefabStageWindow);
                         _wndStage = go.GetComponent<StageWindow>();
-                        _wndStage.OpenWindow();
-                    }
-                    else
-                    {
-                        if (_wndStage.gameObject.activeSelf)
-                            _wndStage.CloseWnd();
-                        else
-                            _wndStage.OpenWindow();
-                    }
+                        _wndStage.OpenWindow(planet);
                     break;
                 case ETypeWindow.CharacterInfoWnd:
-                    if (_wndAvatar == null)
-                    {
+
                         go = Instantiate(_prefabAvatarWindow);
                         _wndAvatar = go.GetComponent<AvatarWindow>();
                         _wndAvatar.OpenWindow();
-                    }
-                    else
-                    {
-                        if (_wndAvatar.gameObject.activeSelf)
-                            _wndAvatar.CloseWnd();
-                        else
-                            _wndAvatar.OpenWindow();
-                    }
                     break;
             }
         }
@@ -123,7 +94,7 @@ namespace Outlaw
                     if (_wndAvatar != null)
                         _wndAvatar.CloseWnd();
                     break;
-                case ETypeWindow.StoreWnd:
+                case ETypeWindow.EnhanceWnd:
                     break;
             }
         }

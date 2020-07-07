@@ -6,13 +6,8 @@ namespace Outlaw
 {
     public class SelectObject : LobbyObject
     {
-        enum ESelectType
-        {
-            Normal = 0,
-            Select,
-        }
-
-        [SerializeField] LobbyManager.ETypeWindow _windowType = LobbyManager.ETypeWindow.StageWnd;
+        [SerializeField] ETypeWindow _windowType = ETypeWindow.StageWnd;
+        [SerializeField] ETypePlanet _stagePlanet = ETypePlanet.None;
         [SerializeField] Material[] _mats = null;
         MeshRenderer _modelRenderer;
 
@@ -27,24 +22,29 @@ namespace Outlaw
 
         }
 
+        void WindowButton(LobbyPlayer lp)
+        {
+            switch (_windowType)
+            {
+                case ETypeWindow.StageWnd:
+                    lp.SelectChange("행성 이동", this);
+                    break;
+                case ETypeWindow.CharacterInfoWnd:
+                    lp.SelectChange("상태 확인", this);
+                    break;
+                case ETypeWindow.EnhanceWnd:
+                    lp.SelectChange("업그레이드", this);
+                    break;
+            }
+        }
+
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Player"))
             {
                 _modelRenderer.material = _mats[(int)ESelectType.Select];
                 LobbyPlayer lp = other.GetComponent<LobbyPlayer>();
-                switch (_windowType)
-                {
-                    case LobbyManager.ETypeWindow.StageWnd:
-                        lp.SelectChange("행성 이동", this);
-                        break;
-                    case LobbyManager.ETypeWindow.CharacterInfoWnd:
-                        lp.SelectChange("상태 확인", this);
-                        break;
-                    case LobbyManager.ETypeWindow.StoreWnd:
-                        lp.SelectChange("업그레이드", this);
-                        break;
-                }
+                WindowButton(lp);
             }
         }
 
@@ -61,7 +61,7 @@ namespace Outlaw
 
         public override void Select()
         {
-            LobbyManager.Instance.OpenWindow(_windowType);
+            LobbyManager.Instance.OpenWindow(_windowType, _stagePlanet);
         }
     }
 }

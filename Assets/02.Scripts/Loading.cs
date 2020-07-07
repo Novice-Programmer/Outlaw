@@ -45,7 +45,7 @@ namespace Outlaw
             }
         }
 
-        public void OpenLoaddingWnd(ELoadType type, string planet = "", string stageName = "", string goalString = "")
+        public void OpenLoaddingWnd(ELoadType type)
         {
             _rate = 0;
             _txtLoadingValue.text = "0%";
@@ -57,9 +57,29 @@ namespace Outlaw
                     break;
                 case ELoadType.Planet:
                     _txtGoal.text = "목표";
+                    StageInfo nowStage = DataManager.Instance._userData._nowStage;
                     string goalMain = "";
-                    goalMain += "행성 " + planet + "\n";
-                    goalMain += "지역 " + stageName + "\n";
+                    goalMain += "행성 " + nowStage._planet + "\n";
+                    goalMain += "지역 " + nowStage._stageName + "\n";
+                    string goalString = "";
+                    switch (nowStage._goal)
+                    {
+                        case ETypeGoal.모든적을제거:
+                            goalString = "모든 적을 제거하시오.";
+                            break;
+                        case ETypeGoal.특정지역방문:
+                            goalString = "특정 지역을 방문하시오.";
+                            break;
+                        case ETypeGoal.특정건물파괴:
+                            goalString = "특정 건물을 파괴하시오.";
+                            break;
+                        case ETypeGoal.일정건물파괴:
+                            goalString = "건물을 일정량만큼 파괴하시오.";
+                            break;
+                        case ETypeGoal.보스처치:
+                            goalString = "몬스터를 잡고 보스를 처치하시오.";
+                            break;
+                    }
                     goalMain += goalString;
                     _txtGoalMain.text = goalMain;
                     _targetObject.SetActive(true);

@@ -12,12 +12,12 @@ namespace Outlaw
         [SerializeField] int _maxViewCount = 3;
         [SerializeField] int _maxCreateCount = 10;
         [SerializeField] float _intervalCreateTime = 2;
-        [SerializeField] string[] _prefabMonsterNames = new string[] { "MonGhost", "MonOrc" };
 
         List<GameObject> _prefabMon = new List<GameObject>();
         float _timeCheck = 0;
 
         List<GameObject> _spawnMonList = new List<GameObject>();
+        MonsterInfo[] _monsterInfos;
 
         public bool _checkRemainingCount
         {
@@ -26,10 +26,11 @@ namespace Outlaw
 
         private void Awake()
         {
-            string path = "Prefabs/Characters/";
-            for (int i = 0; i < _prefabMonsterNames.Length; i++)
+            _monsterInfos = DataManager.Instance._userData._nowStage._spawnMonsters;
+            for(int i = 0; i < _monsterInfos.Length; i++)
             {
-                _prefabMon.Add(Resources.Load(path + _prefabMonsterNames[i]) as GameObject);
+                _prefabMon.Add(Resources.Load("Prefabs/Characters/" + _monsterInfos[i]._fileName) as GameObject);
+                
             }
         }
         // Start is called before the first frame update
@@ -52,9 +53,10 @@ namespace Outlaw
                     if (_timeCheck >= _intervalCreateTime)
                     {
                         _timeCheck = 0;
-
-                        GameObject go = Instantiate(_prefabMon[Random.Range(0, _prefabMon.Count)], transform.position, transform.rotation);
+                        int rid = Random.Range(0, _prefabMon.Count);
+                        GameObject go = Instantiate(_prefabMon[rid], transform.position, transform.rotation);
                         Monster monster = go.GetComponent<Monster>();
+                        monster._number = _monsterInfos[rid]._no;
                         if (_isRandom)
                         {
                             int type, kind;

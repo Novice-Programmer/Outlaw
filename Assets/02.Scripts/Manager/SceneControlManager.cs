@@ -14,12 +14,15 @@ namespace Outlaw
 
         ELoaddingState _currentStateLoad;
 
+        Loading _wnd;
+
         public ELoaddingState _nowLoaddingState
         {
             get { return _currentStateLoad; }
         }
 
         int _nowStageNumber, _oldStageNumber;
+        float _timeCheck = 0;
 
         static SceneControlManager _uniqueInstance;
 
@@ -44,6 +47,21 @@ namespace Outlaw
             StartSceneLobby();
         }
 
+        private void Update()
+        {
+            if(_currentStateLoad == ELoaddingState.LoadEnd)
+            {
+                _timeCheck += Time.deltaTime;
+                if (_timeCheck > 2.0f)
+                {
+                    StopCoroutine("LoaddingScene");
+                    _currentStateLoad = ELoaddingState.None;
+                    Destroy(_wnd.gameObject);
+                    _timeCheck = 0;
+                }
+            }
+        }
+
         public void StartSceneLobby()
         {
             _oldSceneType = _nowSceneType;
@@ -65,12 +83,12 @@ namespace Outlaw
             // 씬을 로드한다.
             // IngameScene일 경우 스테이지를 로드한다. 그리고 SetActiveScene을 StageScene으로 한다.
 
-            Loading wnd = Instantiate(_prefabLoading, transform).GetComponent<Loading>();
+            _wnd = Instantiate(_prefabLoading, transform).GetComponent<Loading>();
 
             if (stageNum == 0)
-                wnd.OpenLoaddingWnd(ELoadType.Lobby);
+                _wnd.OpenLoaddingWnd(ELoadType.Lobby);
             else
-                wnd.OpenLoaddingWnd(ELoadType.Planet);
+                _wnd.OpenLoaddingWnd(ELoadType.Planet);
 
             AsyncOperation aOper;
             Scene aScene;
@@ -80,10 +98,10 @@ namespace Outlaw
             while (!aOper.isDone)
             {
                 _currentStateLoad = ELoaddingState.LoaddingScene;
-                wnd.SettingLoadRate(aOper.progress);
+                _wnd.SettingLoadRate(aOper.progress);
                 yield return null;
             }
-            wnd.SettingLoadRate(1);
+            _wnd.SettingLoadRate(1);
 
             aScene = SceneManager.GetSceneByName(sceneName);
             _currentStateLoad = ELoaddingState.LoadSceneEnd;
@@ -96,16 +114,13 @@ namespace Outlaw
                 while (!aOper.isDone)
                 {
                     _currentStateLoad = ELoaddingState.LoaddingStage;
-                    wnd.SettingLoadRate(aOper.progress);
+                    _wnd.SettingLoadRate(aOper.progress);
                     yield return null;
                 }
                 aScene = SceneManager.GetSceneByName(stageName + stageNum.ToString());
                 _currentStateLoad = ELoaddingState.LoadStageEnd;
             }
-            wnd.SettingLoadRate(1);
-            yield return new WaitForSeconds(2.0f);
-            Destroy(wnd.gameObject);
-
+            _wnd.SettingLoadRate(1);
             SceneManager.SetActiveScene(aScene);
             _currentStateLoad = ELoaddingState.LoadEnd;
         }

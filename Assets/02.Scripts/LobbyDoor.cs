@@ -50,6 +50,21 @@ namespace Outlaw
             }
         }
 
+        private void OnTriggerStay(Collider other)
+        {
+            if (other.CompareTag("Player"))
+            {
+                LobbyPlayer lp = other.GetComponent<LobbyPlayer>();
+                if (!lp._isSelect)
+                {
+                    if (_isOpened)
+                        lp.SelectChange("문 닫기", this);
+                    else
+                        lp.SelectChange("문 열기", this);
+                }
+            }
+        }
+
         private void OnTriggerExit(Collider other)
         {
             if (other.CompareTag("Player"))

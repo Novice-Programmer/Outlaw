@@ -8,12 +8,12 @@ namespace Outlaw
 {
     public class Monster : UnitBase
     {
-        [Range(0.5f, 3.0f)] [SerializeField] float _minWaitTime = 2.5f;
-        [Range(3.0f, 9.9f)] [SerializeField] float _maxWaitTime = 9.9f;
         [SerializeField] HitZone _hitZone = null;
         [SerializeField] SightZone _sightZone = null;
         [SerializeField] WorldStatusWindow _worldMiniUI = null;
         [SerializeField] Marker _marker = null;
+        [SerializeField] string _hitEffName = "MonsterHit";
+        [SerializeField] string _deadEffName = "MonsterDead";
         Player _targetPlayer;
         SpawnControl _ownerParent;
 
@@ -25,30 +25,36 @@ namespace Outlaw
         Dictionary<EAniKeyType, string> _aniList = new Dictionary<EAniKeyType, string>();
         List<Vector3> _roamPointList = new List<Vector3>();
 
+        float _timeCheck = 0;
 
         // Monster의 기본 정보
-        [SerializeField] float _runSpeed = 4;
-        [SerializeField] float _walkSpeed = 0.7f;
-        [SerializeField] float _sightRange = 10;
-        [SerializeField] float _attackRange = 3;
-        [SerializeField] float _followDistance = 20;
-        [Range(10.0f, 100.0f)] [SerializeField] float _rateMoveAct = 50.0f; // 비전투 행동중 이동을 선택할 확률
-        float _timeCheck = 0;
+        float _minWaitTime = 2.5f;
+        float _maxWaitTime = 9.9f;
+        float _runSpeed = 4;
+        float _walkSpeed = 0.7f;
+        float _sightRange = 10;
+        float _attackRange = 3;
+        float _followDistance = 20;
+        float _rateMoveAct = 50.0f;
 
         // Monster의 활용 정보
         int _nowIndex = -1;
         int _moveCount = 0;
         int _randomPos = 0;
+        int _monsterNum = 0;
         bool _isBack = false;
         bool _isSelectAct = true;  // false일때 선택을 한다. (true면 선택한 상황)
         bool _isRandom = false;
         bool _isInvincibility = false;
         Vector3 _posBattleStart;
 
-        [SerializeField] string _hitEffName = "MonsterHit";
-        [SerializeField] string _deadEffName = "MonsterDead";
         GameObject _hitEffect;
         GameObject _deadEffect;
+
+        public int _number
+        {
+            set { _monsterNum = value; }
+        }
 
         public float _lengthSight
         {
@@ -70,10 +76,7 @@ namespace Outlaw
             _ctrlAni = GetComponent<Animation>();
             _navAgent = GetComponent<NavMeshAgent>();
             MyAnimationList();
-
-            //임시
-            InitalizeData("몬스터", 30, 2, 1);
-            //
+            InitMonsterData();
         }
         void Start()
         {
@@ -217,6 +220,21 @@ namespace Outlaw
             if (_targetPlayer == null)
                 return;
             StartCoroutine(WinnerAction());
+        }
+
+        void InitMonsterData()
+        {
+            MonsterInfo monster = DataManager.Instance.GetMonster(_monsterNum);
+
+            InitalizeData(monster._name, monster._hp, monster._att, monster._def);
+            _minWaitTime = monster._minWaitTime;
+            _maxWaitTime = monster._maxWaitTime;
+            _runSpeed = monster._runSpeed;
+            _walkSpeed = monster._walkSpeed;
+            _sightRange = monster._sightRange;
+            _attackRange = monster._attackRange;
+            _followDistance = monster._followDistance;
+            _rateMoveAct = monster._rateMoveAct;
         }
 
         IEnumerator WinnerAction()
