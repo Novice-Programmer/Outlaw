@@ -91,9 +91,9 @@ GameObject:
   - component: {fileID: 2823716474261725669}
   - component: {fileID: 8585076074005897376}
   - component: {fileID: 8790156954422475070}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Hydrant
-  m_TagString: Untagged
+  m_TagString: BrokenObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -130,6 +130,7 @@ MonoBehaviour:
   _boomEffectName: Explosion
   _frameEffectName: Frame
   _effSize: 1
+  _markerSize: 1
 --- !u!65 &8585076074005897376
 BoxCollider:
   m_ObjectHideFlags: 0

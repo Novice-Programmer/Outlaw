@@ -8,12 +8,8 @@ namespace Outlaw
     {
         [SerializeField] bool _targetAll = false;
         [Range(1, 10)] [SerializeField] int _damagePower = 3;
-
-        BoxCollider _range;
-
         private void Awake()
         {
-            _range = GetComponent<BoxCollider>();
         }
 
         private void OnTriggerEnter(Collider other)

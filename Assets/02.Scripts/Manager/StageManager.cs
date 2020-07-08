@@ -15,6 +15,8 @@ namespace Outlaw
         // 스테이지 오브젝트 관련
         List<SpawnControl> _spawnPointList = new List<SpawnControl>();
         List<Animal> _animals = new List<Animal>();
+        List<Transform> _goalPointList = new List<Transform>();
+        GameObject _prefabGoalArea = null;
         int _maxSpawnPoint = 3;
 
         // 클리어 관련
@@ -34,6 +36,11 @@ namespace Outlaw
         public StageInfo _nowStageInfo
         {
             get { return _stage; }
+        }
+
+        public ETypeGoal _nowStageGoal
+        {
+            get { return _goal; }
         }
 
         public string _goalString
@@ -74,9 +81,15 @@ namespace Outlaw
             _uniqueInstance = this;
             _stage = DataManager.Instance._userData._nowStage;
             _maxSpawnPoint = _stage._monsterSpawnPoint;
+            _prefabGoalArea = Resources.Load("Prefabs/Objects/GoalArea") as GameObject;
         }
         private void Start()
         {
+            GameObject rootGoal = GameObject.Find("GoalAreaPoint");
+            for(int i = 0; i < rootGoal.transform.childCount; i++)
+            {
+                _goalPointList.Add(rootGoal.transform.GetChild(i));
+            }
             _startEffect = GameObject.Find("PlayerStartEffect");
             _startEffect.SetActive(_firstCheck);
             ListUpSpawnControl();
@@ -110,9 +123,9 @@ namespace Outlaw
                 case ETypeGoal.모든적을제거:
                     break;
                 case ETypeGoal.특정지역방문:
-                    GoalArea[] goalCandArea = FindObjectsOfType<GoalArea>();
-                    int rid = Random.Range(0, goalCandArea.Length);
-                    _goalArea = goalCandArea[rid];
+                    int rid = Random.Range(0, _goalPointList.Count);
+                    GameObject goalObject = Instantiate(_prefabGoalArea, _goalPointList[rid].position, _goalPointList[rid].rotation);
+                    _goalArea = goalObject.GetComponent<GoalArea>();
                     _goalArea.InitGoal();
                     break;
                 case ETypeGoal.특정건물파괴:
@@ -215,6 +228,12 @@ namespace Outlaw
             {
                 _spawnPointList[i].AllNotificationPlayerDeath();
             }
+        }
+
+        public void ClearStage()
+        {
+            ObjectClear();
+            DataManager.Instance.StageClear();
         }
     }
 }

@@ -70,7 +70,7 @@ namespace Outlaw
 #endif
 
                 AnimChange(mv);
-
+                mv = new Vector3(mv.x, mv.y + Physics.gravity.y * 0.2f, mv.z);
                 _controller.Move(mv);
             }
         }

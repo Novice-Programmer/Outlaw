@@ -201,7 +201,8 @@ namespace Outlaw
             GameObject go = Instantiate(_prefabResultWindow);
             ResultWindow wnd = go.GetComponent<ResultWindow>();
             wnd.OpenWindow(_isWin, _gameTime, _monsterkillCount, _animalKillCount, TotalScore());
-
+            StageManager.Instance.ClearStage();
+            DataManager.Instance.MoneyAdd(_isWin, TotalScore());
         }
 
         void GameSetting()
@@ -233,6 +234,8 @@ namespace Outlaw
             switch (action)
             {
                 case EActionScore.MonsterKill:
+                    if (!(StageManager.Instance._nowStageGoal == ETypeGoal.모든적을제거 || StageManager.Instance._nowStageGoal == ETypeGoal.보스처치))
+                        _goalWnd.GoalUpdate(StageManager.Instance._goalString);
                     addScore = 5;
                     break;
                 case EActionScore.AnimalKill:
@@ -240,7 +243,8 @@ namespace Outlaw
                     addScore = -7;
                     break;
                 case EActionScore.BrokenObject:
-                    _goalWnd.GoalUpdate();
+                    if (!(StageManager.Instance._nowStageGoal == ETypeGoal.일정건물파괴 || StageManager.Instance._nowStageGoal == ETypeGoal.특정건물파괴))
+                        _goalWnd.GoalUpdate(StageManager.Instance._goalString);
                     break;
             }
             _scoreWnd.ScoreUpdate(_totalScore, addScore);

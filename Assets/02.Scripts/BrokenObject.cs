@@ -34,6 +34,11 @@ namespace Outlaw
             get { return _duration; }
         }
 
+        public bool _goalBrokenObject
+        {
+            get { return _isGoal; }
+        }
+
         // Start is called before the first frame update
         void Awake()
         {
@@ -69,6 +74,7 @@ namespace Outlaw
                         go = Instantiate(_effectExplosion, transform.position, Quaternion.identity);
                         Vector3 scale = go.transform.localScale;
                         go.transform.localScale = scale * _effSize;
+                        go.GetComponent<BoxCollider>().size = go.transform.localScale * 1.5f;
                         Destroy(go, 2.0f);
                         go = Instantiate(_effectFrame, transform.position, Quaternion.identity);
                         scale = go.transform.localScale;

@@ -149,6 +149,13 @@ namespace Outlaw
                 Marker marker = addMarker.GetComponent<Marker>();
                 marker._sizeScale = brokenObj[i].GetComponent<BrokenObject>()._sizeMarker;
                 _markers.Add(marker);
+                if (StageManager.Instance._nowStageGoal == ETypeGoal.특정건물파괴)
+                {
+                    if (brokenObj[i].GetComponent<BrokenObject>()._goalBrokenObject)
+                    {
+                        marker.GetComponent<SpriteRenderer>().color = Color.red;
+                    }
+                }
             }
 
             Animal[] animalObj = FindObjectsOfType<Animal>();

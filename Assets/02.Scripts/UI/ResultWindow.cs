@@ -44,8 +44,8 @@ namespace Outlaw
             _txtMonsterCount.text = monsterKill.ToString();
             _txtAnimalKillCount.text = animalKill.ToString();
             _txtTotalScore.text = totalScore.ToString();
-            if (DataManager.Instance.StageCheck())
-                _objNextStage.gameObject.SetActive(false);
+            _objNextStage.gameObject.SetActive(DataManager.Instance.StageCheck());
+
         }
 
         public void ClickRestartButton()

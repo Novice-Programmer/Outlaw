@@ -91,9 +91,9 @@ GameObject:
   - component: {fileID: 6910205424172817634}
   - component: {fileID: 7820762482507841856}
   - component: {fileID: 6510255702368354292}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: JapaneseHouse
-  m_TagString: Untagged
+  m_TagString: BrokenObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -130,8 +130,7 @@ MonoBehaviour:
   _boomEffectName: Explosion
   _frameEffectName: Frame
   _effSize: 5
-  _markerSize: 5
-  _brokenScore: 30
+  _markerSize: 7
 --- !u!65 &7820762482507841856
 BoxCollider:
   m_ObjectHideFlags: 0

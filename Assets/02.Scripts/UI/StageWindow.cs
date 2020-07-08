@@ -49,7 +49,7 @@ namespace Outlaw
             _warpButton.interactable = true;
             for (int i = 0; i < _stageSlotList.Count; i++)
             {
-                if (i + 1 == no)
+                if(_stageSlotList[i]._myNumber == no)
                     continue;
                 _stageSlotList[i].DisableSelect();
             }
@@ -77,8 +77,7 @@ namespace Outlaw
 
         public void ClickStartBtn()
         {
-            DataManager.Instance.StageChange(_nowPlanet, _selectNum);
-            SceneControlManager.Instance.StartSceneIngame(_selectNum);
+            SceneControlManager.Instance.StartSceneIngame(_selectNum, _nowPlanet);
         }
     }
 }

@@ -16,6 +16,12 @@ namespace Outlaw
             {
                 _goods.text = string.Format("{0:#,###}", (long)(val / 10000)) + "만";
             }
+
+            else if(val == 0)
+            {
+                _goods.text = val.ToString();
+            }
+
             else
             {
                 _goods.text = string.Format("{0:#,###.##}", val);

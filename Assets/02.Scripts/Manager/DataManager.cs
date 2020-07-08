@@ -68,7 +68,7 @@ namespace Outlaw
         void StageDataGet()
         {
             Dictionary<int, StageInfo> stageStanfeed = new Dictionary<int, StageInfo>();
-            StageInfo stage1 = new StageInfo(ETypePlanet.스탄피드, ETypeGoal.모든적을제거, 1, 1, "SF-173", stageIcons[0], 
+            StageInfo stage1 = new StageInfo(ETypePlanet.스탄피드, ETypeGoal.특정지역방문, 1, 1, "SF-173", stageIcons[0], 
                 new MonsterInfo[] { _dicMonsterInfo[0]});
             stageStanfeed.Add(stage1._no, stage1);
             StageInfo stage2 = new StageInfo(ETypePlanet.스탄피드, ETypeGoal.특정건물파괴, 2, 1, "SF-199", stageIcons[1],
@@ -78,10 +78,10 @@ namespace Outlaw
             _dicStageInfo.Add(ETypePlanet.스탄피드, stageStanfeed);
 
             Dictionary<int, StageInfo> stageTempleCrone = new Dictionary<int, StageInfo>();
-            StageInfo stage3 = new StageInfo(ETypePlanet.템플크론, ETypeGoal.모든적을제거, 3, 2, "TC-000", stageIcons[0],
+            StageInfo stage3 = new StageInfo(ETypePlanet.템플크론, ETypeGoal.일정건물파괴, 3, 2, "TC-000", stageIcons[0],
                 new MonsterInfo[] { _dicMonsterInfo[0] });
             stageTempleCrone.Add(stage3._no, stage3);
-            StageInfo stage4 = new StageInfo(ETypePlanet.템플크론, ETypeGoal.특정건물파괴, 4, 3, "TC-31752", stageIcons[1],
+            StageInfo stage4 = new StageInfo(ETypePlanet.템플크론, ETypeGoal.모든적을제거, 4, 3, "TC-31752", stageIcons[1],
                 new MonsterInfo[] { _dicMonsterInfo[0], _dicMonsterInfo[1] });
             stageTempleCrone.Add(stage4._no, stage4);
 
@@ -91,7 +91,7 @@ namespace Outlaw
             StageInfo stage5 = new StageInfo(ETypePlanet.마그네온, ETypeGoal.모든적을제거, 5, 4, "MN-1", stageIcons[0],
                 new MonsterInfo[] { _dicMonsterInfo[0] });
             stageMagneon.Add(stage5._no, stage5);
-            StageInfo stage6 = new StageInfo(ETypePlanet.마그네온, ETypeGoal.특정건물파괴, 6, 5, "MN-2", stageIcons[1],
+            StageInfo stage6 = new StageInfo(ETypePlanet.마그네온, ETypeGoal.보스처치, 6, 5, "MN-2", stageIcons[1],
                 new MonsterInfo[] { _dicMonsterInfo[0], _dicMonsterInfo[1] });
             stageMagneon.Add(stage6._no, stage6);
 
@@ -100,7 +100,7 @@ namespace Outlaw
 
         void UserDataGet()
         {
-            UserInfo firstInfo = new UserInfo(_dicAvatarInfo[0], "Player", 1321, 27, 0, new StageInfo());
+            UserInfo firstInfo = new UserInfo(_dicAvatarInfo[0], "Player", 0, 0, 2, new StageInfo());
             _userInfo = firstInfo;
         }
 
@@ -147,9 +147,32 @@ namespace Outlaw
             return stages.ContainsKey(nowStage._no + 1);
         }
 
-        public void StageChange(ETypePlanet planet,int stageNum)
+        public void StageChange(ETypePlanet planet, int stageNum)
         {
             _userInfo._nowStage = _dicStageInfo[planet][stageNum];
+        }
+
+        public void StageClear()
+        {
+            if (_userInfo._bestStageClear < _userData._nowStage._no)
+                _userInfo._bestStageClear = _userData._nowStage._no;
+
+        }
+
+        public void MoneyAdd(bool isClear, int score)
+        {
+            int addGold = 0;
+            int addDiamond = 0;
+            if (isClear)
+            {
+                addGold = _userInfo._nowStage._no * 100;
+                addDiamond = _userInfo._nowStage._no * 2;
+            }
+
+            addGold += score / (7 - _userInfo._nowStage._no);
+
+            _userInfo._ownGold += addGold;
+            _userInfo._ownDiamond += addDiamond;
         }
     }
 }

@@ -69,12 +69,16 @@ namespace Outlaw
             StartCoroutine(LoaddingScene("LobbyScene", 0));
         }
 
-        public void StartSceneIngame(int stageNum)
+        public void StartSceneIngame(int stageNum, ETypePlanet planet = ETypePlanet.None)
         {
             _oldSceneType = _nowSceneType;
             _nowSceneType = ESceneType.INGAME;
             _oldStageNumber = _nowStageNumber;
             _nowStageNumber = stageNum;
+            if (planet == ETypePlanet.None)
+                DataManager.Instance.StageChange(DataManager.Instance._userData._nowStage._planet, stageNum);
+            else
+                DataManager.Instance.StageChange(planet, stageNum);
             StartCoroutine(LoaddingScene("IngameScene", stageNum));
         }
 
@@ -110,14 +114,15 @@ namespace Outlaw
             {
                 string stageName = "Stage";
                 _currentStateLoad = ELoaddingState.LoadSceneStart;
-                aOper = SceneManager.LoadSceneAsync(stageName + stageNum.ToString(), LoadSceneMode.Additive);
+                sceneName = stageName + stageNum.ToString();
+                aOper = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
                 while (!aOper.isDone)
                 {
                     _currentStateLoad = ELoaddingState.LoaddingStage;
                     _wnd.SettingLoadRate(aOper.progress);
                     yield return null;
                 }
-                aScene = SceneManager.GetSceneByName(stageName + stageNum.ToString());
+                aScene = SceneManager.GetSceneByName(sceneName);
                 _currentStateLoad = ELoaddingState.LoadStageEnd;
             }
             _wnd.SettingLoadRate(1);

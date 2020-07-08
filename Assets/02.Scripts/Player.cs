@@ -82,6 +82,7 @@ namespace Outlaw
 
             if (_isDead || _nowAction == EAniType.RELOAD)
                 return;
+
             Vector3 mv;
             if (ViewPoint.Instance._viewPoint== EViewPoint.FirstPerson)
             {
@@ -109,7 +110,7 @@ namespace Outlaw
                     ChangeAnimationToDirectionFirstView(md);
 
                     md = transform.TransformDirection(md);
-                    _controller.Move(md * _movSpeed * Time.deltaTime);
+                    mv = md * _movSpeed * Time.deltaTime;
                 }
                 else
                 {
@@ -126,7 +127,7 @@ namespace Outlaw
                     }
 
                     transform.Rotate(Vector3.up * mx * Time.deltaTime * 100);
-                    _controller.Move(mv * _movSpeed * _nowSpeed * Time.deltaTime);
+                    mv = mv * _movSpeed * _nowSpeed * Time.deltaTime;
                 }
             }
             else
@@ -158,8 +159,10 @@ namespace Outlaw
                         _modelObj.transform.rotation = Quaternion.LookRotation(mv);
                     }
                 }
-                _controller.Move(mv * _movSpeed * _nowSpeed * Time.deltaTime);
+                mv = mv * _movSpeed * _nowSpeed * Time.deltaTime;
             }
+            mv = new Vector3(mv.x, mv.y + Physics.gravity.y * 0.1f, mv.z);
+            _controller.Move(mv);
         }
 
         void ChangeAnimationToDirectionFirstView(Vector3 dir)

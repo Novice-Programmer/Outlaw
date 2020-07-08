@@ -217,18 +217,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd4f509fbe9e49544a576d58a582c279, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _minWaitTime: 0.5
-  _maxWaitTime: 5
   _hitZone: {fileID: 4393670544944396230}
   _sightZone: {fileID: 438691926441017732}
   _worldMiniUI: {fileID: 6887899350375977567}
   _marker: {fileID: 3596411392796992367}
-  _runSpeed: 6
-  _walkSpeed: 1
-  _sightRange: 10
-  _attackRange: 2
-  _followDistance: 20
-  _rateMoveAct: 50
   _hitEffName: OrcHit
   _deadEffName: OrcDead
 --- !u!195 &1083954254483556954
@@ -1035,7 +1027,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7788662474740405797}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 10, z: 0}
+  m_LocalPosition: {x: 0, y: 15, z: 0}
   m_LocalScale: {x: 70, y: 70.000015, z: 1}
   m_Children: []
   m_Father: {fileID: 2647271397181370413}
