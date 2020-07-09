@@ -21698,7 +21698,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _eularLeft: {x: 55, y: 30, z: 0}
   _eularRight: {x: 135, y: 150, z: 0}
-  _rotateSpeed: 20
+  _rotateSpeed: 100
 --- !u!1001 &1349537649
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -30,8 +30,6 @@ namespace Outlaw
             get
             {
                 return new Vector3(_dirInput.z, -_dirInput.x, 0);
-                //Vector3 mov = new Vector3(_dirInput.y, _dirInput.x, 0);
-                //return (mov.magnitude > 1.0f) ? mov.normalized : mov;
             }
         }
 

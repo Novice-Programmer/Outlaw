@@ -47,7 +47,6 @@ namespace Outlaw
             _diamondText.SetGoodsValue(_userData._ownDiamond);
             _startEffect = GameObject.Find("PlayerStartEffect");
             _startEffect.SetActive(false);
-
         }
 
         // Update is called once per frame

@@ -6,7 +6,7 @@ namespace Outlaw
 {
     public class SoundManager : MonoBehaviour
     {
-        float _volumeBgm = 0.1f;
+        float _volumeBgm = 0.5f;
         float _volumeEff = 1.0f;
 
         bool _muteBgm = false;
@@ -96,8 +96,8 @@ namespace Outlaw
             if (_playerBGM != null)
                 Destroy(_playerBGM.gameObject);
             GameObject obj = new GameObject("BGMPlayer");
-            obj.transform.parent = Camera.main.transform.parent;
-            transform.localPosition = Vector3.zero;
+            obj.transform.parent = Camera.main.transform;
+            obj.transform.localPosition = Vector3.zero;
 
             _playerBGM = obj.AddComponent<AudioSource>();
             _playerBGM.clip = _bgmClips[(int)eTypeClip];
@@ -105,11 +105,11 @@ namespace Outlaw
             _playerBGM.mute = _muteBgm;
             _playerBGM.loop = true;
             _playerBGM.Play();
-
+  
             return _playerBGM;
         }
 
-        public AudioSource PlayEffectSound(ETypeEffectSound type, Transform owner)
+        public AudioSource PlayEffectSound(ETypeEffectSound type, Transform owner, bool loop = false, float soundDistance = 50.0f)
         {
             GameObject obj = new GameObject("EffectSound");
             obj.transform.parent = owner;
@@ -118,8 +118,8 @@ namespace Outlaw
             effPlayer.clip = _effClips[(int)type];
             effPlayer.volume = _volumeEff;
             effPlayer.mute = _muteEff;
-            effPlayer.loop = false;
-            effPlayer.minDistance = 50.0f;
+            effPlayer.loop = loop;
+            effPlayer.minDistance = soundDistance;
             effPlayer.Play();
             _ltPlayEffect.Add(effPlayer);
 
