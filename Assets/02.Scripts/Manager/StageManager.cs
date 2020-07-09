@@ -95,6 +95,7 @@ namespace Outlaw
             ListUpSpawnControl();
             AnimalGetList();
             GoalSetting();
+            SoundManager.Instance.PlayerBGMSound((ETypeBGMSound)_stage._no);
         }
         // Update is called once per frame
         void Update()
@@ -150,12 +151,12 @@ namespace Outlaw
 
         void ListUpSpawnControl()
         {
-            int removeCount = _spawnPointList.Count - _maxSpawnPoint;
             SpawnControl[] scArray = FindObjectsOfType<SpawnControl>();
             for (int i = 0; i < scArray.Length; i++)
             {
                 _spawnPointList.Add(scArray[i]);
             }
+            int removeCount = _spawnPointList.Count - _maxSpawnPoint;
             for (int i = 0; i < removeCount; i++)
             {
                 int rid = Random.Range(0, _spawnPointList.Count);

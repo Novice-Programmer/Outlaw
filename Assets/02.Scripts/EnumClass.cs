@@ -34,9 +34,6 @@ namespace Outlaw
         LoadSceneStart,
         LoaddingScene,
         LoadSceneEnd,
-        UnloadStageStart,
-        UnloaddingStage,
-        UnloadStageEnd,
         LoadStageStart,
         LoaddingStage,
         LoadStageEnd,
@@ -118,18 +115,17 @@ namespace Outlaw
     {
         Lobby = 0,
         Stage1,
-        Stage2
+        Stage2,
+        Stage3,
+        Stage4,
+        Stage5,
+        Stage6
     }
 
     public enum ETypeEffectSound
     {
-        Shot = 0,
-        Reload,
-        Hit,
-        Broken,
-        Frame,
-        MonsterDead,
-        PlayerDead
+        OpenDoor,
+        CloseDoor
     }
 
     public enum ETypeWindow
