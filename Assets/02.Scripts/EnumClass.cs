@@ -124,8 +124,10 @@ namespace Outlaw
 
     public enum ETypeEffectSound
     {
-        OpenDoor,
-        CloseDoor
+        Fire,
+        Warp,
+        BrokenObject,
+        WarpButton
     }
 
     public enum ETypeWindow

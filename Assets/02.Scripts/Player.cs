@@ -292,6 +292,7 @@ namespace Outlaw
             GameObject go = Instantiate(_prefabBullet, _posFire.position, _posFire.rotation);
             Bullet bullet = go.GetComponent<Bullet>();
             bullet.InitData(this);
+            SoundManager.Instance.PlayEffectSound(ETypeEffectSound.Fire, transform);
 
             _curBulletCount++;
             _miniWnd.SetBulletRate(_limitBulletCount - _curBulletCount);

@@ -75,6 +75,7 @@ namespace Outlaw
                         Vector3 scale = go.transform.localScale;
                         go.transform.localScale = scale * _effSize;
                         go.GetComponent<BoxCollider>().size = go.transform.localScale * 1.5f;
+                        SoundManager.Instance.PlayEffectSound(ETypeEffectSound.BrokenObject, transform);
                         Destroy(go, 2.0f);
                         go = Instantiate(_effectFrame, transform.position, Quaternion.identity);
                         scale = go.transform.localScale;

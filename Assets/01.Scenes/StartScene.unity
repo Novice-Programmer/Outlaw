@@ -212,17 +212,16 @@ MonoBehaviour:
   _bgmClips:
   - {fileID: 8300000, guid: ad403fe5cb1141c4db962f01954ad170, type: 3}
   - {fileID: 8300000, guid: 3d48ccdcd960b43cf88722b46569106c, type: 3}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: 3d48ccdcd960b43cf88722b46569106c, type: 3}
+  - {fileID: 8300000, guid: 3d48ccdcd960b43cf88722b46569106c, type: 3}
+  - {fileID: 8300000, guid: 3d48ccdcd960b43cf88722b46569106c, type: 3}
+  - {fileID: 8300000, guid: 3d48ccdcd960b43cf88722b46569106c, type: 3}
+  - {fileID: 8300000, guid: 3d48ccdcd960b43cf88722b46569106c, type: 3}
   _effClips:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: 6739c01659ad96d47987f4ddee226b36, type: 3}
+  - {fileID: 8300000, guid: adcac75087a17704ca6c0c3b15bc3aa5, type: 3}
+  - {fileID: 8300000, guid: 986d6b30567e30e428f3f21373fe45ca, type: 3}
+  - {fileID: 8300000, guid: 7784e7ab59ab376458c07be56b1a8d6f, type: 3}
 --- !u!1 &743220084
 GameObject:
   m_ObjectHideFlags: 0

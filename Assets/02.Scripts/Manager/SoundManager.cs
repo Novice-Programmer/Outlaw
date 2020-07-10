@@ -72,6 +72,11 @@ namespace Outlaw
         {
             for (int i = 0; i < _ltPlayEffect.Count; i++)
             {
+                if (_ltPlayEffect[i] == null)
+                {
+                    _ltPlayEffect.RemoveAt(i);
+                    break;
+                }
                 if (!_ltPlayEffect[i].isPlaying)
                 {
                     Destroy(_ltPlayEffect[i].gameObject);

@@ -77,6 +77,7 @@ namespace Outlaw
 
         public void ClickStartBtn()
         {
+            SoundManager.Instance.PlayEffectSound(ETypeEffectSound.WarpButton, Camera.main.transform);
             SceneControlManager.Instance.StartSceneIngame(_selectNum, _nowPlanet);
         }
     }

@@ -58,6 +58,7 @@ namespace Outlaw
                 {
                     _firstCheck = true;
                     _startEffect.SetActive(true);
+                    SoundManager.Instance.PlayEffectSound(ETypeEffectSound.Warp, _startEffect.transform);
                 }
             }
         }

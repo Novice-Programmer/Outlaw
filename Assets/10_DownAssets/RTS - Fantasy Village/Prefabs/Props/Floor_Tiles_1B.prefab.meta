@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ff04ed4c390ea42a0b3d08b087c789f8
+labels:
+- Floor
+- Road
+- Path
+- Stone
+- Modular
+- Tiles
+timeCreated: 1468241512
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -163,6 +163,7 @@ namespace Outlaw
             _player = go.GetComponent<Player>();
             CameraController cc = Camera.main.GetComponent<CameraController>();
             cc.SetPlayer(go);
+            SoundManager.Instance.PlayEffectSound(ETypeEffectSound.Warp, _player.transform);
         }
 
         public void GameStart()

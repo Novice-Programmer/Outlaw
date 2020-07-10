@@ -52,7 +52,7 @@ namespace Outlaw
             if(_currentStateLoad == ELoaddingState.LoadEnd)
             {
                 _timeCheck += Time.deltaTime;
-                if (_timeCheck > 2.0f)
+                if (_timeCheck > 1.0f)
                 {
                     StopCoroutine("LoaddingScene");
                     _currentStateLoad = ELoaddingState.None;
