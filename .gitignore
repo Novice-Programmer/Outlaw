@@ -52,3 +52,5 @@ Mkfile.old
 dkms.conf
 .svn/
 Temp/
+Library/
+obj/
