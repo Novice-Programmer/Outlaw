@@ -137,6 +137,7 @@ namespace Outlaw
             }
         }
 
+
         public override bool OnHitting(int hitDamage)
         {
             if (HittingMe(hitDamage))
